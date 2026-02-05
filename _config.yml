@@ -1,0 +1,52 @@
+# Site Build Settings
+title: Metaphase Management Associates
+description: We help clients navigate the journey from idea to meaningful impact.
+baseurl: ""
+url: ""
+
+# Author
+author:
+  name: Susan Mills
+  email: susanmills@metaphasemgt.com
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+
+# Sass
+sass:
+  sass_dir: _sass
+  style: compressed
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENSE
+  - metaphase.md
+  - profile.md
+  - pitch-email-draft.md
+  - "*.docx"
+  - "*.eml"
+  - "*.pdf"
+  - "*.webloc"
+  - "*.ai"
+  - Logo
+  - _MMA2.0_Logo_Files
+  - 168A6256-Edit.jpg
+  - 168A6256-72dpi.jpg
+  - 168A6256-72dpi-crop.jpg
+  - 168A6338-Edit.jpg
+  - 168A6364.jpg
+  - 168A6375.jpg
+
+# Collections
+collections:
+  services:
+    output: true
+    permalink: /services/:name/

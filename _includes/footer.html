@@ -1,0 +1,35 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-info">
+        <h3>{{ site.data.settings.title }}</h3>
+        <p>{{ site.data.settings.tagline }}</p>
+        <p class="location"><i class="fas fa-map-marker-alt"></i> {{ site.data.settings.author.location }}</p>
+      </div>
+
+      <div class="footer-social">
+        <a href="mailto:{{ site.data.settings.social.email }}" aria-label="Email">
+          <i class="fas fa-envelope"></i>
+        </a>
+        <a href="tel:{{ site.data.settings.author.phone }}" aria-label="Phone">
+          <i class="fas fa-phone"></i>
+        </a>
+        <a href="https://linkedin.com/in/{{ site.data.settings.social.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ site.data.settings.title }}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  document.querySelector('.nav-toggle').addEventListener('click', function() {
+    document.querySelector('.nav-menu').classList.toggle('active');
+    this.classList.toggle('active');
+  });
+</script>

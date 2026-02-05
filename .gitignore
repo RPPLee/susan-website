@@ -1,0 +1,42 @@
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Ruby
+Gemfile.lock
+*.gem
+.bundle/
+vendor/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Misc
+*.log
+
+# Source content files (not part of built site)
+*.docx
+*.eml
+*.webloc
+*.ai
+*.pdf
+metaphase.md
+profile.md
+pitch-email-draft.md
+168A6256-Edit.jpg
+168A6256-72dpi.jpg
+168A6256-72dpi-crop.jpg
+168A6338-Edit.jpg
+168A6364.jpg
+168A6375.jpg
+Logo/
+_MMA2.0_Logo_Files/

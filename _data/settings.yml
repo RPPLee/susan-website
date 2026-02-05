@@ -1,0 +1,46 @@
+# Site Settings
+title: Metaphase Management Associates
+tagline: From Idea to Meaningful Impact
+description: We help clients navigate the journey from idea to meaningful impact.
+baseurl: ""
+
+# Author Info
+author:
+  name: Susan Mills
+  title: Founder & CEO
+  email: susanmills@metaphasemgt.com
+  phone: "510-524-3434"
+  location: Berkeley, California
+  bio: "For over four decades, Susan Mills has successfully guided over 200 companies and individuals through profound shifts in markets, technology, finances and personal circumstances."
+
+# Social Links
+social:
+  linkedin: susan-mills
+  email: susanmills@metaphasemgt.com
+
+# Navigation Menu
+menu:
+  - title: Services
+    url: /#services
+  - title: About
+    url: /about/
+  - title: Contact
+    url: /contact/
+
+# Specialties
+specialties:
+  - Strategic Planning
+  - Market Position
+  - Partnerships
+  - Community Development
+  - Brand Communications
+  - Gift Economy Culture
+  - Social Impact
+  - Operations
+  - Business Plans
+  - Circular Economy
+  - Coaching
+  - Crisis Management
+  - Investment & Funding
+  - Teambuilding
+  - Facilitation
