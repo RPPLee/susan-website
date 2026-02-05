@@ -78,7 +78,7 @@ img {
 }
 
 .logo-img {
-  height: 55px;
+  height: 60px;
   width: auto;
 }
 
@@ -198,6 +198,14 @@ img {
   box-shadow: 0 20px 40px rgba(10, 45, 47, 0.15);
 }
 
+.hero-image img.hero-logo-mark {
+  object-fit: contain;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 20px;
+}
+
 /* ===== Buttons ===== */
 .btn {
   display: inline-flex;
@@ -284,20 +292,38 @@ section {
   align-items: center;
   justify-content: center;
   height: 100px;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 50%, var(--accent-color) 100%);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   text-decoration: none;
   position: relative;
   overflow: hidden;
 }
 
-.service-card-banner::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+.service-card:nth-child(1) .service-card-banner {
+  background: linear-gradient(135deg, #1A8292, #0A2D2F);
+}
+
+.service-card:nth-child(2) .service-card-banner {
+  background: linear-gradient(135deg, #D08529, #b8741f);
+}
+
+.service-card:nth-child(3) .service-card-banner {
+  background: linear-gradient(135deg, #0A2D2F, #1A8292);
+}
+
+.service-card:nth-child(4) .service-card-banner {
+  background: linear-gradient(135deg, #14697a, #D08529);
+}
+
+.service-card:nth-child(5) .service-card-banner {
+  background: linear-gradient(135deg, #0A2D2F, #14697a);
+}
+
+.service-card:nth-child(6) .service-card-banner {
+  background: linear-gradient(135deg, #1A8292, #D08529);
+}
+
+.service-card:nth-child(7) .service-card-banner {
+  background: linear-gradient(135deg, #D08529, #0A2D2F);
 }
 
 .service-card-banner-text {
@@ -306,7 +332,6 @@ section {
   color: white;
   letter-spacing: 1px;
   text-transform: uppercase;
-  position: relative;
 }
 
 .service-card-content {
