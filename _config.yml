@@ -1,8 +1,8 @@
 # Site Build Settings
 title: Metaphase Management Associates
 description: We help clients navigate the journey from idea to meaningful impact.
-baseurl: ""
-url: ""
+baseurl: "/susan-website"
+url: "https://rpplee.github.io"
 
 # Author
 author:
