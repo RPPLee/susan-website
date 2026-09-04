@@ -33,7 +33,11 @@ exclude:
   - pitch-email-draft.md
   - "*.docx"
   - "*.eml"
-  - "*.pdf"
+  - "BizBlitz_Flyer 2020.pdf"
+  - "Flyer for Jubilee 050223.pdf"
+  - "MetaphaseManagementAssociates_BusinessCard_Back.pdf"
+  - "MetaphaseManagementAssociates_BusinessCard_Front.pdf"
+  - "VizBlitz_Flyer 2020.pdf"
   - "*.webloc"
   - "*.ai"
   - Logo

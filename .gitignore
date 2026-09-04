@@ -29,6 +29,7 @@ Thumbs.db
 *.webloc
 *.ai
 *.pdf
+!assets/flyers/*.pdf
 metaphase.md
 profile.md
 pitch-email-draft.md

@@ -49,13 +49,13 @@ layout: default
 
     <div class="service-cta">
       <h3>Ready to get started?</h3>
-      <p>Reach out to discuss how this service can help you achieve your goals.</p>
+      <p>Register your interest and Susan will follow up to talk through fit, timing and next steps.</p>
       <div class="cta-buttons">
-        <a href="{{ '/contact/' | relative_url }}" class="btn btn-primary">
-          <i class="fas fa-paper-plane"></i> Send a Message
+        <a href="{{ '/register/' | relative_url }}?program={{ page.title | url_encode }}" class="btn btn-primary">
+          <i class="fas fa-pen-to-square"></i> Register Your Interest
         </a>
-        <a href="https://www.linkedin.com/in/susanmills2019/" target="_blank" rel="noopener" class="btn btn-secondary">
-          <i class="fab fa-linkedin"></i> Connect on LinkedIn
+        <a href="{{ '/contact/' | relative_url }}" class="btn btn-secondary">
+          <i class="fas fa-paper-plane"></i> Send a Message
         </a>
       </div>
     </div>
