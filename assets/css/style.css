@@ -751,7 +751,7 @@ section {
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: var(--border-color);
+  color: #8fa6a8;
 }
 
 .form-group textarea {
