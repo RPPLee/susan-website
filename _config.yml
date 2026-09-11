@@ -27,6 +27,10 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+  - CLAUDE.md
+  - CONTEXT.md
+  - docs
+  - .scratch
   - LICENSE
   - metaphase.md
   - profile.md
