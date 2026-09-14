@@ -58,6 +58,13 @@ exclude:
   - 168A6364.jpg
   - 168A6375.jpg
 
+# Share image for links to any page that does not set its own (jekyll-seo-tag reads page.image)
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/social/share-default.png
+
 # Collections
 collections:
   services:

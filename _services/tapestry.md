@@ -9,6 +9,7 @@ format: Cohort of up to 10, in person or online
 order: 8
 new: true
 summary: A six-month group creative story-making experience that builds trust, companionship and a shared vision of the future.
+image: /assets/social/share-tapestry.png
 ---
 
 ## What is Tapestry?

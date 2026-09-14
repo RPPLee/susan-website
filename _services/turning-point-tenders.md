@@ -9,6 +9,7 @@ format: Private, one-to-one engagement
 order: 9
 new: true
 summary: A private, curated six-month listening and coaching program for an individual at a moment of transition.
+image: /assets/social/share-turning-point-tenders.png
 ---
 
 ## Why "Tenders"?

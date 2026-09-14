@@ -1,0 +1,33 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,500;0,600;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; }
+  body { width: 1200px; height: 627px; overflow: hidden; font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  .card { position: relative; width: 1200px; height: 627px; overflow: hidden; color: #F5F1E8;
+    background: linear-gradient(115deg, #1A8292 -10%, #0f4f58 40%, #0a2d2f 85%); }
+  .dots { position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(208,133,41,0.5) 1.3px, transparent 1.6px);
+    background-size: 22px 22px; background-position: 11px 11px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 45%, rgba(0,0,0,0.7) 80%, #000 100%); }
+  .logo { position: absolute; top: 44px; left: 72px; display: flex; align-items: center; gap: 18px; }
+  .logo img { height: 72px; }
+  .wordmark { display: flex; flex-direction: column; color: #F5F1E8; }
+  .wordmark b { font-weight: 800; font-size: 30px; letter-spacing: 0.16em; line-height: 1; }
+  .wordmark span { font-weight: 500; font-size: 13px; letter-spacing: 0.22em; margin-top: 7px; }
+  .text { position: absolute; left: 72px; right: 72px; bottom: 64px; }
+  .kicker { color: #D08529; font-weight: 500; font-size: 20px; letter-spacing: 0.32em; text-transform: uppercase; margin: 0 0 18px 2px; }
+  h1 { margin: 0 0 22px; font-weight: 800; font-size: 82px; line-height: 1.02; letter-spacing: -0.01em; }
+  h1 em { font-style: italic; font-weight: 600; color: #D08529; }
+  .rule { width: 160px; height: 5px; background: #D08529; margin: 0 0 24px; }
+  p { margin: 0; font-size: 28px; line-height: 1.35; font-weight: 500; color: rgba(245,241,232,0.9); max-width: 900px; }
+</style></head>
+<body><div class="card"><div class="dots"></div>
+  <div class="logo"><img src="logo-graphic.svg" alt=""><div class="wordmark"><b>METAPHASE</b><span>MANAGEMENT ASSOCIATES</span></div></div>
+  <div class="text">
+    <p class="kicker">__KICKER__</p>
+    <h1>__TITLE__</h1>
+    <div class="rule"></div>
+    <p>__SUB__</p>
+  </div>
+</div></body></html>
