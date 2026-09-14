@@ -4,11 +4,10 @@ title: BizBlitz
 tagline: 60-Minute Rapid-Fire Business Analysis
 icon: fas fa-bolt
 duration: 60 minutes
-price: Contact for pricing
+price: Contact for pricing!
 format: One-on-one or small group
 order: 1
 ---
-
 ## What is BizBlitz?
 
 BizBlitz is Susan's signature offering. In one intense hour, she walks a founder through defining four key elements of their business:
@@ -41,3 +40,4 @@ Each session is tailored to where you are right now -- whether you're pre-launch
 - Understanding of your competitive advantages
 - A prioritized action plan for the next 30-90 days
 - Fresh perspective from someone who's guided 200+ companies
+
