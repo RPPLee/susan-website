@@ -51,7 +51,7 @@ Every paragraph in Implementation Decisions and Testing Decisions, and every tes
 step 2 sketches, is one of three things:
 
 - it states an approved or already-proposed decision: cite the id at the end of the paragraph,
-  `(mp-042)`, and write no card;
+  `(op-042)`, and write no card;
 - it states something new: write a card in `PROPOSALS` and cite its id the same way. A seam is
   a card too, its **Decision** naming the seam and its **Why** saying why that level and no
   lower one;

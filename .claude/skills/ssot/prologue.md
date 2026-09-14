@@ -73,7 +73,7 @@ docs/ssot/decisions/<feature>.md` reads both sections and says what each paragra
   an approved decision that was amended on the page keeps its id and the paragraph is rewritten
   to the amended text (`SYNC export docs/ssot/decisions/<feature>.md` gives the text);
 - a paragraph that states an approved decision without citing it gets the id in parentheses at
-  the end, `(mp-042)`;
+  the end, `(op-042)`;
 - `pending` ids are left as they are; `unknown` ids are a mistake to fix; `uncited` paragraphs
   with no decision behind them stay as they are and are listed in the report as backfill
   candidates; `unstated` ids (decisions that answered a question but appear nowhere in the spec)
