@@ -4,8 +4,8 @@ Read this first in a fresh session. The record is the truth; this is the story a
 
 ## Where the record is
 
-- Approved and rejected: `docs/ssot/decisions/presence.md` (55 approved, 3 rejected as of 2026-09-14; Lee approved the last 38 in the terminal because the page was unreachable on his phone).
-- Proposed and open: `.scratch/presence/decisions.md` (0 proposed, 0 open questions).
+- Approved and rejected: `docs/ssot/decisions/presence.md` (47 approved, 3 rejected, 9 withdrawn as of 2026-09-14; Lee approved the last 38 in the terminal because the page was unreachable on his phone, and withdrew the nine payment cards in the terminal the same day).
+- Proposed and open: `.scratch/presence/decisions.md` (2 proposed, op-063 and op-064; 0 open questions).
 - The page: the `Artifact:` line in `docs/ssot/decisions/README.md`. Lee and Susan rule there.
 - Tooling and rules: `docs/ssot/decisions/README.md`. Skills: `/ssot`, `/grill-with-docs-lee presence`, `/to-spec-lee presence`, `/to-tickets-lee presence`.
 - Glossary: `CONTEXT.md`. Research behind the cards: `docs/research/`.
@@ -17,6 +17,7 @@ Read this first in a fresh session. The record is the truth; this is the story a
 3. Redo the site so she can edit it herself. Ruled: evolve the site (op-005), Pages CMS as the editor (op-020), no paid platform (op-009).
 4. Make it look professional. The sites she compared are in `docs/research/2026-09-12-comparison-sites.md`; the additions are op-022.
 5. Stripe emailed her after an account was created. Answer: Substack made it; no call needed (op-023).
+6. Later on 2026-09-14, through Lee: no reservations or payments on the website, and no separate Stripe account. Register buttons open the contact form (op-065).
 
 ## What is already built
 
@@ -30,7 +31,7 @@ Lee closed op-021 (Pages CMS, op-029) and op-024 (ignore the Stripe email, op-03
 
 ## Open threads
 
-- Prices on the older service pages date from earlier flyers; Susan has not confirmed them (op-008 and op-032 need that before pay buttons go live).
-- The spec is `.scratch/presence/spec.md` (written 2026-09-14). Its seven Spec cards, op-043 to op-049, are approved. The 13 tickets are in `.scratch/presence/issues/`, blockers first; 01 to 04, 11 and 12 can start now.
+- Prices on the older service pages date from earlier flyers; Susan has not confirmed them. Nothing charges them now (op-065), so it is a content check, not a gate.
+- The spec is `.scratch/presence/spec.md` (written 2026-09-14). Its seven Spec cards, op-043 to op-049, are approved. The 13 tickets are in `.scratch/presence/issues/`, blockers first. 01 to 03 are done (03 waits on Lee's yes for the LinkedIn copy); 12 and 13 are `wontfix` after op-065; 04 and 11 can start now.
 - Lee's machine cannot build the site today (system Ruby 2.6, Jekyll 3.9; the Gemfile wants 4.3). op-048 covers the fix.
 - Next: `/implement-lee presence` does not exist yet; use `/implement` per ticket, starting with 01.

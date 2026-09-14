@@ -6,11 +6,11 @@ Decisions: docs/ssot/decisions/presence.md and .scratch/presence/decisions.md
 
 ## Problem Statement
 
-Susan wants her online presence to look professional and to work without Lee for everyday changes. Her site is a Jekyll site only Lee can edit. Her LinkedIn profile and the Metaphase company page carry no banner in her branding and do not point to her Substack. Her Substack, Experience Matters, is unbranded, and the site does not show she writes. Stripe emailed her about an account she did not know she had. She cannot take money for programs or coaching online, and her prices date from old flyers.
+Susan wants her online presence to look professional and to work without Lee for everyday changes. Her site is a Jekyll site only Lee can edit. Her LinkedIn profile and the Metaphase company page carry no banner in her branding and do not point to her Substack. Her Substack, Experience Matters, is unbranded, and the site does not show she writes. Stripe emailed her about an account she did not know she had. Her prices date from old flyers. She does not want the site to take registrations or money; that is a conversation and an invoice.
 
 ## Solution
 
-The site evolves rather than being redesigned (op-005). Susan gets a free web editor, Pages CMS, on top of the current site, and changes titles, prices, copy, testimonials and photos herself (op-004, op-009, op-020, op-029). The site gains what the comparable sites have: named testimonials, a line naming who she works with, services in three groups, one booking link, a footer signup and a fuller About page (op-022). An Insights page lists her Substack posts, refreshed once a day without anyone touching anything (op-007, op-036, op-037). Fixed-price items get a pay button through a second Stripe account for Metaphase; retained work stays invoiced (op-006, op-008, op-025, op-032). Her profile and the company page get the matching banners and complete details, and her profile features the Substack (op-002, op-010, op-011, op-012, op-014, op-031). The Substack keeps its address and paywall and gets her own look (op-017, op-027, op-028). The Stripe email is ignored (op-023, op-030). The work runs banner, editor, site additions, Substack branding, payments (op-042).
+The site evolves rather than being redesigned (op-005). Susan gets a free web editor, Pages CMS, on top of the current site, and changes titles, prices, copy, testimonials and photos herself (op-004, op-009, op-020, op-029). The site gains what the comparable sites have: named testimonials, a line naming who she works with, services in three groups, one booking link, a footer signup and a fuller About page (op-022). An Insights page lists her Substack posts, refreshed once a day without anyone touching anything (op-007, op-036, op-037). The site takes no registrations and no payments: every register button opens the contact form, and there is no Metaphase Stripe account (op-065). Her profile and the company page get the matching banners and complete details, and her profile features the Substack (op-002, op-010, op-011, op-012, op-014, op-031). The Substack keeps its address and paywall and gets her own look (op-017, op-027, op-028). The Stripe email is ignored (op-023, op-030). The work runs banner, editor, site additions, Substack branding (op-042, payments dropped by op-065).
 
 ## User Stories
 
@@ -41,16 +41,16 @@ The site evolves rather than being redesigned (op-005). Susan gets a free web ed
 25. As Susan, I want new posts to appear on the site within a day without doing anything, so that the site never looks stale.
 26. As Susan, I want the site to keep working when the Substack feed is unreachable, so that one outage does not break a build.
 27. As a search engine, I want the posts as plain HTML, so that Susan's writing is found.
-28. As a buyer, I want to pay for a coaching package with a button, so that I can commit without a call.
-29. As a buyer, I want to pay for a Tapestry seat, so that I am enrolled at once.
-30. As a buyer, I want to land on a thank-you page that says what happens next, so that I know Susan will follow up.
-31. As a buyer, I want the pay button to say the price I saw on the page, so that there is no surprise.
-32. As Susan, I want Stripe to email me when someone pays, so that I know without checking a dashboard.
-33. As Susan, I want to confirm every price before a button goes live, so that no old flyer price is charged.
-34. As Susan, I want the blitzes to get a button only when I have named a price, so that nothing is sold at a guess.
+28. As a visitor, I want every register button to open the contact form with the program named, so that I write to Susan instead of booking or paying on the site (op-065).
+29. As Susan, I want no reservations or payments on the site, so that every engagement starts with a conversation (op-065).
+30. As Susan, I want old /register/ links to land on the contact form, so that nothing I have shared breaks (op-065).
+31. (dropped by op-065)
+32. (dropped by op-065)
+33. (dropped by op-065)
+34. (dropped by op-065)
 35. As a prospect, I want retained work to say it is quoted, so that I know to get in touch.
 36. As a prospect interested in Turning Point Tenders, I want the registration form, so that Susan can quote me.
-37. As Susan, I want a second Stripe account for Metaphase under my login, so that business income stays apart from my writing income.
+37. (dropped by op-065: no second Stripe account)
 38. As Susan, I want to ignore the Stripe email, so that I stop worrying about it.
 39. As a LinkedIn visitor, I want Susan's profile and the company page to share a banner family, so that they read as one business.
 40. As a LinkedIn visitor, I want her profile to feature Experience Matters, so that I find her writing from her profile.
@@ -73,11 +73,11 @@ Everything on the site is built into the existing Jekyll site on GitHub Pages at
 
 The editor is Pages CMS, installed by Lee on the live repo. Lee makes the first edit, a service price, and it must appear on the site within minutes without touching GitHub; only then is Susan invited by email (op-020, op-029).
 
-The editor's configuration exposes exactly what Susan may change: the services as a collection with title, tagline, price, format, duration, group, checkout link and body; the site settings, including the hero's audience line, the intro, her bio, contact details and the booking link; the testimonials data file; the About page body; the Programs page; and the images folder as media. Layout, navigation, the workflow and the editor configuration itself are not exposed (op-004, op-047).
+The editor's configuration exposes exactly what Susan may change: the services as a collection with title, tagline, price, format, duration, group and body; the site settings, including the hero's audience line, the intro, her bio, contact details and the booking link; the testimonials data file; the About page body; the Programs page; and the images folder as media. Layout, navigation, the workflow and the editor configuration itself are not exposed (op-004, op-047).
 
 Services are rendered from the services collection, grouped by a `group` field in each service's front matter with the values individuals, groups and organizations. The homepage's hand-written service cards are replaced by that rendering, so a service Susan edits or regroups changes the homepage without touching a template (op-045). The groups are: Individuals, Coaching & Mentoring and Turning Point Tenders; Groups, Peer Circles and Tapestry; Organizations, BizBlitz, VizBlitz, Team Building, Strategic Planning and Performance. The programs appear in their group and the Programs page stays the enrolling view (op-033).
 
-A pay button is a Stripe checkout link stored in the service's `checkout` field. A service page shows the pay button when the field is set and the existing register-interest and contact buttons when it is not. Susan pastes the link from the Metaphase Stripe account into the editor; nothing about Stripe lives in a template (op-046). The first buttons go on the coaching initial session, the four-session coaching package, Peer Circles formation, Team Building initial planning and Tapestry at the group-of-five price; the blitzes wait for a price; Susan confirms every price before a link is pasted (op-008, op-032). On Tapestry the pay button replaces the registration form; the form stays for Turning Point Tenders and custom work (op-038). Every checkout link sends the buyer to a thank-you page on the site; Susan learns of a payment from Stripe's email (op-039). The Metaphase Stripe account is a second account under Susan's login (op-025).
+The site takes no registrations and no payments. Every button that said "Register" opens the contact form at /contact/ with the program name in the subject, /register/ redirects there, and there is no Metaphase Stripe account; prices stay public and Susan invoices after a conversation (op-065).
 
 The Insights page is generated from a data file that a script writes before the Jekyll build. The script reads the Substack feed from a URL or a local file, keeps the ten newest posts with title, date, link and excerpt, and writes the data file. The deploy workflow runs it before the build on every push and on a daily schedule. The data file is not committed; when it is missing or the feed is unreachable, the build still succeeds and the page shows the subscribe form with a line saying posts are on Substack (op-036, op-044). The page lists the ten posts, each linking to Substack, with the subscribe form at the top, and Insights joins the menu after Services (op-007, op-037).
 
@@ -95,15 +95,15 @@ The Substack keeps its address and its paid plans and gets its own look built fr
 
 Local builds need Jekyll 4 running through Bundler on a Ruby newer than the system's 2.6, installed once on Lee's machine; the tests and the workflow build with the same Jekyll (op-048).
 
-The tracks run in this order: banners and company page; the editor trial; the site additions; Substack branding; pay buttons (op-042).
+The tracks run in this order: banners and company page; the editor trial; the site additions; Substack branding (op-042; the payments track is dropped by op-065).
 
 ## Testing Decisions
 
-A good test builds the site the way GitHub does and reads the HTML that comes out. It asserts on what a visitor sees, the text, links and forms on a page, never on template internals or CSS classes chosen for styling. It never reaches Substack, Stripe, LinkedIn or Google; the feed is a fixture file, the checkout link is a fixture address.
+A good test builds the site the way GitHub does and reads the HTML that comes out. It asserts on what a visitor sees, the text, links and forms on a page, never on template internals or CSS classes chosen for styling. It never reaches Substack, Stripe, LinkedIn or Google; the feed is a fixture file.
 
 There is one seam: the built site. A Node test runs the feed script against a fixture feed, runs the Jekyll build into a temporary folder with fixture data, and asserts on the resulting pages. It runs locally with `node --test` and in the workflow before deploy, so a push from Susan's editor that breaks a template stops before it reaches the site (op-043).
 
-Through that seam the tests cover: the homepage shows the three groups with the right services in each; a service with a checkout link shows a pay button and no register button, and one without shows the register button; the Insights page lists the ten newest posts from the fixture feed with links to Substack, and shows the fallback line when the data file is absent; the footer carries the Substack form; the testimonials section is absent when the data file is empty and present with a named entry; the menu carries Insights after Services; the thank-you page exists.
+Through that seam the tests cover: the homepage shows the three groups with the right services in each; no page links to /register/, the program and service buttons link to the contact form, and /register/ redirects there; the Insights page lists the ten newest posts from the fixture feed with links to Substack, and shows the fallback line when the data file is absent; the footer carries the Substack form; the testimonials section is absent when the data file is empty and present with a named entry; the menu carries Insights after Services.
 
 Prior art is the sync module's tests, `node --test` over a markdown fixture asserting on the output, and the matt resolver's tests, which run the same way.
 
@@ -113,7 +113,7 @@ What happens in Susan's accounts, LinkedIn, Substack, Stripe and Google Calendar
 
 - A new design or a move to another platform (op-005, op-009).
 - Renaming the Substack (op-028). Turning the paywall off (op-027).
-- Pay buttons on the blitzes or Turning Point Tenders until a price exists (op-032).
+- Registrations, reservations or payments of any kind on the site, and a Metaphase Stripe account (op-065).
 - A draft or preview step in the editor; git history is the undo (op-020).
 - Reading the feed live in the browser (op-036).
 - LinkedIn headline and About copy, pending op-013.
@@ -121,7 +121,7 @@ What happens in Susan's accounts, LinkedIn, Substack, Stripe and Google Calendar
 
 ## Further Notes
 
-The prices on the service pages come from the 2020 flyers. op-008 and op-032 make Susan's confirmation the gate for every pay button; the confirmation itself is a conversation, not a build step.
+The prices on the service pages come from the 2020 flyers. They stay public and Susan can change them in the editor; nothing on the site charges them (op-065).
 
 GitHub pauses a scheduled workflow after 60 days without a commit to the default branch. Susan's editor saves are commits, so the daily Insights refresh keeps running as long as the site is edited; if it ever pauses, one commit restarts it.
 

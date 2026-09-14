@@ -72,8 +72,8 @@ An offer with a published price that gets a pay button: programs, blitzes, the c
 An engagement quoted in conversation and invoiced: strategic planning, performance, team building beyond the first session.
 
 **Registration**:
-The form at `/register/` that records interest in a program. Not yet a payment.
-_Avoid_: signup, enrollment
+No longer a thing on the site (op-065). A visitor who wants a program writes through the contact form; `/register/` redirects there.
+_Avoid_: signup, enrollment, register button
 
 ### Money
 
@@ -81,10 +81,10 @@ _Avoid_: signup, enrollment
 The Stripe account Substack requires to charge readers. Already connected; the one Stripe emailed about.
 
 **Metaphase Stripe account**:
-A second account under the same login for program and coaching payments. Not yet created.
+Was planned as a second account for program and coaching payments. Never created; dropped by op-065. The Substack account is the only Stripe account.
 
 **Pay button**:
-A Stripe checkout link on a fixed-price item's page, charged to the Metaphase Stripe account.
+Was a planned Stripe checkout link on a fixed-price item's page. Dropped by op-065; the site takes no payments.
 _Avoid_: buy now, cart
 
 **Paywall**:

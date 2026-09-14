@@ -1,6 +1,6 @@
 # 13: Pay buttons and the thank-you page
 
-**Status:** ready-for-agent
+**Status:** wontfix
 **Blocked by:** 01 (touches test), 04 (touches .pages.yml), 05 (touches _services), 06 (touches .pages.yml), 07 (touches .pages.yml), 08 (touches .pages.yml), 09 (touches assets/css/style.css), 10 (touches assets/css/style.css), 12.
 **Next:** `/implement-lee presence`
 
@@ -18,3 +18,7 @@
 - [ ] The five real links are pasted and Susan has approved each price on the page
 
 Next: /implement-lee presence
+
+## Comments
+
+2026-09-14, Lee in the terminal: Susan does not want reservations or payments handled on the website, and there will be no separate Stripe account. op-065 reverses the payment cards this ticket depends on; they are withdrawn. Nothing here gets built. Register buttons now open the contact form (commit 1c489bb).

@@ -121,7 +121,7 @@ Feature name: Susan's online presence
 
 ## op-006 · Susan gets paid for three things online
 - category: Payments
-- status: approved
+- status: withdrawn
 - image: none
 - caption:
 - svg: docs/ssot/decisions/images/presence/op-006.svg
@@ -141,6 +141,7 @@ Feature name: Susan's online presence
 **What it touches.** Substack, pages/register.html, _services, Stripe.
 
 > 2026-09-14 approved by Lee
+> 2026-09-14 withdrawn by Lee
 
 ## op-007 · An Insights page lists her Substack posts, pulled from the feed
 - category: Website
@@ -166,7 +167,7 @@ Feature name: Susan's online presence
 
 ## op-008 · Fixed-price items get a checkout; retained work is invoiced
 - category: Payments
-- status: approved
+- status: withdrawn
 - image: none
 - caption:
 - svg: docs/ssot/decisions/images/presence/op-008.svg
@@ -186,6 +187,7 @@ Feature name: Susan's online presence
 **What it touches.** _services, pages/register.html, pages/programs.html, Stripe.
 
 > 2026-09-14 approved by Lee
+> 2026-09-14 withdrawn by Lee
 
 ## op-009 · No paid website platform
 - category: Website
@@ -458,7 +460,7 @@ Feature name: Susan's online presence
 
 ## op-025 · A second Stripe account for coaching and program payments
 - category: Payments
-- status: approved
+- status: withdrawn
 - image: none
 - caption:
 - svg: docs/ssot/decisions/images/presence/op-025.svg
@@ -480,6 +482,7 @@ Feature name: Susan's online presence
 **Details.** Stripe card fee 2.9% plus 30 cents; no extra fee for checkout links.
 
 > 2026-09-14 approved by Lee
+> 2026-09-14 withdrawn by Lee
 
 ## op-026 · The agent may change Susan's accounts without asking first
 - category: Process
@@ -621,7 +624,7 @@ Feature name: Susan's online presence
 
 ## op-032 · Pay buttons go on the five firmly priced items first
 - category: Payments
-- status: approved
+- status: withdrawn
 - image: none
 - caption:
 - screen: Service pages, price block
@@ -642,6 +645,7 @@ Feature name: Susan's online presence
 **Details.** Coaching $250 initial, $150 an hour after, $500 for four sessions. Peer Circles $500 formation and planning. Team Building $500 initial planning. Tapestry $400 a person in a group of five, $300 a person in a group of six to ten.
 
 > 2026-09-14 approved by Lee
+> 2026-09-14 withdrawn by Lee
 
 ## op-033 · The nine service pages split into individuals, groups and organizations
 - category: Website
@@ -756,7 +760,7 @@ Feature name: Susan's online presence
 
 ## op-038 · The pay button replaces the registration form on Tapestry
 - category: Payments
-- status: approved
+- status: withdrawn
 - image: none
 - caption:
 - screen: Tapestry service page
@@ -775,10 +779,11 @@ Feature name: Susan's online presence
 **What it touches.** Tapestry page, Programs page, the registration form.
 
 > 2026-09-14 approved by Lee
+> 2026-09-14 withdrawn by Lee
 
 ## op-039 · Buyers land on a thank-you page on the site
 - category: Payments
-- status: approved
+- status: withdrawn
 - image: none
 - caption:
 - screen: Thank-you page
@@ -797,6 +802,7 @@ Feature name: Susan's online presence
 **What it touches.** A new thank-you page, each checkout link's success address.
 
 > 2026-09-14 approved by Lee
+> 2026-09-14 withdrawn by Lee
 
 ## op-040 · The testimonials section stays hidden until a real one is in
 - category: Website
@@ -938,7 +944,7 @@ Feature name: Susan's online presence
 
 ## op-046 · A pay button is a checkout link in the service's front matter
 - category: Spec
-- status: approved
+- status: withdrawn
 - image: none
 - caption:
 - screen: Service page, call to action
@@ -957,6 +963,7 @@ Feature name: Susan's online presence
 **What it touches.** Service front matter, the service layout, the editor configuration.
 
 > 2026-09-14 approved by Lee
+> 2026-09-14 withdrawn by Lee
 
 ## op-047 · What the editor exposes to Susan
 - category: Spec
@@ -1367,7 +1374,7 @@ Feature name: Susan's online presence
 
 ## op-061 · Ticket 12: Prices confirmed and the Metaphase Stripe account created
 - category: Tickets
-- status: approved
+- status: withdrawn
 - ticket: 12
 - depends: op-025, op-032, op-008, op-006
 - image: none
@@ -1394,10 +1401,11 @@ Feature name: Susan's online presence
 - [ ] Susan gets Stripe's payment email for a test payment
 
 > 2026-09-14 approved by Lee
+> 2026-09-14 withdrawn by Lee
 
 ## op-062 · Ticket 13: Pay buttons and the thank-you page
 - category: Tickets
-- status: approved
+- status: withdrawn
 - ticket: 13
 - blocked: 01, 04, 05, 06, 07, 08, 09, 10, 12
 - depends: op-046, op-038, op-039, op-032, op-008
@@ -1425,5 +1433,28 @@ Feature name: Susan's online presence
 - [ ] The editor exposes the checkout field
 - [ ] The test covers a service with and without a link and the thank-you page
 - [ ] The five real links are pasted and Susan has approved each price on the page
+
+> 2026-09-14 approved by Lee
+> 2026-09-14 withdrawn by Lee
+
+## op-065 · No registration or payment on the site; every register button opens the contact form
+- category: Payments
+- status: approved
+- image: none
+- caption:
+- screen: Service page, call to action; Programs page; the contact form
+- source: Lee in the terminal 2026-09-14
+
+**Context.** Susan told Lee she does not want the website to handle reservations or payments. The record so far planned the opposite: op-006 (three things paid online), op-008 and op-032 (pay buttons on fixed-price items), op-025 (a second Stripe account for Metaphase), op-038 (the pay button replaces the registration form on Tapestry), op-039 (a thank-you page), op-046 (a checkout field in the service front matter), and tickets 12 and 13 (op-061, op-062). Nothing of that was built; the only registration plumbing on the site was the form at /register/, built in September before this record existed. This card reverses those cards.
+
+**Question.** Does the site take registrations or money at all?
+
+**Decision.** 1. The site takes no registrations and no payments. Every button that said "Register" now opens the contact form at /contact/, carrying the program name into the subject line. 2. The /register/ address redirects to the contact form so old links still land. 3. There is no Metaphase Stripe account; the only online payment Susan takes is her Substack subscriptions, through the account Substack made (op-023, op-030 stand). 4. The prices on the service pages stay public; a client who wants to book writes through the form or emails susanmills@metaphasemgt.com, and Susan invoices as she does today. 5. op-042's fifth track and the checkout field in op-047's service fields are dropped; nothing else in those cards changes.
+
+**Why.** It is Susan's business and her ruling. A conversation before every engagement is how she works, and the form already reaches her inbox.
+
+**What else was considered.** Keeping the registration form without payments; keeping the pay-button plan on hold.
+
+**What it touches.** index.html, pages/programs.html, pages/register.html, pages/contact.html, _layouts/service.html, test/site.test.mjs, tickets 12 and 13, the spec, the glossary.
 
 > 2026-09-14 approved by Lee
