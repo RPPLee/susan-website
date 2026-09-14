@@ -1,126 +1,18 @@
 ---
-layout: default
+layout: none
 title: Register
 permalink: /register/
-description: "Register your interest in a Metaphase program: Tapestry, Turning Point Tenders, or another service."
+sitemap: false
 ---
-
-<section class="page-content">
-  <div class="container">
-    <div class="contact-page" style="padding-top: 40px;">
-      <h1 class="page-title" style="text-align: center;">Register Your Interest</h1>
-      <p class="register-lede">
-        Tell us which program you are drawn to and a little about your situation.
-        Susan reads every registration personally and will follow up to arrange a conversation
-        before anything is confirmed or paid.
-      </p>
-
-      <div class="contact-form-wrapper">
-        <form action="https://formspree.io/f/meeljpzb" method="POST" class="contact-form" id="register-form">
-          <input type="hidden" name="_subject" value="Program registration from metaphasemgt.com">
-          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-
-          <div class="form-group">
-            <label for="program">Which program?</label>
-            <select id="program" name="program" required>
-              <option value="">Please choose&hellip;</option>
-              <option value="Tapestry">Tapestry &mdash; six-month group story-making</option>
-              <option value="Turning Point Tenders">Turning Point Tenders &mdash; six-month private transition support</option>
-              <option value="BizBlitz">BizBlitz &mdash; 60-minute business analysis</option>
-              <option value="VizBlitz">VizBlitz &mdash; 60-minute future visioning</option>
-              <option value="Coaching &amp; Mentoring">Coaching &amp; Mentoring</option>
-              <option value="Peer Circles">Peer Circles</option>
-              <option value="Team Building">Team Building</option>
-              <option value="Strategic Planning">Strategic Planning</option>
-              <option value="Not sure yet">Not sure yet &mdash; help me choose</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required placeholder="Your name">
-          </div>
-
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required placeholder="your@email.com">
-          </div>
-
-          <div class="form-group">
-            <label for="phone">Phone <span class="optional">(optional)</span></label>
-            <input type="tel" id="phone" name="phone" placeholder="510-555-0123">
-          </div>
-
-          <div class="form-group">
-            <label for="organization">Organization or group <span class="optional">(optional)</span></label>
-            <input type="text" id="organization" name="organization" placeholder="Company, congregation, team, family&hellip;">
-          </div>
-
-          <div class="form-group">
-            <label for="participants">Registering for</label>
-            <select id="participants" name="participants">
-              <option value="Just me">Just me</option>
-              <option value="Me and a small group">Me and a small group (I am organizing)</option>
-              <option value="An organization or team">An organization or team</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="timing">Preferred start</label>
-            <select id="timing" name="timing">
-              <option value="As soon as a cohort forms">As soon as a cohort forms</option>
-              <option value="Within the next three months">Within the next three months</option>
-              <option value="Later this year">Later this year</option>
-              <option value="Just exploring for now">Just exploring for now</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="message">What brings you here?</label>
-            <textarea id="message" name="message" rows="6" required
-              placeholder="The transition you are facing, the group you have in mind, questions about fit or cost&hellip;"></textarea>
-          </div>
-
-          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-            <i class="fas fa-paper-plane"></i> Submit Registration
-          </button>
-
-          <p class="form-note">
-            This is an expression of interest, not a payment. Susan will be in touch within a few days
-            to talk through fit, timing and next steps.
-          </p>
-        </form>
-      </div>
-
-      <div class="register-alt">
-        <p>Prefer to talk first?</p>
-        <div class="contact-links">
-          <a href="mailto:susanmills@metaphasemgt.com" class="contact-link">
-            <i class="fas fa-envelope"></i>
-            <span>susanmills@metaphasemgt.com</span>
-          </a>
-          <a href="tel:+15105243434" class="contact-link">
-            <i class="fas fa-phone"></i>
-            <span>510-524-3434</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<script>
-  // Pre-select a program when arriving from a /register/?program=... link
-  (function () {
-    var params = new URLSearchParams(window.location.search);
-    var wanted = params.get('program');
-    if (!wanted) return;
-    var select = document.getElementById('program');
-    for (var i = 0; i < select.options.length; i++) {
-      if (select.options[i].value === wanted) {
-        select.selectedIndex = i;
-        return;
-      }
-    }
-  })();
-</script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url=/contact/">
+  <link rel="canonical" href="{{ '/contact/' | absolute_url }}">
+  <title>Get in Touch | Metaphase Management Associates</title>
+</head>
+<body>
+  <p>Registration now happens through a conversation. <a href="{{ '/contact/' | relative_url }}">Go to the contact form.</a></p>
+</body>
+</html>

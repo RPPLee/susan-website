@@ -40,3 +40,29 @@ test("the site builds and the homepage renders", () => {
     rmSync(destination, { recursive: true, force: true });
   }
 });
+
+// op-065: no registration or payment on the site. Every "register" button goes to the contact form,
+// and the old /register/ address sends its visitors there too.
+test("register buttons go to the contact form and /register/ redirects there", () => {
+  const { destination, result } = buildSite();
+  try {
+    assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
+    const page = (p) => readFileSync(join(destination, p), "utf8");
+
+    for (const p of ["index.html", "programs/index.html", "services/tapestry/index.html", "services/coaching/index.html"]) {
+      assert.doesNotMatch(page(p), /href="[^"]*\/register\//, `${p} still links to /register/`);
+      assert.match(page(p), /href="[^"]*\/contact\/[^"]*"/, `${p} has no link to the contact form`);
+    }
+    assert.match(page("programs/index.html"), /href="\/contact\/\?program=Tapestry"/);
+
+    const redirect = page("register/index.html");
+    assert.match(redirect, /<meta http-equiv="refresh" content="0; ?url=\/contact\/">/);
+    assert.doesNotMatch(redirect, /<form/);
+
+    const contact = page("contact/index.html");
+    assert.match(contact, /<form action="https:\/\/formspree\.io\/f\/meeljpzb" method="POST"/);
+    assert.match(contact, /susanmills@metaphasemgt\.com/);
+  } finally {
+    rmSync(destination, { recursive: true, force: true });
+  }
+});

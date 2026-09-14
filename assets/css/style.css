@@ -1066,48 +1066,6 @@ section {
   margin-top: 8px;
 }
 
-/* ===== Register Page ===== */
-.register-lede {
-  font-size: 1.15rem;
-  color: var(--text-light);
-  margin: 0 auto 48px;
-  max-width: 620px;
-  text-align: center;
-}
-
-.form-group .optional {
-  font-weight: 400;
-  color: var(--text-light);
-}
-
-.form-group select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%235a7274' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-  background-size: 12px;
-  padding-right: 44px;
-  cursor: pointer;
-}
-
-.form-note {
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: var(--text-light);
-  text-align: center;
-}
-
-.register-alt {
-  margin-top: 56px;
-  text-align: center;
-}
-
-.register-alt > p {
-  color: var(--text-light);
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
 @media (max-width: 768px) {
   .new-programs-grid {
     grid-template-columns: 1fr;
