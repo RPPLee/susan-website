@@ -3,7 +3,7 @@
   "private": true,
   "description": "Tests for the Metaphase Management Associates site. The site itself is built by Jekyll.",
   "scripts": {
-    "test": "node --test test/**/*.test.mjs"
+    "test": "node --test 'test/**/*.test.mjs'"
   },
   "engines": {
     "node": ">=22"

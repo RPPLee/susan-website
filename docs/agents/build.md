@@ -22,7 +22,7 @@ bundle exec jekyll serve          # http://localhost:4000, rebuilds on save
 ## Test
 
 ```sh
-npm test                          # node --test test/; needs Node 22 or newer
+npm test                          # needs Node 22 or newer
 ```
 
 The test in `test/site.test.mjs` builds the site into a temporary folder with
@@ -30,7 +30,7 @@ The test in `test/site.test.mjs` builds the site into a temporary folder with
 silently building at the wrong address. It then asserts on the HTML that comes out. Later tickets
 add their assertions to the same file (op-043).
 
-The test looks for Homebrew's Ruby at `/opt/homebrew/opt/ruby/bin` on its own, so `npm test`
+The test hardcodes Homebrew's Ruby path, `/opt/homebrew/opt/ruby/bin`, and prefers it, so `npm test`
 works without the `PATH` line above.
 
 ## Deploy

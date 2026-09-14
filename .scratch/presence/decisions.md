@@ -87,11 +87,10 @@ Last extracted: 8ea23c5
 ## op-063 · The workflow builds from the Gemfile, so the test and the deploy run the same Jekyll
 - category: Spec
 - status: proposed
-- depends: op-048, op-043
 - image: none
 - caption:
 - screen: none (toolchain)
-- source: implement ticket 01, 2026-09-14
+- source: ticket 01
 
 **Context.** op-048 clause 3 keeps GitHub's `jekyll-build-pages` action and says both builds use Jekyll 4. Ticket 01 found otherwise: the action pins the `github-pages` gem at 232, which is Jekyll 3.10, while the Gemfile, the local build and the test use Jekyll 4.4. Ticket 01 shipped with the mismatch and noted it in `docs/agents/build.md`; the site builds under both today.
 

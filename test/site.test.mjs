@@ -15,7 +15,7 @@ const repo = dirname(dirname(fileURLToPath(import.meta.url)));
 const brewRuby = "/opt/homebrew/opt/ruby/bin";
 const PATH = existsSync(brewRuby) ? `${brewRuby}:${process.env.PATH}` : process.env.PATH;
 
-export function buildSite() {
+function buildSite() {
   const destination = mkdtempSync(join(tmpdir(), "metaphase-site-"));
   const result = spawnSync(
     "bundle",
