@@ -146,3 +146,24 @@ Last extracted: 8ea23c5
 **What else was considered.** Keeping the gold rule as a mark without words; dropping only the tagline line and keeping the rule.
 
 **What it touches.** assets/social/linkedin-banner-personal-dark.png, assets/social/linkedin-banner-personal-light.png, docs/research/linkedin-banner/, LinkedIn profile.
+
+## op-067 · Her programs are featured on her profile as link cards to the site
+- category: LinkedIn
+- status: proposed
+- image: docs/ssot/decisions/images/presence/op-067.png
+- caption: Featured on Susan's profile, 2026-09-14: Programs, Tapestry, Turning Point Tenders, then the Substack and the OG post.
+- screen: LinkedIn profile, Featured section
+- source: Susan via Lee 2026-09-14
+- work: done
+
+**Context.** Susan wants her programs on her profile the way the company page lists what Metaphase offers. A personal profile has no Products or Programs section; it has Featured (link, post, image and document cards near the top), Services (LinkedIn's fixed category list) and Projects under Accomplishments, which she rightly says is the wrong word. Featured link cards show a picture, a title and two lines of text and open the page on the site.
+
+**Question.** How do her programs appear on her personal profile?
+
+**Decision.** 1. Featured carries, in this order: the Programs page, Tapestry, Turning Point Tenders, Experience Matters (the Substack about page), and her Conversation With An OG post. 2. Each site link shows a branded card rendered from `docs/research/share-images/card.html`; the site now sets `og:image` on every page, with the Programs page and the two program services getting their own cards and everything else a site card. 3. The Services section keeps LinkedIn's categories; the programs are named in About and the headline, which stay Susan's copy (op-026).
+
+**Why.** Featured is the only place on a personal profile that shows offerings as pictures near the top, and linking to the site sends readers to the full page, the flyer and the contact form.
+
+**What else was considered.** Projects under Accomplishments (wrong word, buried); a LinkedIn Services page (fixed categories, no program names); an image-only Featured card (no link).
+
+**What it touches.** LinkedIn profile, assets/social/share-*.png, _config.yml defaults, pages/programs.html, _services/tapestry.md, _services/turning-point-tenders.md.
