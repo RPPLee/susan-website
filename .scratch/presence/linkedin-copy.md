@@ -1,6 +1,6 @@
 # LinkedIn headline and About for Susan (draft for Lee)
 
-**Status:** waiting on Lee. Nothing here is saved to LinkedIn until Lee says yes (op-013, op-041).
+**Status:** approved by Lee in the terminal 2026-09-14; use the 184-character headline. Not yet saved: the browser tool cannot type into LinkedIn, so Lee pastes both by hand.
 **Written:** 2026-09-14 from `profile.md`, `metaphase.md`, the site hero and the programs page.
 
 ## What the profile says today
