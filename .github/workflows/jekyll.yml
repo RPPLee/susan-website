@@ -20,6 +20,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install gems
+        run: bundle install
+      - name: Test the built site
+        run: npm test
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Build with Jekyll

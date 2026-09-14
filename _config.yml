@@ -26,6 +26,10 @@ plugins:
 exclude:
   - Gemfile
   - Gemfile.lock
+  - package.json
+  - test
+  - vendor
+  - node_modules
   - README.md
   - CLAUDE.md
   - CONTEXT.md

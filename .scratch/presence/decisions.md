@@ -83,3 +83,24 @@ Last extracted: 8ea23c5
 **What it touches.** Nothing on the site.
 
 > 2026-09-14 answered by op-030
+
+## op-063 · The workflow builds from the Gemfile, so the test and the deploy run the same Jekyll
+- category: Spec
+- status: proposed
+- depends: op-048, op-043
+- image: none
+- caption:
+- screen: none (toolchain)
+- source: implement ticket 01, 2026-09-14
+
+**Context.** op-048 clause 3 keeps GitHub's `jekyll-build-pages` action and says both builds use Jekyll 4. Ticket 01 found otherwise: the action pins the `github-pages` gem at 232, which is Jekyll 3.10, while the Gemfile, the local build and the test use Jekyll 4.4. Ticket 01 shipped with the mismatch and noted it in `docs/agents/build.md`; the site builds under both today.
+
+**Question.** Should the deploy build with the same Jekyll the test builds with?
+
+**Decision.** 1. The workflow replaces the `jekyll-build-pages` step with `bundle exec jekyll build` from the Gemfile, using the Ruby it already installs for the test. 2. `JEKYLL_ENV=production` and the Pages base path are set the way the action set them. 3. Nothing else in the workflow changes.
+
+**Why.** op-048's own reason: the tests are worthless if the build they run does not match the one that deploys. One build command in three places (Lee's machine, the test, the deploy) means a green test is a safe deploy.
+
+**What else was considered.** Pinning the Gemfile to the `github-pages` gem so the local build drops to Jekyll 3.10; leaving the mismatch.
+
+**What it touches.** `.github/workflows/jekyll.yml`, `docs/agents/build.md`.
