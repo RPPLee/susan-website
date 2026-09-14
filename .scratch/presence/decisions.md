@@ -125,3 +125,24 @@ Last extracted: 8ea23c5
 **What else was considered.** Leaving it, since the banner is otherwise legible; centring the headline in the right two thirds instead of shifting it.
 
 **What it touches.** assets/social/linkedin-banner-company-dark.png, assets/social/linkedin-banner-company-light.png, LinkedIn company page.
+
+## op-066 · The personal banner carries the headline and the logo only
+- category: LinkedIn
+- status: proposed
+- image: docs/ssot/decisions/images/presence/op-031.png
+- caption: Susan's profile header with the trimmed banner up, 2026-09-14.
+- screen: LinkedIn profile header
+- source: Susan via Lee 2026-09-14
+- work: done
+
+**Context.** op-002 gave both banners a headline, a gold rule, a tagline line ("Strategic Management & Business Consulting, Berkeley, California, metaphasemgt.com") and the logo top right, and op-031 put the dark personal version up. Susan looked at her profile on 2026-09-14 and found it too wordy. She asked for the headline and the logo only.
+
+**Question.** What stays on the personal banner?
+
+**Decision.** 1. The personal banner shows "Navigate the journey from Idea to Impact" and the Metaphase logo top right, nothing else. 2. The logo sits left of where LinkedIn draws its edit button, so it is not covered for Susan when she is signed in. 3. Both versions, dark and light, are re-rendered from `docs/research/linkedin-banner/banner.html`, and the dark one replaced the banner on her profile the same day. 4. The company banner keeps its tagline line until op-064 re-renders it; it can drop the line then if Susan wants the same look.
+
+**Why.** It is Susan's own read of her own profile, and the headline alone says what the tagline line said.
+
+**What else was considered.** Keeping the gold rule as a mark without words; dropping only the tagline line and keeping the rule.
+
+**What it touches.** assets/social/linkedin-banner-personal-dark.png, assets/social/linkedin-banner-personal-light.png, docs/research/linkedin-banner/, LinkedIn profile.

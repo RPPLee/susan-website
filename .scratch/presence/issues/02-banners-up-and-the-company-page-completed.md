@@ -12,7 +12,7 @@
 
 - [x] Profile banner is the dark version at 1584 by 396
 - [x] Company page banner is the dark version at 1512 by 256
-- [ ] Featured shows Experience Matters; contact details list the Substack and the site
+- [x] Featured shows Experience Matters; contact details list the Substack and the site
 - [ ] Company page tagline, website, location, specialties and description match the site settings
 - [x] Screenshots attached to op-031, op-011, op-012 and op-014
 
@@ -35,3 +35,5 @@ LinkedIn quirk: two company-page saves failed with "another admin is trying to m
 Found: the company page's logo tile covers the first letters of the banner headline. Proposed as op-064. Found: the footer and two contact links pointed at linkedin.com/in/susanmills2019, which is not her slug. settings.yml now says susan-mills-coaching and the two hard-coded links read the setting.
 
 Tooling: `sync.mjs attach-image` was added so a screenshot reaches a card through the module, as `attach-svg` does for drawn pictures. op-063's drawn picture, owed since ticket 01, was drawn in the same run.
+
+2026-09-14, later: Experience Matters is in Featured as a link to https://metaphase.substack.com/about; LinkedIn could not build a preview for the Substack home address, so the about page is the link. Title "Experience Matters, Susan's Substack". op-012's screenshot retaken. Susan asked for a plainer banner the same day; the trimmed one is up and proposed as op-066. The fourth criterion (company page copy) still waits on Susan.

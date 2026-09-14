@@ -260,7 +260,7 @@ Feature name: Susan's online presence
 - category: LinkedIn
 - status: approved
 - image: docs/ssot/decisions/images/presence/op-012.png
-- caption: Contact info listing metaphasemgt.com and metaphase.substack.com, 2026-09-14. Featured still waits on Lee.
+- caption: Featured on Susan's profile with Experience Matters as a link, 2026-09-14.
 - screen: LinkedIn profile, Featured section
 - source: Lee on the approval page 2026-09-14
 
@@ -604,7 +604,7 @@ Feature name: Susan's online presence
 - category: LinkedIn
 - status: approved
 - image: docs/ssot/decisions/images/presence/op-031.png
-- caption: Susan's profile header with the dark banner up, 2026-09-14.
+- caption: Susan's profile header with the trimmed dark banner up, headline and logo only, 2026-09-14.
 - screen: LinkedIn profile header
 - source: grill 2026-09-14
 
