@@ -49,6 +49,10 @@ _Avoid_: CMS, admin
 The site page that lists her Substack posts, read from the feed at build time.
 _Avoid_: blog
 
+**Booking link**:
+The one link on the site for a first conversation. A Google Calendar appointment schedule in Susan's account.
+_Avoid_: calendar, scheduler
+
 ### Offers
 
 **Service**:
@@ -78,6 +82,10 @@ The Stripe account Substack requires to charge readers. Already connected; the o
 
 **Metaphase Stripe account**:
 A second account under the same login for program and coaching payments. Not yet created.
+
+**Pay button**:
+A Stripe checkout link on a fixed-price item's page, charged to the Metaphase Stripe account.
+_Avoid_: buy now, cart
 
 **Paywall**:
 Substack's paid-subscriber gate on a post. Plans: $8 a month, $80 a year, $240 founding.

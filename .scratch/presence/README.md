@@ -5,7 +5,7 @@ Read this first in a fresh session. The record is the truth; this is the story a
 ## Where the record is
 
 - Approved and rejected: `docs/ssot/decisions/presence.md` (17 approved, 3 rejected as of 2026-09-14).
-- Proposed and open: `.scratch/presence/decisions.md` (4 proposed, 2 open questions).
+- Proposed and open: `.scratch/presence/decisions.md` (18 proposed, 0 open questions after the grill of 2026-09-14).
 - The page: the `Artifact:` line in `docs/ssot/decisions/README.md`. Lee and Susan rule there.
 - Tooling and rules: `docs/ssot/decisions/README.md`. Skills: `/ssot`, `/grill-with-docs-lee presence`, `/to-spec-lee presence`, `/to-tickets-lee presence`.
 - Glossary: `CONTEXT.md`. Research behind the cards: `docs/research/`.
@@ -24,15 +24,12 @@ Read this first in a fresh session. The record is the truth; this is the story a
 - Nothing has been changed in any of Susan's accounts. Lee is logged in to LinkedIn, Substack and Stripe via Google in the browser.
 - Two earlier notes in `docs/agents/` and the site status in Lee's memory.
 
-## Untracked files in the repo root
+## The grill of 2026-09-14
 
-`Susan Mills LinkedIn Banner.html` (Lee's mockup), `look.png`, `too_small.png`, `weird.png` (old screenshots of the site). Not needed by the build; Lee decides whether to keep them.
+Lee closed op-021 (Pages CMS, op-029) and op-024 (ignore the Stripe email, op-030) and ruled on the rest of the plan: op-031 to op-042 cover the banner version, which items get pay buttons, the service grouping, the booking link, the footer signup, the Insights page and its daily rebuild, the registration form, the thank-you page, testimonials, copy in Susan's voice, and the order of work. Lee's banner mockup moved to `docs/research/2026-09-11-linkedin-banner-mockup.html`; the stale screenshots were deleted. op-011's stray second Approve was applied by the prologue and then reverted on Lee's ruling; the card stays approved.
 
 ## Open threads
 
-- op-026, op-027, op-028, op-013 wait for a verdict on the page.
-- op-021 (which editor) is open for Lee; the research says Pages CMS, and op-020 is approved, so it can be closed by a decision.
-- op-024 (the Stripe email) is open for Susan.
-- Personal banner: dark or light.
-- op-011's second Approve on the page was not applied, since it would withdraw the card. Lee to confirm it stays approved.
-- Prices on the older service pages date from earlier flyers; Susan has not confirmed them (op-008 needs that before pay buttons go live).
+- op-013, op-026, op-027, op-028 and op-029 to op-042 wait for a verdict on the page.
+- Prices on the older service pages date from earlier flyers; Susan has not confirmed them (op-008 and op-032 need that before pay buttons go live).
+- Next: `/to-spec-lee presence` once the page has been ruled on.
