@@ -6,6 +6,16 @@
   body { width: 1200px; height: 627px; overflow: hidden; font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
   .card { position: relative; width: 1200px; height: 627px; overflow: hidden; color: #F5F1E8;
     background: linear-gradient(115deg, #1A8292 -10%, #0f4f58 40%, #0a2d2f 85%); }
+  /* Colour variants: each featured card on LinkedIn gets its own. */
+  .card.teal { background: linear-gradient(115deg, #2aa3b5 -10%, #1A8292 45%, #106572 100%); }
+  .card.teal .dots { background-image: radial-gradient(rgba(245,241,232,0.45) 1.3px, transparent 1.6px); }
+  .card.gold { background: linear-gradient(115deg, #e39a3f -10%, #D08529 45%, #a96417 100%); color: #0A2D2F; }
+  .card.gold .dots { background-image: radial-gradient(rgba(10,45,47,0.35) 1.3px, transparent 1.6px); }
+  .card.gold .kicker { color: #0A2D2F; }
+  .card.gold h1 em, .card.teal h1 em { color: #F5F1E8; }
+  .card.gold .rule { background: #0A2D2F; }
+  .card.gold p { color: rgba(10,45,47,0.9); }
+  .card.gold .wordmark { color: #0A2D2F; }
   .dots { position: absolute; inset: 0;
     background-image: radial-gradient(rgba(208,133,41,0.5) 1.3px, transparent 1.6px);
     background-size: 22px 22px; background-position: 11px 11px;
@@ -22,7 +32,7 @@
   .rule { width: 160px; height: 5px; background: #D08529; margin: 0 0 24px; }
   p { margin: 0; font-size: 28px; line-height: 1.35; font-weight: 500; color: rgba(245,241,232,0.9); max-width: 900px; }
 </style></head>
-<body><div class="card"><div class="dots"></div>
+<body><div class="card __VARIANT__"><div class="dots"></div>
   <div class="logo"><img src="logo-graphic.svg" alt=""><div class="wordmark"><b>METAPHASE</b><span>MANAGEMENT ASSOCIATES</span></div></div>
   <div class="text">
     <p class="kicker">__KICKER__</p>

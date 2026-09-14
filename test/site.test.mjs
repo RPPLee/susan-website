@@ -45,6 +45,8 @@ test("pages carry a share image for link previews", () => {
     assert.equal(og("programs/index.html"), "https://metaphasemgt.com/assets/social/share-programs.png");
     assert.equal(og("services/tapestry/index.html"), "https://metaphasemgt.com/assets/social/share-tapestry.png");
     assert.equal(og("services/turning-point-tenders/index.html"), "https://metaphasemgt.com/assets/social/share-turning-point-tenders.png");
+    assert.equal(og("services/conversation-with-an-og/index.html"), "https://metaphasemgt.com/assets/social/share-conversation-with-an-og.png");
+    assert.equal(og("blitz/index.html"), "https://metaphasemgt.com/assets/social/share-blitz.png");
     assert.equal(og("index.html"), "https://metaphasemgt.com/assets/social/share-default.png");
     assert.equal(og("about/index.html"), "https://metaphasemgt.com/assets/social/share-default.png");
   } finally {
