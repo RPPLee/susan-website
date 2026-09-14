@@ -454,3 +454,149 @@ Last extracted: 8ea23c5
 **What else was considered.** none recorded
 
 **What it touches.** LinkedIn profile, company page, the editor, the site, Substack, Stripe.
+
+## op-043 · One test seam: the built site
+- category: Spec
+- status: proposed
+- image: none
+- caption:
+- svg: docs/ssot/decisions/images/presence/op-043.svg
+- screen: none (tests)
+- source: spec presence 2026-09-14
+
+**Context.** Susan wants her online presence to look professional and to work without Lee for everyday changes. The spec's Testing Decisions name one seam for everything the repo builds.
+
+**Question.** At what level are the site changes tested?
+
+**Decision.** 1. One seam, the built site: a Node test runs the feed script against a fixture feed, builds the site with Jekyll into a temporary folder with fixture data, and asserts on the pages that come out. 2. It runs locally with `node --test` and in the deploy workflow before the deploy step, so a broken template from any commit, including Susan's editor saves, stops before it reaches metaphasemgt.com. 3. Nothing in a test reaches Substack, Stripe, LinkedIn or Google.
+
+**Why.** The highest seam that exists is the HTML a visitor gets; asserting there covers grouping, buttons, the Insights page and the footer with one runner and no template-level tests to maintain. Running it in the workflow is what makes Susan's own edits safe.
+
+**What else was considered.** Unit tests on Liquid includes; testing only the feed script; no tests, as the site has today.
+
+**What it touches.** A test file under the repo, the deploy workflow, the feed script.
+
+## op-044 · A script writes the Insights data file before the build
+- category: Spec
+- status: proposed
+- image: none
+- caption:
+- svg: docs/ssot/decisions/images/presence/op-044.svg
+- screen: none (build)
+- source: spec presence 2026-09-14
+
+**Context.** Susan wants her online presence to look professional and to work without Lee for everyday changes. op-036 rules that the Insights page rebuilds daily from the Substack feed; this card, in the spec's Implementation Decisions, says how the feed becomes page data.
+
+**Question.** How does the feed become something Jekyll can render, and what happens when it is missing?
+
+**Decision.** 1. A Node script in the repo reads the feed from a URL or a local file, keeps the ten newest posts with title, date, link and excerpt, and writes a data file Jekyll reads. 2. The deploy workflow runs it before the build on every push and on the daily schedule. 3. The data file is not committed. 4. When the file is missing or the feed is unreachable, the build succeeds and the Insights page shows the subscribe form and a line saying the posts are on Substack.
+
+**Why.** GitHub's Jekyll action runs no custom plugins, so the fetch has to happen before Jekyll. A file that is never committed keeps Susan's history clean, and a soft failure means one Substack outage cannot take the site down.
+
+**What else was considered.** Committing the data file from the scheduled run; failing the build when the feed is down.
+
+**What it touches.** The feed script, the deploy workflow, the Insights page, the gitignore.
+
+**Details.** Daily run at 06:00 Pacific, 13:00 UTC. Ten posts. Excerpt is the feed's description, trimmed to about 200 characters.
+
+## op-045 · Services render from the collection, grouped by a front matter field
+- category: Spec
+- status: proposed
+- image: none
+- caption:
+- screen: Homepage, services section
+- source: spec presence 2026-09-14
+
+**Context.** Susan wants her online presence to look professional and to work without Lee for everyday changes. The homepage's seven service cards are written by hand in the template today, so an edit in the editor would not reach the homepage. This sits in the spec's Implementation Decisions under services.
+
+**Question.** How does the homepage show the three groups so that Susan's edits reach it?
+
+**Decision.** 1. Each service's front matter gets a `group` field: individuals, groups or organizations. 2. The homepage renders the services from the collection, grouped by that field and ordered by the existing order field. 3. The hand-written cards go.
+
+**Why.** One source for a service's title, tagline and group means Susan's edit in the editor changes the homepage too, and regrouping a service is a dropdown, not a template change.
+
+**What else was considered.** Keeping the hand-written cards and adding group headings around them.
+
+**What it touches.** Service front matter, the homepage, the editor configuration.
+
+## op-046 · A pay button is a checkout link in the service's front matter
+- category: Spec
+- status: proposed
+- image: none
+- caption:
+- screen: Service page, call to action
+- source: spec presence 2026-09-14
+
+**Context.** Susan wants her online presence to look professional and to work without Lee for everyday changes. op-008 and op-032 say which items get a pay button; this card, in the spec's Implementation Decisions under payments, says how a button is put on a page.
+
+**Question.** How does a pay button get onto a service page, and who can put it there?
+
+**Decision.** 1. A service's front matter gets a `checkout` field holding a Stripe checkout link. 2. When it is set, the page shows a pay button with the page's price; when it is not, the page shows today's register-interest and contact buttons. 3. Susan pastes the link into the editor herself; no template knows about Stripe.
+
+**Why.** Susan confirms prices and creates links in Stripe; putting the link in the same form as the price keeps the two together and lets her switch a button on or off without Lee.
+
+**What else was considered.** A list of checkout links in the site settings keyed by service; a Stripe integration in the template.
+
+**What it touches.** Service front matter, the service layout, the editor configuration.
+
+## op-047 · What the editor exposes to Susan
+- category: Spec
+- status: proposed
+- image: none
+- caption:
+- screen: Pages CMS sidebar
+- source: spec presence 2026-09-14
+
+**Context.** Susan wants her online presence to look professional and to work without Lee for everyday changes. op-004 lists what Susan may change and op-020 names the editor; this card, in the spec's Implementation Decisions under the editor, fixes the editor's configuration to that list.
+
+**Question.** Which files and fields does the editor configuration expose?
+
+**Decision.** 1. Services: a collection with title, tagline, price, format, duration, group, checkout link and body. 2. Site settings: the hero's audience line, the intro, her bio, contact details and the booking link. 3. Testimonials: a data file with name, title, organization and quote. 4. The About page body and the Programs page. 5. The images folder as media. 6. Nothing else: layouts, navigation, the workflow and the configuration itself stay with Lee.
+
+**Why.** It is op-004's list turned into fields, with the new fields the grill added (group, checkout, booking link, testimonials). Leaving navigation and layouts out is what keeps her from breaking the site.
+
+**What else was considered.** Exposing every file in the repo.
+
+**What it touches.** The editor configuration, the site settings, the testimonials data file.
+
+## op-048 · Jekyll 4 runs locally through Bundler on a newer Ruby
+- category: Spec
+- status: proposed
+- image: none
+- caption:
+- svg: docs/ssot/decisions/images/presence/op-048.svg
+- screen: none (toolchain)
+- source: spec presence 2026-09-14
+
+**Context.** Susan wants her online presence to look professional and to work without Lee for everyday changes. The tests build the site (op-043), and on Lee's machine the build fails today: the system Ruby is 2.6 with Jekyll 3.9, while the site's Gemfile wants Jekyll 4.3 and a Bundler the system Ruby cannot load. This sits at the end of the spec's Implementation Decisions.
+
+**Question.** How does the site build on Lee's machine?
+
+**Decision.** 1. A Ruby newer than the system's, installed once through Homebrew, with Bundler. 2. `bundle exec jekyll build` from the repo's Gemfile is the one local build command, and the tests call it. 3. The workflow keeps GitHub's Jekyll action; both build with Jekyll 4.
+
+**Why.** The tests are worthless if the build they run does not match the one that deploys. One install fixes it for good and touches nothing in the repo but a note.
+
+**What else was considered.** Docker; running the tests only in the workflow.
+
+**What it touches.** Lee's machine, the test runner, a setup note in the repo.
+
+## op-049 · Account work is verified by a screenshot on its card
+- category: Spec
+- status: proposed
+- image: none
+- caption:
+- svg: docs/ssot/decisions/images/presence/op-049.svg
+- screen: none (process)
+- source: spec presence 2026-09-14
+
+**Context.** Susan wants her online presence to look professional and to work without Lee for everyday changes. The LinkedIn, Substack, Stripe and Google Calendar work happens in her accounts, where no test can reach. This closes the spec's Testing Decisions.
+
+**Question.** How is work in Susan's accounts checked?
+
+**Decision.** 1. Each change in an account is checked by hand against its decision. 2. A screenshot of the result is attached to that decision's card on the page. 3. A change with no screenshot is not done.
+
+**Why.** A self-report is not verification; the screenshot is the artifact a ratifier can see.
+
+**What else was considered.** A written report in the ticket; no verification beyond the agent's own report.
+
+**What it touches.** LinkedIn profile, company page, Substack settings, the Metaphase Stripe account, Susan's Google Calendar, the decisions page.
