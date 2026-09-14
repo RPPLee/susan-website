@@ -7,6 +7,7 @@ duration: 60 minutes
 price: Free
 format: One-on-one, in person, by phone or video
 order: 10
+group: individuals
 new: true
 image: /assets/social/share-conversation-with-an-og.png
 summary: A free one-hour conversation for people under 40, and anyone else, navigating these complex times.

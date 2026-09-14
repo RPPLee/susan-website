@@ -7,6 +7,7 @@ duration: Quarterly engagements
 price: Retained engagement
 format: In person and/or virtual
 order: 6
+group: organizations
 ---
 
 ## What is Strategic Planning?

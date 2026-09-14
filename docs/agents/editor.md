@@ -11,7 +11,7 @@ and field in it exists in the site, so a rename on either side fails `npm test`.
 
 | Sidebar entry | File | What changes |
 |---|---|---|
-| Services | `_services/*.md` | Title, tagline, price, duration, format and the page text of each service. Prices are free text, shown as written. |
+| Services | `_services/*.md` | Title, tagline, price, duration, format, group and the page text of each service. The group (Individuals, Groups or Organizations) is where the service sits on the homepage. Prices are free text, shown as written. |
 | Programs | `pages/programs.html` | The New Programs page: title, search description, and the page HTML. |
 | About | `pages/about.html` | The About page: title and the page HTML. Ticket 08 replaces the HTML with a body she edits as text. |
 | Site settings | `_data/settings.yml` | Site name, tagline, description, the homepage intro; Susan's name, title, email, phone and location; the LinkedIn and email links. |
@@ -20,9 +20,11 @@ and field in it exists in the site, so a rename on either side fails `npm test`.
 The Programs and About pages open as HTML source for now. Susan changes words between the tags;
 tickets 06 and 08 turn the pieces she edits often into fields.
 
-Not exposed: layouts, includes, the menu, the specialties list, `_config.yml`, the workflow and
-`.pages.yml` itself. Adding or deleting a service is off too, because the homepage cards are
-still written by hand; ticket 05 draws them from the collection and can open that up. The short
+Not exposed: layouts, includes, the menu, the specialties list, the group list in
+`_data/service_groups.yml`, `_config.yml`, the workflow and `.pages.yml` itself. Adding or
+deleting a service is off too: a new service needs an icon, an order and a share image, which
+stay with Lee. The homepage card text is the tagline, or the `summary` key where one exists
+(the three newest services); `summary` is not an editor field yet. The short
 bio in the settings file is not exposed either, since nothing on the site shows it yet; ticket 08
 adds it with the About page.
 

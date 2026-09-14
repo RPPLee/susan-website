@@ -7,6 +7,7 @@ duration: Ongoing meetings
 price: "$500 formation and planning"
 format: In person or online, up to 10 participants
 order: 4
+group: groups
 ---
 
 ## What are Peer Circles?

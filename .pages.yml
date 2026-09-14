@@ -1,6 +1,6 @@
 # Pages CMS configuration: what Susan can edit at app.pagescms.org (op-020, op-047, op-053).
 # Layouts, includes, navigation, the workflow, _config.yml and this file stay with Lee.
-# Later tickets add their fields here as they add them to the site (group, testimonials, booking link).
+# Later tickets add their fields here as they add them to the site (testimonials, booking link).
 # The note for editors is docs/agents/editor.md.
 
 settings:
@@ -25,13 +25,13 @@ media:
 content:
   - name: services
     label: Services
-    description: One page per service. The homepage lists them in order.
+    description: One page per service. The homepage shows each under its group, in order.
     type: collection
     path: _services
     format: yaml-frontmatter
     filename: "{primary}.md"
     view:
-      fields: [title, price, duration]
+      fields: [title, group, price, duration]
       primary: title
       sort: [order, title]
       default:
@@ -61,6 +61,19 @@ content:
         label: Format
         description: Who takes part and how, for example "One-on-one or small group".
         type: string
+      - name: group
+        label: Group
+        description: Where the service sits on the homepage.
+        type: select
+        required: true
+        options:
+          values:
+            - value: individuals
+              label: Individuals
+            - value: groups
+              label: Groups
+            - value: organizations
+              label: Organizations
       - name: body
         label: Page text
         type: rich-text

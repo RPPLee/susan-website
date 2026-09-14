@@ -60,6 +60,9 @@ One of the seven standing offers with a page under `_services/`: BizBlitz, VizBl
 
 **Program**:
 A dated, enrolling offer: Tapestry and Turning Point Tenders. Has a flyer, a service page and a registration.
+
+**Group**:
+Where a service sits on the homepage: Individuals, Groups or Organizations (op-033). Each service names one in its `group` front matter; the three are listed in `_data/service_groups.yml` (op-045).
 _Avoid_: course, workshop
 
 **Blitz**:

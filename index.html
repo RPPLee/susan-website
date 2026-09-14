@@ -73,72 +73,27 @@ title: Home
     <h2 class="section-title">Our Services</h2>
     <p class="section-subtitle">We blend coaching, strategic planning, and hands-on management into a curated suite of support tailored to each client's purpose and objectives.</p>
 
-    <div class="services-grid">
-
-      <!-- BizBlitz -->
-      <article class="service-card">
-        <div class="service-card-content">
-          <h3><a href="{{ '/services/bizblitz/' | relative_url }}">BizBlitz</a></h3>
-          <p>60-minute rapid-fire business analysis. Define your market position, value proposition, competitive landscape, and action plan in one intense session.</p>
-          <span class="service-price">60-minute session</span>
-        </div>
-      </article>
-
-      <!-- VizBlitz -->
-      <article class="service-card">
-        <div class="service-card-content">
-          <h3><a href="{{ '/services/vizblitz/' | relative_url }}">VizBlitz</a></h3>
-          <p>60-minute future visioning session. Bring possibilities into focus and build a practical tool to stay on track through pivots, scaling, and crossroads.</p>
-          <span class="service-price">60-minute session</span>
-        </div>
-      </article>
-
-      <!-- Coaching & Mentoring -->
-      <article class="service-card">
-        <div class="service-card-content">
-          <h3><a href="{{ '/services/coaching/' | relative_url }}">Coaching &amp; Mentoring</a></h3>
-          <p>Regular counseling sessions tailored to your needs. Connect with an experienced, reflective confidant for life and business transitions.</p>
-          <span class="service-price">Starting at $250</span>
-        </div>
-      </article>
-
-      <!-- Peer Circles -->
-      <article class="service-card">
-        <div class="service-card-content">
-          <h3><a href="{{ '/services/peer-circles/' | relative_url }}">Peer Circles</a></h3>
-          <p>Facilitated discussion groups that meet regularly to advise, support, and act together on a shared interest or purpose. Up to 10 participants.</p>
-          <span class="service-price">Starting at $500</span>
-        </div>
-      </article>
-
-      <!-- Team Building -->
-      <article class="service-card">
-        <div class="service-card-content">
-          <h3><a href="{{ '/services/team-building/' | relative_url }}">Team Building</a></h3>
-          <p>Strengthen group performance through shared vision, clear roles, decision-making parameters, and resolution of differences.</p>
-          <span class="service-price">Starting at $500</span>
-        </div>
-      </article>
-
-      <!-- Strategic Planning -->
-      <article class="service-card">
-        <div class="service-card-content">
-          <h3><a href="{{ '/services/strategic-planning/' | relative_url }}">Strategic Planning</a></h3>
-          <p>In-depth strategic and tactical business planning including position definition, scenario planning, and organizational design.</p>
-          <span class="service-price">Retained engagement</span>
-        </div>
-      </article>
-
-      <!-- Performance -->
-      <article class="service-card">
-        <div class="service-card-content">
-          <h3><a href="{{ '/services/performance/' | relative_url }}">Performance</a></h3>
-          <p>Aligning intentions to actions with assessment, partnerships, and project management to ensure accountability and adaptability.</p>
-          <span class="service-price">Custom pricing</span>
-        </div>
-      </article>
-
-    </div>
+{% assign services = site.services | sort: "order" %}
+{% for group in site.data.service_groups %}
+{% assign in_group = services | where: "group", group.id %}
+{% if in_group.size > 0 %}
+    <section class="service-group" id="{{ group.id }}">
+      <h3 class="service-group-title">{{ group.title }}</h3>
+      <p class="service-group-note">{{ group.note }}</p>
+      <div class="services-grid">
+{% for service in in_group %}
+        <article class="service-card service-card-{{ service.group }}">
+          <div class="service-card-content">
+            <h4><a href="{{ service.url | relative_url }}">{{ service.title | escape }}</a></h4>
+            <p>{{ service.summary | default: service.tagline }}</p>
+            <span class="service-price">{{ service.price }}</span>
+          </div>
+        </article>
+{% endfor %}
+      </div>
+    </section>
+{% endif %}
+{% endfor %}
   </div>
 </section>
 

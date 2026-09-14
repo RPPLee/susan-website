@@ -7,6 +7,7 @@ duration: 60 minutes
 price: Contact for pricing
 format: One-on-one or small group
 order: 2
+group: organizations
 ---
 
 ## What is VizBlitz?

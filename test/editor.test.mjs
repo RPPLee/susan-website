@@ -97,3 +97,18 @@ test("saves carry the editor's own name and keep the keys the editor does not ma
   assert.equal(config.settings?.commit?.identity, "user");
   assert.equal(config.settings?.content?.merge, true);
 });
+
+test("the editor offers each service's group as a choice of the three (op-045)", () => {
+  const group = entries.Services.fields.find((field) => field.name === "group");
+  assert.ok(group, "services collection has no group field");
+  assert.equal(group.type, "select");
+  const ids = loadYaml("_data/service_groups.yml").map((g) => g.id);
+  assert.deepEqual(ids, ["individuals", "groups", "organizations"]);
+  assert.deepEqual(group.options.values.map((v) => v.value), ids);
+  assert.equal(group.required, true);
+
+  for (const file of readdirSync(join(repo, "_services"))) {
+    const value = frontMatter(join("_services", file)).group;
+    assert.ok(ids.includes(value), `${file} has group ${JSON.stringify(value)}`);
+  }
+});

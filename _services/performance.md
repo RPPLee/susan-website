@@ -7,6 +7,7 @@ duration: Custom engagements
 price: Retainer or per-task pricing
 format: In person and/or virtual
 order: 7
+group: organizations
 ---
 
 ## What is Performance?

@@ -291,13 +291,28 @@ section {
   border-top: 4px solid var(--primary-color);
 }
 
-.service-card:nth-child(1) { border-top-color: #1A8292; }
-.service-card:nth-child(2) { border-top-color: #D08529; }
-.service-card:nth-child(3) { border-top-color: #0A2D2F; }
-.service-card:nth-child(4) { border-top-color: #14697a; }
-.service-card:nth-child(5) { border-top-color: #D08529; }
-.service-card:nth-child(6) { border-top-color: #1A8292; }
-.service-card:nth-child(7) { border-top-color: #0A2D2F; }
+.service-card-individuals { border-top-color: #D08529; }
+.service-card-groups { border-top-color: #1A8292; }
+.service-card-organizations { border-top-color: #0A2D2F; }
+
+.service-group {
+  padding: 0; /* a nested section; the page-section padding above does not apply */
+}
+
+.service-group + .service-group {
+  margin-top: 56px;
+}
+
+.service-group-title {
+  font-size: 1.6rem;
+  color: var(--text-color);
+  margin-bottom: 4px;
+}
+
+.service-group-note {
+  color: var(--text-light);
+  margin-bottom: 24px;
+}
 
 .service-card-content {
   padding: 24px;
@@ -306,16 +321,16 @@ section {
   flex-direction: column;
 }
 
-.service-card-content h3 {
+.service-card-content h4 {
   font-size: 1.4rem;
   margin-bottom: 12px;
 }
 
-.service-card-content h3 a {
+.service-card-content h4 a {
   color: var(--text-color);
 }
 
-.service-card-content h3 a:hover {
+.service-card-content h4 a:hover {
   color: var(--primary-color);
 }
 

@@ -3,10 +3,10 @@
 // Nothing here reaches Substack, Stripe, LinkedIn or Google.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { run, loadYaml } from "./jekyll.mjs";
+import { repo, run, loadYaml, frontMatter } from "./jekyll.mjs";
 
 function buildSite() {
   const destination = mkdtempSync(join(tmpdir(), "metaphase-site-"));
@@ -79,3 +79,40 @@ test("register buttons go to the contact form and /register/ redirects there", (
     rmSync(destination, { recursive: true, force: true });
   }
 });
+
+// op-033 and op-045: the homepage shows the services in three groups, rendered from the
+// collection's `group` field. The expected membership comes from the front matter, so a service
+// Susan regroups in the editor moves on the homepage and the deploy still passes.
+test("the homepage shows the services in three groups from the collection", () => {
+  const { destination, result } = buildSite();
+  try {
+    assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
+    const home = readFileSync(join(destination, "index.html"), "utf8");
+    const groupList = loadYaml("_data/service_groups.yml");
+
+    const expected = Object.fromEntries(groupList.map((g) => [g.id, []]));
+    const services = readdirSync(join(repo, "_services"))
+      .map((file) => frontMatter(join("_services", file)))
+      .sort((a, b) => a.order - b.order);
+    for (const service of services) expected[service.group].push(escapeHtml(service.title));
+
+    const groups = [...home.matchAll(/<section class="service-group" id="([^"]+)">([\s\S]*?)<\/section>/g)];
+    assert.deepEqual(groups.map((m) => m[1]), groupList.filter((g) => expected[g.id].length).map((g) => g.id));
+
+    const titles = (html) => [...html.matchAll(/<h4><a href="\/services\/[^"]+\/">([^<]+)<\/a><\/h4>/g)].map((m) => m[1]);
+    for (const [id, html] of groups.map((m) => [m[1], m[2]])) {
+      assert.deepEqual(titles(html), expected[id], `the ${id} group shows the wrong services`);
+    }
+    for (const { id, title } of groupList) {
+      if (!expected[id].length) continue;
+      assert.match(home, new RegExp(`<section class="service-group" id="${id}">\\s*<h3 class="service-group-title">${title}</h3>`));
+    }
+    assert.doesNotMatch(home, /<!-- BizBlitz -->/, "the hand-written cards are still on the homepage");
+  } finally {
+    rmSync(destination, { recursive: true, force: true });
+  }
+});
+
+function escapeHtml(text) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}

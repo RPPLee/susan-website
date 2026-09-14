@@ -7,6 +7,7 @@ duration: 3-6 month engagements
 price: "$500 initial planning"
 format: In person and/or virtual
 order: 5
+group: organizations
 ---
 
 ## What is Team Building?

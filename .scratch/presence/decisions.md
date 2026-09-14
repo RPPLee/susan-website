@@ -167,3 +167,25 @@ Last extracted: 8ea23c5
 **What else was considered.** Projects under Accomplishments (wrong word, buried); a LinkedIn Services page (fixed categories, no program names); image-only Featured cards (no link); featuring the OG post alone (no branded picture, no page to send people to).
 
 **What it touches.** LinkedIn profile, assets/social/share-*.png, _config.yml defaults, _services/conversation-with-an-og.md, pages/blitz.html, _services/turning-point-tenders.md.
+
+## op-068 · Conversation With An OG sits under Individuals
+- category: Website
+- status: proposed
+- linked: op-033, op-054
+- image: none
+- caption:
+- screen: Homepage, services section
+- source: implement ticket 05, 2026-09-14
+- work: done
+
+**Context.** op-033 placed nine services in three groups. Conversation With An OG became a tenth service page after that ruling (op-067). Ticket 05 renders every service from the collection, so it needs a group.
+
+**Question.** Which group does Conversation With An OG belong to?
+
+**Decision.** Individuals, after Coaching & Mentoring and Turning Point Tenders. Its front matter says so; Susan can move it in the editor.
+
+**Why.** It is a one-on-one conversation for one person at a time, the same shape as the other two in that group.
+
+**What else was considered.** Leaving it off the homepage; a fourth group for free offers.
+
+**What it touches.** _services/conversation-with-an-og.md, the homepage services section.
