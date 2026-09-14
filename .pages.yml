@@ -1,0 +1,163 @@
+# Pages CMS configuration: what Susan can edit at app.pagescms.org (op-020, op-047, op-053).
+# Layouts, includes, navigation, the workflow, _config.yml and this file stay with Lee.
+# Later tickets add their fields here as they add them to the site (group, testimonials, booking link).
+# The note for editors is docs/agents/editor.md.
+
+settings:
+  content:
+    merge: true          # keep front-matter keys the editor does not manage (layout, icon, order)
+  commit:
+    identity: user       # each save is committed under the editor's own name and email
+    templates:
+      create: "Add {path} in the editor"
+      update: "Update {path} in the editor"
+      delete: "Remove {path} in the editor"
+      rename: "Rename {oldPath} to {newPath} in the editor"
+
+media:
+  name: images
+  label: Media
+  input: assets/images
+  output: /assets/images
+  categories: [image]
+  rename: safe
+
+content:
+  - name: services
+    label: Services
+    description: One page per service. The homepage lists them in order.
+    type: collection
+    path: _services
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [title, price, duration]
+      primary: title
+      sort: [order, title]
+      default:
+        sort: order
+        order: asc
+    operations:
+      create: false
+      delete: false
+      rename: false
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: tagline
+        label: Tagline
+        description: One line under the title.
+        type: string
+      - name: price
+        label: Price
+        description: Shown as written, for example "$250 initial session, $150/hour thereafter" or "Contact for pricing".
+        type: string
+      - name: duration
+        label: Duration
+        type: string
+      - name: format
+        label: Format
+        description: Who takes part and how, for example "One-on-one or small group".
+        type: string
+      - name: body
+        label: Page text
+        type: rich-text
+        options:
+          format: markdown
+          media: images
+
+  - name: programs
+    label: Programs
+    description: The New Programs page. The page text is HTML; change words, not tags.
+    type: file
+    path: pages/programs.html
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Description for search engines
+        type: text
+      - name: body
+        label: Page text
+        type: code
+        options:
+          format: html
+
+  - name: about
+    label: About
+    description: The About page. The page text is HTML; change words, not tags.
+    type: file
+    path: pages/about.html
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: body
+        label: Page text
+        type: code
+        options:
+          format: html
+
+  - name: settings
+    label: Site settings
+    description: Details used across the site.
+    type: file
+    path: _data/settings.yml
+    format: yaml
+    fields:
+      - name: title
+        label: Site name
+        type: string
+        required: true
+      - name: tagline
+        label: Tagline
+        description: Shown in the footer.
+        type: string
+      - name: description
+        label: Description
+        description: One sentence about the firm, for search engines and previews.
+        type: text
+      - name: intro
+        label: Homepage intro
+        description: The paragraph under the headline on the homepage.
+        type: text
+      - name: author
+        label: Susan
+        type: object
+        fields:
+          - name: name
+            label: Name
+            type: string
+          - name: title
+            label: Title
+            type: string
+          - name: email
+            label: Email
+            type: string
+          - name: phone
+            label: Phone
+            type: string
+          - name: location
+            label: Location
+            type: string
+      - name: social
+        label: Links
+        type: object
+        fields:
+          - name: linkedin
+            label: LinkedIn profile name
+            description: The part after linkedin.com/in/
+            type: string
+          - name: linkedin_company
+            label: LinkedIn company page id
+            type: string
+          - name: email
+            label: Contact email
+            type: string

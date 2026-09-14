@@ -32,6 +32,7 @@ exclude:
   - node_modules
   - README.md
   - CLAUDE.md
+  - .pages.yml
   - CONTEXT.md
   - docs
   - .scratch

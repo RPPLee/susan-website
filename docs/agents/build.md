@@ -30,6 +30,11 @@ The test in `test/site.test.mjs` builds the site into a temporary folder with
 silently building at the wrong address. It then asserts on the HTML that comes out. Later tickets
 add their assertions to the same file (op-043).
 
+`test/editor.test.mjs` is the one check that does not read the built site: it reads the editor
+configuration, `.pages.yml`, and asserts that every path and field in it exists in the source
+(docs/agents/editor.md). Both files share `test/jekyll.mjs` for the repo path, the Ruby to use
+and a YAML reader.
+
 The test hardcodes Homebrew's Ruby path, `/opt/homebrew/opt/ruby/bin`, and prefers it, so `npm test`
 works without the `PATH` line above.
 

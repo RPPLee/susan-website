@@ -1,6 +1,6 @@
 # 04: Pages CMS installed and proven with Lee's own edit
 
-**Status:** ready-for-agent
+**Status:** in-progress
 **Blocked by:** None (can start immediately).
 **Next:** `/implement-lee presence`
 
@@ -10,10 +10,14 @@
 
 **Touches:** .pages.yml, docs/agents/editor.md
 
-- [ ] The editor lists Services, Programs, About, Site settings and Media
+- [x] The editor lists Services, Programs, About, Site settings and Media (`.pages.yml`, checked by `test/editor.test.mjs`; the sidebar itself is seen after the app is installed)
 - [ ] Lee's price edit is live on the site within minutes
 - [ ] Saves carry Susan's name as the commit author
 - [ ] Susan has received her invitation and signed in once
-- [ ] A note says what she can edit and where
+- [x] A note says what she can edit and where (`docs/agents/editor.md`)
 
 Next: /implement-lee presence
+
+## Comments
+
+2026-09-14: Config, test and note are in the repo. The push, the GitHub App install, the price edit, and the invitation are Lee's steps; they are numbered in `docs/agents/editor.md`.

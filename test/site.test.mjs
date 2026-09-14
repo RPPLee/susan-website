@@ -3,25 +3,14 @@
 // Nothing here reaches Substack, Stripe, LinkedIn or Google.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, existsSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-
-const repo = dirname(dirname(fileURLToPath(import.meta.url)));
-
-// Homebrew's Ruby is the documented one (docs/agents/build.md); prefer it over the system Ruby when present.
-const brewRuby = "/opt/homebrew/opt/ruby/bin";
-const PATH = existsSync(brewRuby) ? `${brewRuby}:${process.env.PATH}` : process.env.PATH;
+import { join } from "node:path";
+import { run, loadYaml } from "./jekyll.mjs";
 
 function buildSite() {
   const destination = mkdtempSync(join(tmpdir(), "metaphase-site-"));
-  const result = spawnSync(
-    "bundle",
-    ["exec", "jekyll", "build", "--strict_front_matter", "--destination", destination],
-    { cwd: repo, env: { ...process.env, PATH }, encoding: "utf8" },
-  );
+  const result = run("bundle", ["exec", "jekyll", "build", "--strict_front_matter", "--destination", destination]);
   return { destination, result };
 }
 
@@ -36,6 +25,10 @@ test("the site builds and the homepage renders", () => {
     const home = readFileSync(join(destination, "index.html"), "utf8");
     assert.match(home, /<h1>Navigate the Journey from Idea to Impact<\/h1>/);
     assert.match(home, /<title>[^<]*Metaphase Management Associates[^<]*<\/title>/);
+    // The hero intro comes from the site settings so Susan can change it in the editor (op-004).
+    const { intro } = loadYaml("_data/settings.yml");
+    assert.ok(intro, "settings.yml has no intro");
+    assert.ok(home.includes(intro), "the homepage does not show the intro from settings.yml");
   } finally {
     rmSync(destination, { recursive: true, force: true });
   }
