@@ -4,8 +4,8 @@ Read this first in a fresh session. The record is the truth; this is the story a
 
 ## Where the record is
 
-- Approved and rejected: `docs/ssot/decisions/presence.md` (17 approved, 3 rejected as of 2026-09-14).
-- Proposed and open: `.scratch/presence/decisions.md` (25 proposed, 0 open questions after the grill and spec of 2026-09-14).
+- Approved and rejected: `docs/ssot/decisions/presence.md` (42 approved, 3 rejected as of 2026-09-14, after Lee approved all 25 pending cards in the terminal because the page was unreachable on his phone).
+- Proposed and open: `.scratch/presence/decisions.md` (0 proposed, 0 open questions).
 - The page: the `Artifact:` line in `docs/ssot/decisions/README.md`. Lee and Susan rule there.
 - Tooling and rules: `docs/ssot/decisions/README.md`. Skills: `/ssot`, `/grill-with-docs-lee presence`, `/to-spec-lee presence`, `/to-tickets-lee presence`.
 - Glossary: `CONTEXT.md`. Research behind the cards: `docs/research/`.
@@ -30,7 +30,6 @@ Lee closed op-021 (Pages CMS, op-029) and op-024 (ignore the Stripe email, op-03
 
 ## Open threads
 
-- op-013, op-026, op-027, op-028 and op-029 to op-042 wait for a verdict on the page.
 - Prices on the older service pages date from earlier flyers; Susan has not confirmed them (op-008 and op-032 need that before pay buttons go live).
-- The spec is `.scratch/presence/spec.md` (written 2026-09-14). Its seven Spec cards, op-043 to op-049, must be ruled on before `/to-tickets-lee presence` will run.
+- The spec is `.scratch/presence/spec.md` (written 2026-09-14). Its seven Spec cards, op-043 to op-049, are approved.
 - Lee's machine cannot build the site today (system Ruby 2.6, Jekyll 3.9; the Gemfile wants 4.3). op-048 covers the fix.
