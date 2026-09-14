@@ -1,0 +1,860 @@
+#!/usr/bin/env node
+// Decision record sync: markdown <-> page documents, and verdicts -> markdown.
+//
+// A decisions file (proposals in .scratch/<feature>/decisions.md, truth in
+// docs/ssot/decisions/<feature>.md) is a header block followed by one `##`
+// section per decision. This module parses it, serialises it back
+// byte-identically, and applies verdicts from the page.
+//
+// CLI:
+//   node sync.mjs export <decisions.md> [more.md...]   -> JSON docs on stdout
+//   node sync.mjs apply <verdicts.json> <proposals.md> <ssot.md>
+//   node sync.mjs pending <decisions.md> [<category>]   -> count of proposed/amended; with a category, {category, count, ids}
+//   node sync.mjs ticket-plan <feature> <proposals.md> [<ssot.md>]   -> the ticket cards with their blocking edges (declared + touches overlap)
+//   node sync.mjs publish-tickets <feature> <proposals.md> <ssot.md> <issues dir> --next <cmd>   -> writes one file per approved ticket card; refuses while one is pending, blocked by a later ticket, or built on a rejected id
+//   node sync.mjs answers <question id> <decision id> <proposals.md> <ssot.md>
+//   node sync.mjs questions <proposals.md> [<ssot.md>]      -> the open questions as JSON, file order
+//   node sync.mjs linked <proposals.md> [<ssot.md>]         -> decisions that answered a question, as JSON
+//   node sync.mjs cite <spec.md> <proposals.md> [<ssot.md>]  -> what the spec's decision sections cite, as JSON
+//   node sync.mjs triage <verdicts.json> --out <dir>   -> clear.json (apply now), words.json (synthesise first), rewrites.json (apply after yes)
+//   node sync.mjs next-id <proposals.md> <ssot.md>     -> the next free id
+//   node sync.mjs images <assets.json> <_images.json>  -> images to upload (new, changed, missing)
+//   node sync.mjs asset <assets.json> <path> <asset id> -> record one upload with the file's hash
+//   node sync.mjs undrawn <proposals.md> [<ssot.md>]   -> screenless cards with no drawn picture yet
+//   node sync.mjs draw <spec.json> [<out.svg>]         -> draw a diagram from a spec (diagram.mjs), checked
+//   node sync.mjs attach-svg <decisions.md> <id> <svg path>  -> check the file and set the card's `svg:` line
+
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { draw, TOKENS } from './diagram.mjs';
+
+const HEAD_KEYS = ['feature', 'feature name', 'last extracted', 'artifact'];
+const PARTS = [
+  ['context', 'Context'],
+  ['question', 'Question'],
+  ['decision', 'Decision'],
+  ['why', 'Why'],
+  ['alternatives', 'What else was considered'],
+  ['touches', 'What it touches'],
+  ['details', 'Details'],
+];
+const AMEND_PARTS = [
+  ['original', 'Original'],
+  ['leeSaid', 'Lee said'],
+];
+
+export function parse(text) {
+  const lines = text.split('\n');
+  const doc = { title: '', head: {}, decisions: [], preamble: [] };
+  let i = 0;
+  // title
+  while (i < lines.length && !lines[i].startsWith('# ')) i++;
+  if (i < lines.length) { doc.title = lines[i].slice(2).trim(); i++; }
+  // head block: `Key: value` lines until first `## `
+  while (i < lines.length && !lines[i].startsWith('## ')) {
+    const m = lines[i].match(/^([A-Za-z ]+):\s*(.*)$/);
+    if (m && HEAD_KEYS.includes(m[1].toLowerCase())) doc.head[m[1].toLowerCase()] = m[2].trim();
+    else doc.preamble.push(lines[i]);
+    i++;
+  }
+  // sections
+  while (i < lines.length) {
+    if (!lines[i].startsWith('## ')) { i++; continue; }
+    const hm = lines[i].match(/^## ([a-z0-9]+-\d{3})\s+·\s+(.*)$/);
+    if (!hm) throw new Error(`Bad decision heading at line ${i + 1}: ${lines[i]}`);
+    const d = { id: hm[1], title: hm[2].trim(), meta: {}, parts: {}, history: [] };
+    i++;
+    // meta bullets
+    while (i < lines.length && lines[i].startsWith('- ')) {
+      const m = lines[i].match(/^- ([a-z]+):\s*(.*)$/);
+      if (m) d.meta[m[1]] = m[2].trim();
+      i++;
+    }
+    // body until next `## `
+    const body = [];
+    while (i < lines.length && !lines[i].startsWith('## ')) { body.push(lines[i]); i++; }
+    let current = null;
+    for (const raw of body) {
+      const pm = raw.match(/^\*\*([^*]+)\.\*\*\s?(.*)$/);
+      if (pm) {
+        const key = [...PARTS, ...AMEND_PARTS].find(([, label]) => label === pm[1])?.[0] || pm[1].toLowerCase();
+        current = key; d.parts[key] = pm[2];
+        continue;
+      }
+      const hist = raw.match(/^> (\d{4}-\d{2}-\d{2}) (.*)$/);
+      if (hist) { d.history.push({ date: hist[1], note: hist[2] }); current = null; continue; }
+      if (current && raw.trim() !== '') d.parts[current] += '\n' + raw;
+      else if (current && raw.trim() === '' && d.parts[current] && !d.parts[current].endsWith('\n')) d.parts[current] += '\n';
+    }
+    for (const k of Object.keys(d.parts)) d.parts[k] = d.parts[k].replace(/\n+$/, '');
+    doc.decisions.push(d);
+  }
+  return doc;
+}
+
+export function serialize(doc) {
+  const out = [`# ${doc.title}`, ''];
+  for (const k of HEAD_KEYS) if (doc.head[k] !== undefined) out.push(`${cap(k)}: ${doc.head[k]}`);
+  if (Object.keys(doc.head).length) out.push('');
+  for (const d of doc.decisions) {
+    out.push(`## ${d.id} · ${d.title}`);
+    for (const [k, v] of Object.entries(d.meta)) out.push(v === '' ? `- ${k}:` : `- ${k}: ${v}`);
+    out.push('');
+    for (const [key, label] of [...AMEND_PARTS, ...PARTS]) {
+      if (d.parts[key] === undefined) continue;
+      out.push(`**${label}.** ${d.parts[key]}`);
+      out.push('');
+    }
+    for (const h of d.history) out.push(`> ${h.date} ${h.note}`);
+    if (d.history.length) out.push('');
+  }
+  return out.join('\n').replace(/\n+$/, '') + '\n';
+}
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+/** Page documents for the `decisions` collection, keyed by id. */
+export function toDocuments(doc, { order = 0, readSvg = () => '' } = {}) {
+  const feature = doc.head.feature;
+  return doc.decisions.map((d, n) => ({
+    id: d.id,
+    feature,
+    category: d.meta.category || 'Other',
+    title: d.title,
+    kind: d.meta.kind || 'decision',
+    status: d.meta.status || 'proposed',
+    linked: d.meta.linked || '',
+    source: d.meta.source || '',
+    screen: d.meta.screen || '',
+    detail: d.meta.detail === 'yes',
+    work: d.meta.work || '',
+    ticket: d.meta.ticket || '',
+    blocked: d.meta.blocked || '',
+    depends: d.meta.depends || '',
+    image: d.meta.image && d.meta.image !== 'none' ? d.meta.image : '',
+    imageCaption: d.meta.caption || '',
+    svgPath: d.meta.svg || '',
+    svg: d.meta.svg ? readSvg(d.meta.svg) : '',
+    context: d.parts.context || '',
+    question: d.parts.question || '',
+    decision: ticketDecision(d),
+    clauses: clauses(d.parts.decision || ''),
+    why: d.parts.why || '',
+    alternatives: d.parts.alternatives || '',
+    touches: d.parts.touches || '',
+    details: d.parts.details || '',
+    original: d.parts.original || '',
+    leeSaid: d.parts.leeSaid || '',
+    ruled: ruling(d.history),
+    order: order + n,
+  }));
+}
+
+/** A ticket card's Decision on the page ends with its blockers, so the ratifier approves the edges, not only the prose. */
+const ticketDecision = d => {
+  const decision = d.parts.decision || '';
+  if (d.meta.ticket === undefined || d.meta.ticket === '') return decision;
+  const blocked = splitList(d.meta.blocked).map(num2);
+  return `${decision}\n\nBlocked by: ${blocked.length ? blocked.join(', ') : 'nothing, it can start at once'}.`;
+};
+
+/**
+ * Who ruled last, and when. Reads the newest history line that is a verdict
+ * (`approved`, `rejected`, `withdrawn`, `amended`, `approved again`, and the
+ * `added`/`edited`/`removed` lines a change card writes) and returns
+ * `{status, by, date}`; `by` is the name after the last " by " ahead of any
+ * reason (`: …`), or '' when the line names nobody. Fold and answered lines are
+ * history, not rulings, so a card with only those has none.
+ */
+export function ruling(history) {
+  for (let i = history.length - 1; i >= 0; i--) {
+    const m = /^(approved again|approved|rejected|withdrawn|amended|added|edited|removed)\b([^:]*)(?::.*)?$/.exec(history[i].note);
+    if (!m) continue;
+    const by = /(?:^| )by (.+)$/.exec(m[2].trim());
+    return { status: m[1] === 'approved again' ? 'approved' : m[1], by: by ? by[1].trim() : '', date: history[i].date };
+  }
+  return null;
+}
+
+/** A Decision written as numbered lines is a list of clauses Lee can keep or drop one by one. */
+export function clauses(decision) {
+  const lines = decision.split('\n').map(s => s.trim()).filter(Boolean);
+  if (lines.length < 2 || !lines.every(l => /^\d+\.\s/.test(l))) return [];
+  return lines.map(l => l.replace(/^\d+\.\s+/, ''));
+}
+
+/**
+ * Move the closing "The question was X." sentence of every Context into its
+ * own Question part, as a question. Idempotent: a section that already has a
+ * Question part, or whose Context does not end that way, is left alone.
+ */
+export function questionFirst(doc) {
+  let moved = 0;
+  for (const d of doc.decisions) {
+    if (d.parts.question || !d.parts.context) continue;
+    const m = d.parts.context.match(/^([\s\S]*?)\s*The question (?:was|is) ([^.]+)\.\s*$/);
+    if (!m) continue;
+    const q = m[2].trim();
+    d.parts.question = q.charAt(0).toUpperCase() + q.slice(1) + '.';
+    d.parts.context = m[1].trim();
+    moved++;
+  }
+  return moved;
+}
+
+/**
+ * Fold several proposals into one. `plan` is a list of
+ * {from: [ids], into: {id?, title, category, screen?, source?, detail?, work?, question, context, decision, why, alternatives, touches, details?}}.
+ * The folded sections leave the proposals file; the new section carries a history line naming them.
+ * A `from` id that is not a proposal (already ruled on) is refused and the fold is skipped.
+ */
+export function fold(plan, proposals, ssot, today = new Date().toISOString().slice(0, 10)) {
+  const folded = [], refused = [];
+  for (const step of plan) {
+    const missing = step.from.filter(id => !proposals.decisions.some(d => d.id === id));
+    if (missing.length) { refused.push({ into: step.into.title, why: `not a proposal: ${missing.join(', ')}` }); continue; }
+    const members = step.from.map(id => proposals.decisions.find(d => d.id === id));
+    const held = members.filter(d => !['proposed', 'amended'].includes(d.meta.status));
+    if (held.length) { refused.push({ into: step.into.title, why: `not foldable: ${held.map(d => d.id + ' is ' + d.meta.status).join(', ')}` }); continue; }
+    const into = step.into;
+    const id = into.id || nextId(proposals, ssot); // before the splice, so a folded number is never reused
+    for (const m of step.from) proposals.decisions.splice(proposals.decisions.findIndex(d => d.id === m), 1);
+    const sources = [...new Set(members.flatMap(d => (d.meta.source || '').split(';').map(s => s.trim()).filter(Boolean)))];
+    const meta = {
+      category: into.category || members[0].meta.category,
+      status: 'proposed',
+      image: into.image || members.find(d => d.meta.image && d.meta.image !== 'none')?.meta.image || 'none',
+      caption: into.caption || members.find(d => d.meta.image && d.meta.image !== 'none')?.meta.caption || '',
+      screen: into.screen || members[0].meta.screen || '',
+      source: into.source || sources.join('; '),
+    };
+    if (into.detail) meta.detail = 'yes';
+    if (into.work) meta.work = into.work;
+    const parts = { question: into.question || '', context: into.context || '', decision: into.decision || '', why: into.why || '', alternatives: into.alternatives || 'none recorded', touches: into.touches || '' };
+    if (into.details) parts.details = into.details;
+    for (const k of Object.keys(parts)) if (parts[k] === '' && k !== 'context') delete parts[k];
+    proposals.decisions.push({ id, title: into.title, meta, parts, history: [{ date: today, note: `folded from ${step.from.join(', ')}` }] });
+    folded.push({ id, from: step.from });
+  }
+  return { folded, refused };
+}
+
+/**
+ * Tickets for the `tickets` collection: one document per `.scratch/<feature>/issues/NN-*.md`.
+ * Status, blockers and next come from the three header lines every ticket carries.
+ * `cites` is every decision id mentioned anywhere in the ticket.
+ */
+export function ticketDocument(feature, file, text, idPrefix = '') {
+  const name = file.split('/').pop().replace(/\.md$/, '');
+  const num = (name.match(/^(\d+)/) || [])[1] || '';
+  const title = (text.match(/^# (.+)$/m) || [, name])[1].replace(/^\d+:\s*/, '').trim();
+  const line = k => { const m = text.match(new RegExp(`^\\*\\*${k}:\\*\\*\\s*(.*)$`, 'mi')); return m ? m[1].trim() : ''; };
+  const [statusLine, blockedLine, nextLine] = TICKET_HEADERS.map(line);
+  const s = statusLine.toLowerCase();
+  const state = /wontfix/.test(s) ? 'dropped' : /^(done|built|verified|typed-postcode|send,|partly verified)/.test(s) ? 'done' : /needs-grilling|needs grilling/.test(s) ? 'needs grilling' : /ready/.test(s) ? 'ready' : /after|blocked/.test(s) ? 'waiting' : s ? 'other' : 'proposed';
+  const owed = /owed|not yet (seen|looked)|awaiting a look|untested|unverified|not exercised|fails/.test(s);
+  const cites = [...new Set((text.match(new RegExp(`\\b${idPrefix || '[a-z]+'}-\\d{3}\\b`, 'g')) || []))].sort();
+  return { id: `${feature}-${num}`, feature, number: num, title, status: statusLine, state, owed, blockedBy: blockedLine, next: nextLine, cites, file, order: parseInt(num, 10) || 0 };
+}
+
+export function nextId(proposals, ssot) {
+  const ids = [...proposals.decisions, ...ssot.decisions].map(d => d.id);
+  const prefix = (ids[0] || 'x-000').split('-')[0];
+  const max = ids.reduce((m, id) => Math.max(m, parseInt(id.split('-')[1], 10) || 0), 0);
+  return `${prefix}-${String(max + 1).padStart(3, '0')}`;
+}
+
+/**
+ * Apply verdicts. `verdicts` is {id: {verdict, text, at, by?}}. Returns
+ * {proposals, ssot, applied: [...], refused: [...]} with the two docs mutated.
+ * approve: proposals -> ssot (status approved) ; on an approved id -> withdrawn
+ *          (pressing Approve again takes the approval back) ; on a withdrawn id -> approved again
+ * withdraw: approved -> withdrawn (in ssot)
+ * reject: proposals -> ssot as rejected with reason
+ * amend: stays in proposals as amended, carrying original + Lee's words; the
+ *        rewrite is the skill's job (it replaces `decision` and sets proposed).
+ * `by` names who gave the verdict; the history line ends "by <name>" so the
+ * record can tell Lee's ruling from Xuan's. A verdict without `by` still applies.
+ */
+export function apply(verdicts, proposals, ssot, today = new Date().toISOString().slice(0, 10)) {
+  const applied = [], refused = [];
+  const take = (id) => {
+    const i = proposals.decisions.findIndex(d => d.id === id);
+    return i < 0 ? null : proposals.decisions.splice(i, 1)[0];
+  };
+  const inSsot = (id) => ssot.decisions.find(d => d.id === id);
+  const withdraw = (d, date, by) => { d.meta.status = 'withdrawn'; d.history.push({ date, note: 'withdrawn' + by }); applied.push({ id: d.id, to: 'withdrawn' }); };
+  for (const [id, v] of Object.entries(verdicts)) {
+    const date = (v.at || '').slice(0, 10) || today;
+    const who = String(v.by ?? '').replace(/\s+/g, ' ').trim();
+    const by = who ? ` by ${who}` : '';
+    const existing = inSsot(id);
+    if (v.verdict === 'approve') {
+      if (existing && existing.meta.status === 'approved') { withdraw(existing, date, by); continue; }
+      if (existing) { existing.meta.status = 'approved'; existing.history.push({ date, note: 'approved again' + by }); applied.push({ id, to: 'approved' }); continue; }
+      const d = take(id); if (!d) { refused.push({ id, why: 'unknown id' }); continue; }
+      d.meta.status = 'approved';
+      delete d.parts.original; delete d.parts.leeSaid;
+      d.history.push({ date, note: 'approved' + by });
+      ssot.decisions.push(d); applied.push({ id, to: 'approved' });
+    } else if (v.verdict === 'withdraw') {
+      if (!existing || existing.meta.status !== 'approved') { refused.push({ id, why: 'not approved' }); continue; }
+      withdraw(existing, date, by);
+    } else if (v.verdict === 'reject') {
+      const d = take(id) || (existing && existing.meta.status !== 'rejected' ? existing : null);
+      if (!d) { refused.push({ id, why: 'unknown id' }); continue; }
+      d.meta.status = 'rejected';
+      d.history.push({ date, note: 'rejected' + by + (v.text ? `: ${v.text}` : '') });
+      if (!existing) ssot.decisions.push(d);
+      applied.push({ id, to: 'rejected' });
+    } else if (v.verdict === 'change') {
+      // A change drafted from a category discussion and accepted by Lee on the page.
+      if (!v.accepted) { refused.push({ id, why: 'change not accepted' }); continue; }
+      const c = v.change || {};
+      const note = 'from the category discussion on ' + date;
+      if (c.op === 'add') {
+        const nid = nextId(proposals, ssot);
+        proposals.decisions.push({ id: nid, title: c.title || 'Untitled', meta: { category: v.category || 'Other', status: 'proposed', image: 'none', caption: '', screen: c.screen || '', source: `${v.by ? v.by + ', ' : ''}${note}` }, parts: { context: c.context || '', decision: c.decision || '', why: c.why || '', alternatives: c.alternatives || 'none recorded', touches: c.touches || '' }, history: [{ date, note: 'added ' + note + by }] });
+        applied.push({ id, to: 'added as ' + nid });
+      } else if (c.op === 'edit') {
+        const d = proposals.decisions.find(x => x.id === c.id) || inSsot(c.id);
+        if (!d) { refused.push({ id, why: `unknown id ${c.id}` }); continue; }
+        d.meta.status = 'amended';
+        if (!d.parts.original) d.parts.original = d.parts.decision;
+        d.parts.leeSaid = `Edit accepted ${note}: ${c.title || ''}`;
+        if (c.title) d.title = c.title;
+        if (c.context) d.parts.context = c.context;
+        if (c.decision) d.parts.decision = c.decision;
+        if (c.why) d.parts.why = c.why;
+        d.history.push({ date, note: 'edited ' + note + by });
+        applied.push({ id, to: 'amended ' + c.id });
+      } else if (c.op === 'delete') {
+        const d = take(c.id) || (inSsot(c.id) && inSsot(c.id).meta.status !== 'rejected' ? inSsot(c.id) : null);
+        if (!d) { refused.push({ id, why: `unknown id ${c.id}` }); continue; }
+        d.meta.status = 'rejected';
+        d.history.push({ date, note: 'removed ' + note + by + (c.reason ? `: ${c.reason}` : '') });
+        if (!inSsot(c.id)) ssot.decisions.push(d);
+        applied.push({ id, to: 'rejected ' + c.id });
+      } else refused.push({ id, why: `unknown change op ${c.op}` });
+    } else if (v.verdict === 'amend') {
+      const d = proposals.decisions.find(x => x.id === id) || existing;
+      if (!d) { refused.push({ id, why: 'unknown id' }); continue; }
+      d.meta.status = 'amended';
+      if (!d.parts.original) d.parts.original = d.parts.decision;
+      // A rewrite from a clause list says which clauses Lee dropped, then his words.
+      const dropped = Array.isArray(v.dropped) && v.dropped.length ? `Dropped clause${v.dropped.length > 1 ? 's' : ''} ${v.dropped.join(', ')}. ` : '';
+      d.parts.leeSaid = (dropped + (v.text || '')).trim();
+      d.history.push({ date, note: 'amended' + by });
+      applied.push({ id, to: 'amended' });
+    } else refused.push({ id, why: `unknown verdict ${v.verdict}` });
+  }
+  ssot.decisions.sort((a, b) => a.id.localeCompare(b.id));
+  return { proposals, ssot, applied, refused };
+}
+
+/**
+ * Close an open question with the decision that answers it. The question
+ * (`kind: question`, `status: open`, in either file) gets `status: answered`
+ * and a history line naming the decision; the decision (in either file) gets
+ * `linked:` pointing back, appended after any link it already carries.
+ * A question that is not open, or an id that is not found, is refused and nothing changes.
+ */
+export function answers(questionId, decisionId, proposals, ssot, today = new Date().toISOString().slice(0, 10)) {
+  const find = id => proposals.decisions.find(d => d.id === id) || ssot.decisions.find(d => d.id === id);
+  const q = find(questionId), d = find(decisionId);
+  if (!q) return { applied: [], refused: [{ id: questionId, why: `unknown question ${questionId}` }] };
+  if (!d) return { applied: [], refused: [{ id: questionId, why: `unknown decision ${decisionId}` }] };
+  if (q.meta.kind !== 'question' || q.meta.status !== 'open') return { applied: [], refused: [{ id: questionId, why: 'not an open question' }] };
+  q.meta.status = 'answered';
+  q.history.push({ date: today, note: `answered by ${decisionId}` });
+  const links = splitLinks(d.meta.linked);
+  if (!links.includes(questionId)) links.push(questionId);
+  d.meta.linked = links.join('; ');
+  return { applied: [{ question: questionId, decision: decisionId }], refused: [] };
+}
+
+/**
+ * The open questions, proposals first then the record, each in file order.
+ * A grill walks these one at a time; everything the question carries is here
+ * so the skill never re-reads the files to ask it.
+ */
+export function openQuestions(proposals, ssot = { decisions: [] }) {
+  const keep = ['id', 'title', 'category', 'linked', 'screen', 'source', 'context', 'question', 'why', 'touches'];
+  return [...toDocuments({ head: {}, decisions: proposals.decisions }), ...toDocuments({ head: {}, decisions: ssot.decisions })]
+    .filter(d => d.kind === 'question' && d.status === 'open')
+    .map(d => Object.fromEntries(keep.map(k => [k, d[k]])));
+}
+
+const GONE = ['rejected', 'withdrawn'];
+const PENDING = ['proposed', 'amended'];
+const splitLinks = linked => String(linked || '').split(';').map(s => s.trim()).filter(Boolean);
+
+/**
+ * Decisions that answered a question (`linked:` names a question whose status is
+ * `answered`), proposals first then the record, each in file order. `/to-spec-lee`
+ * states these in the spec before anything else. `stale` marks a decision that was
+ * rejected or withdrawn after it answered: the question then points at a ruling that
+ * no longer stands, and the ratifier decides whether to reopen it.
+ */
+export function answeredLinks(proposals, ssot = { decisions: [] }) {
+  const all = [...toDocuments({ head: {}, decisions: proposals.decisions }), ...toDocuments({ head: {}, decisions: ssot.decisions })];
+  const byId = new Map(all.map(d => [d.id, d]));
+  const out = [];
+  for (const d of all) {
+    if (d.kind === 'question') continue;
+    for (const qid of splitLinks(d.linked)) {
+      const q = byId.get(qid);
+      if (!q || q.kind !== 'question' || q.status !== 'answered') continue;
+      out.push({ id: d.id, title: d.title, category: d.category, status: d.status, stale: GONE.includes(d.status), question: q.id, questionTitle: q.title });
+    }
+  }
+  return out;
+}
+
+/**
+ * What the spec's Implementation Decisions and Testing Decisions sections cite.
+ * Each paragraph (blank-line separated; a list item is its own paragraph) carries the
+ * ids it names, matched on the id prefix the two files use (`mp` in `mp-042`). `rejected` are
+ * paragraphs naming any id that was rejected or withdrawn (`gone` says which ids; the
+ * paragraph or the clause goes), `uncited` name no id (backfill candidates), `unknown`
+ * are ids in neither file, `pending` are cited ids still proposed or amended, and
+ * `pendingSpec` the subset in the Spec category (the `/to-tickets-lee` gate).
+ * `unstated` are decisions that answered a question but appear nowhere in the spec.
+ * Nothing is written.
+ */
+export function specCitations(spec, proposals, ssot = { decisions: [] }) {
+  const all = [...proposals.decisions, ...ssot.decisions];
+  const known = new Map(all.map(d => [d.id, d.meta.status || 'proposed']));
+  const category = new Map(all.map(d => [d.id, d.meta.category || 'Other']));
+  const first = all.find(d => d.id);
+  const prefix = first ? first.id.slice(0, first.id.lastIndexOf('-')) : '[a-z][a-z0-9]*';
+  const idRe = new RegExp(`\\b(${prefix}-\\d{3})\\b`, 'g');
+  const sections = ['Implementation Decisions', 'Testing Decisions'];
+  const paragraphs = [];
+  let section = '', buf = [];
+  const flush = () => {
+    const text = buf.join('\n').trim();
+    buf = [];
+    if (!section || !text) return;
+    paragraphs.push({ section, text, ids: [...new Set([...text.matchAll(idRe)].map(m => m[1]))] });
+  };
+  for (const line of spec.split('\n')) {
+    const h = line.match(/^## (.*)$/);
+    if (h) { flush(); section = sections.includes(h[1].trim()) ? h[1].trim() : ''; continue; }
+    if (!section) continue;
+    const startsParagraph = line.trim() === '' || /^\s*([-*]|\d+\.)\s/.test(line);
+    if (startsParagraph) flush();
+    if (line.trim() !== '') buf.push(line);
+  }
+  flush();
+  const statuses = {};
+  for (const p of paragraphs) for (const id of p.ids) statuses[id] = known.get(id) || 'unknown';
+  const gone = id => GONE.includes(statuses[id]);
+  const cited = new Set(Object.keys(statuses));
+  const pending = Object.keys(statuses).filter(id => PENDING.includes(statuses[id]));
+  return {
+    paragraphs,
+    statuses,
+    rejected: paragraphs.filter(p => p.ids.some(gone)).map(p => ({ ...p, gone: p.ids.filter(gone) })),
+    uncited: paragraphs.filter(p => !p.ids.length),
+    unknown: Object.keys(statuses).filter(id => statuses[id] === 'unknown'),
+    pending,
+    pendingSpec: pending.filter(id => category.get(id) === 'Spec'),
+    unstated: answeredLinks(proposals, ssot).filter(l => !l.stale && !cited.has(l.id)).map(l => l.id),
+  };
+}
+
+
+/** The proposed and amended cards of one category: `{category, count, ids}`. The `/to-tickets-lee` gate reads `Spec`. */
+export function pendingIn(doc, category) {
+  const ids = doc.decisions.filter(d => (d.meta.category || 'Other') === category && PENDING.includes(d.meta.status)).map(d => d.id);
+  return { category, count: ids.length, ids };
+}
+
+const splitList = s => String(s || '').split(/[,\n]/).map(x => x.trim().replace(/\.$/, '')).filter(Boolean);
+const num2 = n => String(n).padStart(2, '0');
+/** The header lines a ticket file carries and the Work page reads (`ticketDocument`). */
+export const TICKET_HEADERS = ['Status', 'Blocked by', 'Next'];
+const touchKey = t => t.replace(/\/+$/, '').toLowerCase();
+/** Two touches overlap when they name the same thing or one is a directory the other sits in. */
+const overlap = (a, b) => { const x = touchKey(a), y = touchKey(b); return x === y || x.startsWith(y + '/') || y.startsWith(x + '/'); };
+
+/**
+ * The ticket breakdown a `/to-tickets-lee` run put on the page: every card in
+ * either file with a `ticket:` meta line, in ticket-number order. Each comes
+ * back with `declared` (its `blocked:` line), `overlaps` (the earlier tickets
+ * whose touches it shares, and on what), and `blockedBy`, the union of the two,
+ * lower numbers blocking higher ones. A declared blocker that is not a lower
+ * number is listed in `forward` (a later or same-numbered ticket cannot block an
+ * earlier one). `pending` and `approved` name the cards by status; a rejected
+ * or withdrawn card is listed but never published.
+ */
+export function ticketPlan(feature, proposals, ssot = { decisions: [] }) {
+  const cards = [...proposals.decisions, ...ssot.decisions].filter(d => d.meta.ticket !== undefined && d.meta.ticket !== '');
+  const tickets = cards.map(d => ({
+    id: d.id,
+    number: num2(d.meta.ticket),
+    title: d.title.replace(/^Ticket \d+:\s*/i, '').trim(),
+    status: d.meta.status || 'proposed',
+    declared: splitList(d.meta.blocked).map(num2),
+    touches: splitList(d.parts.touches),
+    depends: splitList(d.meta.depends),
+    decision: d.parts.decision || '',
+    details: d.parts.details || '',
+    overlaps: [],
+    blockedBy: [],
+  })).sort((a, b) => a.number.localeCompare(b.number));
+  const live = tickets.filter(t => !GONE.includes(t.status));
+  for (let j = 0; j < live.length; j++) {
+    for (let i = 0; i < j; i++) {
+      const on = live[j].touches.find(t => live[i].touches.some(u => overlap(t, u)));
+      if (on !== undefined) live[j].overlaps.push({ with: live[i].number, on });
+    }
+    live[j].blockedBy = [...new Set([...live[j].declared, ...live[j].overlaps.map(o => o.with)])].sort();
+  }
+  return {
+    feature,
+    tickets,
+    forward: live.flatMap(t => t.declared.filter(n => n >= t.number).map(n => ({ ticket: t.number, blockedBy: n }))),
+    pending: tickets.filter(t => PENDING.includes(t.status)).map(t => t.id),
+    approved: tickets.filter(t => t.status === 'approved').map(t => t.id),
+  };
+}
+
+const slug = s => s.toLowerCase().replace(/`/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60).replace(/-$/, '');
+
+/**
+ * Write the approved ticket cards of a feature as one file each under `dir`,
+ * in the local ticket template with the three header lines the Work page reads
+ * (Status, Blocked by, Next), a Decisions line citing the ids the card depends
+ * on and the card's own id, the touches, the Details as acceptance criteria,
+ * and a closing `Next:` line. Refuses (writes nothing) while any ticket card
+ * is still proposed or amended, a declared blocker is not a lower number, or
+ * a card depends on a rejected or withdrawn id; `why` says which. A number that
+ * already has a file is skipped.
+ */
+export function publishTickets(feature, proposals, ssot, dir, { next }) {
+  if (!next) throw new Error('publishTickets needs the Next: command the files will carry');
+  const plan = ticketPlan(feature, proposals, ssot);
+  const status = new Map([...proposals.decisions, ...ssot.decisions].map(d => [d.id, d.meta.status || 'proposed']));
+  const why = {};
+  for (const id of plan.pending) why[id] = 'still pending on the page';
+  for (const f of plan.forward) { const t = plan.tickets.find(x => x.number === f.ticket); why[t.id] = `blocked by ${f.blockedBy}, which is not a lower number`; }
+  for (const t of plan.tickets) { const gone = t.depends.filter(id => GONE.includes(status.get(id))); if (gone.length) why[t.id] = `depends on ${gone.join(', ')}, which no longer stands`; }
+  const refused = Object.keys(why);
+  if (refused.length) return { written: [], skipped: [], refused, why };
+  const written = [], skipped = [];
+  const present = existsSync(dir) ? readdirSync(dir) : [];
+  for (const t of plan.tickets) {
+    if (t.status !== 'approved') continue;
+    const clash = present.find(f => f.startsWith(t.number + '-'));
+    if (clash) { skipped.push({ id: t.id, file: `${dir}/${clash}` }); continue; }
+    const file = `${dir}/${t.number}-${slug(t.title)}.md`;
+    const blockedBy = t.blockedBy.length
+      ? t.blockedBy.map(n => { const o = t.overlaps.find(x => x.with === n); return o ? `${n} (touches ${o.on})` : n; }).join(', ') + '.'
+      : 'None (can start immediately).';
+    const ids = t.depends.length ? `${t.depends.join(', ')}; approved as ${t.id}.` : `approved as ${t.id}.`;
+    const criteria = t.details.split('\n').map(l => l.trim()).filter(Boolean).map(l => /^- \[[ x]\]/.test(l) ? l : `- [ ] ${l.replace(/^[-*]\s+|^\d+\.\s+/, '')}`);
+    const out = [
+      `# ${t.number}: ${t.title}`, '',
+      `**${TICKET_HEADERS[0]}:** ready-for-agent`,
+      `**${TICKET_HEADERS[1]}:** ${blockedBy}`,
+      `**${TICKET_HEADERS[2]}:** \`${next}\``, '',
+      `**What to build:** ${t.decision}`, '',
+      `**Decisions:** ${ids}`, '',
+      `**Touches:** ${t.touches.join(', ')}`, '',
+      ...criteria, '',
+      `Next: ${next}`, '',
+    ];
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+    writeFileSync(file, out.join('\n'));
+    written.push({ id: t.id, file, blockedBy: t.blockedBy });
+  }
+  return { written, skipped, refused: [], why };
+}
+
+// ---- CLI ----
+
+/**
+ * Split the page's verdicts into what a skill applies at once and what it must
+ * first say back in the terminal. Clear-cut: approve, withdraw, reject with a
+ * plain reason. With words: amend, an accepted change card, a new term, and a
+ * rejection whose reason is really a question. Anything else (a change card
+ * that was dismissed, an unknown verdict) is `other` and is only reported.
+ */
+export function triage(verdicts) {
+  const clear = {}, words = {}, other = {};
+  const withWords = (id, v, pile) => { words[id] = { ...v, pile }; };
+  for (const [id, v] of Object.entries(verdicts)) {
+    const asksQuestion = String(v.text || '').includes('?');
+    if (v.verdict === 'approve' || v.verdict === 'withdraw') clear[id] = v;
+    else if (v.verdict === 'reject' && !asksQuestion) clear[id] = v;
+    else if (v.verdict === 'reject') withWords(id, v, 'a rejection that asks a question');
+    else if (v.verdict === 'amend') withWords(id, v, 'a rewrite in the ratifier\'s words');
+    else if (v.verdict === 'change' && v.accepted) withWords(id, v, 'an accepted change card');
+    else if (v.verdict === 'term') withWords(id, v, 'a new glossary term');
+    else other[id] = v;
+  }
+  return { clear, words, other };
+}
+
+// Drawn pictures. A screenless card (`screen:` starts with "none") carries
+// `- svg: <repo path>` to a file diagram.mjs drew; `prepare` inlines it. The
+// check keeps them plain: an svg root, no raster or stock link, and no colour
+// that is not a page token (`var(--token, fallback)`; the fallback is free).
+const SCREENLESS = d => /^none\b/i.test(d.meta.screen || '');
+export function svgCheck(text) {
+  const problems = [];
+  const t = String(text || '');
+  if (!/^\s*(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(t)) problems.push('does not start with <svg');
+  if (/<image\b/i.test(t)) problems.push('<image> element (raster)');
+  if (/<foreignObject\b/i.test(t)) problems.push('<foreignObject> element');
+  if (/url\(\s*["']?data:/i.test(t)) problems.push('data: url');
+  if (/(?:xlink:)?href\s*=\s*["'](?:https?:|data:)/i.test(t)) problems.push('external href');
+  for (const m of t.matchAll(/var\(\s*--([a-z0-9-]+)/gi)) if (!TOKENS.includes(m[1])) problems.push(`--${m[1]} is not a page token`);
+  // Strip the token references (with their fallbacks) and look for what is left.
+  const rest = t.replace(/var\(\s*--[a-z0-9-]+\s*(?:,[^)]*)?\)/gi, 'var()');
+  for (const m of rest.matchAll(/#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(/gi)) problems.push(`colour ${m[0]} outside the page tokens`);
+  for (const m of rest.matchAll(/(?:fill|stroke|stop-color|color|flood-color|lighting-color)\s*[:=]\s*["']?\s*([a-z]+)/gi)) {
+    if (!['none', 'currentcolor', 'inherit', 'transparent', 'var', 'url'].includes(m[1].toLowerCase())) problems.push(`colour ${m[1]} outside the page tokens`);
+  }
+  return { ok: problems.length === 0, problems: [...new Set(problems)] };
+}
+
+/** Screenless decisions with no drawn picture, proposals then record, file order. Questions and ruled-out cards are not drawn. */
+export function undrawn(proposals, ssot = { decisions: [] }) {
+  const out = [];
+  for (const [file, doc] of [['proposals', proposals], ['record', ssot]]) {
+    for (const d of doc.decisions) {
+      if ((d.meta.kind || 'decision') === 'question' || GONE.includes(d.meta.status)) continue;
+      if (SCREENLESS(d) && !d.meta.svg) out.push({ id: d.id, title: d.title, file });
+    }
+  }
+  return out;
+}
+
+/** Set a card's `svg:` line (after `caption:`, else after `image:`, else last); false when the id is not in the doc. */
+export function attachSvg(doc, id, path) {
+  const d = doc.decisions.find(x => x.id === id);
+  if (!d) return false;
+  if (d.meta.svg !== undefined) { d.meta.svg = path; return true; }
+  const keys = Object.keys(d.meta);
+  const after = keys.includes('caption') ? 'caption' : keys.includes('image') ? 'image' : keys[keys.length - 1];
+  const meta = {};
+  for (const k of keys) { meta[k] = d.meta[k]; if (k === after) meta.svg = path; }
+  d.meta = meta;
+  return true;
+}
+
+// The assets map (`_page/assets.json`) keys a repo image path to the artifact
+// asset it was uploaded as. New entries are {id, sha256}; the first entries
+// were bare ids and still resolve. An image is uploaded again only when its
+// hash no longer matches.
+const sha256 = path => createHash('sha256').update(readFileSync(path)).digest('hex');
+export function assetId(assets, path) { const a = assets[path]; return !a ? '' : typeof a === 'string' ? a : a.id || ''; }
+export function staleImages(assets, paths) {
+  const out = [];
+  for (const path of paths) {
+    if (!existsSync(path)) { out.push({ path, why: 'file missing' }); continue; }
+    const a = assets[path];
+    if (!a) out.push({ path, why: 'new' });
+    else if (typeof a === 'object' && a.sha256 && a.sha256 !== sha256(path)) out.push({ path, why: 'changed' });
+  }
+  return out;
+}
+export function recordAsset(assets, path, id) { assets[path] = { id, sha256: sha256(path) }; return assets; }
+const loadAssets = path => path && existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')) : {};
+// The proposals file and the record; a record that does not exist yet reads as empty.
+const readPair = (pf, sf) => [parse(readFileSync(pf, 'utf8')), sf && existsSync(sf) ? parse(readFileSync(sf, 'utf8')) : { head: {}, decisions: [] }];
+
+if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split('/').pop())) {
+  const [cmd, ...args] = process.argv.slice(2);
+  if (cmd === 'export') {
+    let order = 0; const docs = [];
+    for (const f of args) { const d = parse(readFileSync(f, 'utf8')); docs.push(...toDocuments(d, { order })); order += 1000; }
+    process.stdout.write(JSON.stringify(docs, null, 2));
+  } else if (cmd === 'apply') {
+    const [vf, pf, sf] = args;
+    const verdicts = JSON.parse(readFileSync(vf, 'utf8')).verdicts || JSON.parse(readFileSync(vf, 'utf8'));
+    const proposals = parse(readFileSync(pf, 'utf8'));
+    const ssot = existsSync(sf) ? parse(readFileSync(sf, 'utf8')) : { title: proposals.title.replace('Proposed decisions', 'Decisions'), head: { feature: proposals.head.feature, 'feature name': proposals.head['feature name'] }, decisions: [], preamble: [] };
+    const r = apply(verdicts, proposals, ssot);
+    writeFileSync(pf, serialize(proposals)); writeFileSync(sf, serialize(ssot));
+    console.log(JSON.stringify({ applied: r.applied, refused: r.refused }, null, 2));
+  } else if (cmd === 'prepare') {
+    // prepare <decisions.md>... --assets <assets.json> --out <dir>
+    // Writes one JSON file per page document (with imageAssetId resolved from
+    // the assets map {repoPath: assetId}) and prints the batch entries for the
+    // Artifact tool's write_db batch, 50 per batch.
+    const { mkdirSync } = await import('node:fs');
+    const files = [], opts = {};
+    for (let k = 0; k < args.length; k++) { if (args[k].startsWith('--')) { opts[args[k].slice(2)] = args[++k]; } else files.push(args[k]); }
+    const assets = loadAssets(opts.assets);
+    const { resolve } = await import('node:path'); const out = resolve(opts.out || 'docs-out'); mkdirSync(out, { recursive: true });
+    let order = 0; const entries = [];
+    for (const f of files) {
+      const d = parse(readFileSync(f, 'utf8'));
+      for (const doc of toDocuments(d, { order })) {
+        const { id, ...body } = doc;
+        body.imageAssetId = body.image ? assetId(assets, body.image) : '';
+        if (body.svgPath) {
+          const check = existsSync(body.svgPath) ? svgCheck(readFileSync(body.svgPath, 'utf8')) : { problems: ['file missing'] };
+          if (check.problems.length) { console.error(`${id}: svg ${body.svgPath} left out: ${check.problems.join('; ')}`); body.svg = ''; }
+          else body.svg = readFileSync(body.svgPath, 'utf8');
+        }
+        writeFileSync(`${out}/${id}.json`, JSON.stringify(body, null, 2));
+        entries.push({ op: 'set', collection: 'decisions', doc_id: id, file_path: `${out}/${id}.json` });
+      }
+      order += 1000;
+    }
+    // Tickets ride along: --tickets <feature>=<issues dir> (repeatable via commas).
+    for (const spec of (opts.tickets || '').split(',').filter(Boolean)) {
+      const [feature, dir] = spec.split('=');
+      const { readdirSync } = await import('node:fs');
+      for (const f of readdirSync(dir).filter(x => /^\d+-.*\.md$/.test(x)).sort()) {
+        const t = ticketDocument(feature, `${dir}/${f}`, readFileSync(`${dir}/${f}`, 'utf8'));
+        const { id, ...body } = t;
+        writeFileSync(`${out}/ticket-${id}.json`, JSON.stringify(body, null, 2));
+        entries.push({ op: 'set', collection: 'tickets', doc_id: id, file_path: `${out}/ticket-${id}.json` });
+      }
+    }
+    const batches = []; for (let k = 0; k < entries.length; k += 50) batches.push(entries.slice(k, k + 50));
+    writeFileSync(`${out}/_batches.json`, JSON.stringify(batches, null, 2));
+    const images = [...new Set(entries.map(e => JSON.parse(readFileSync(e.file_path, 'utf8')).image).filter(Boolean))];
+    writeFileSync(`${out}/_images.json`, JSON.stringify(images, null, 2));
+    console.log(`${entries.length} documents in ${batches.length} batches; ${images.length} distinct images (${staleImages(assets, images).length} to upload)`);
+  } else if (cmd === 'terms') {
+    // terms <verdicts.json> <CONTEXT.md>: append accepted `term` verdicts to the glossary
+    // under their area heading (created at the end of ## Language if missing).
+    const [vf, cf] = args;
+    const raw = JSON.parse(readFileSync(vf, 'utf8')); const verdicts = raw.verdicts || raw;
+    let ctx = readFileSync(cf, 'utf8'); const added = [];
+    for (const [id, v] of Object.entries(verdicts)) {
+      if (v.verdict !== 'term') continue;
+      const entry = `**${v.term}**:\n${v.definition.trim()}\n${v.avoid ? `_Avoid_: ${v.avoid}\n` : ''}`;
+      const area = v.area && v.area.trim() ? v.area.trim() : 'General';
+      const h = `### ${area}`;
+      if (ctx.includes(h + '\n')) {
+        const i = ctx.indexOf(h + '\n'); const rest = ctx.slice(i + h.length + 1); const next = rest.search(/\n### |\n## /);
+        const end = next < 0 ? ctx.length : i + h.length + 1 + next;
+        ctx = ctx.slice(0, end).replace(/\n+$/, '') + '\n\n' + entry + ctx.slice(end);
+      } else ctx = ctx.replace(/\n+$/, '') + `\n\n${h}\n\n${entry}`;
+      added.push(id);
+    }
+    writeFileSync(cf, ctx.replace(/\n+$/, '') + '\n');
+    console.log(JSON.stringify({ added }));
+  } else if (cmd === 'answers') {
+    // answers <question id> <decision id> <proposals.md> <ssot.md>: link both ways.
+    const [qid, did, pf, sf] = args;
+    const proposals = parse(readFileSync(pf, 'utf8'));
+    const ssot = existsSync(sf) ? parse(readFileSync(sf, 'utf8')) : { title: '', head: {}, decisions: [], preamble: [] };
+    const r = answers(qid, did, proposals, ssot);
+    if (r.applied.length) { writeFileSync(pf, serialize(proposals)); if (existsSync(sf)) writeFileSync(sf, serialize(ssot)); }
+    console.log(JSON.stringify(r, null, 2));
+    if (r.refused.length) process.exit(1);
+  } else if (cmd === 'questions') {
+    // questions <proposals.md> [<ssot.md>]: the open questions as JSON, nothing written.
+    const [pf, sf] = args;
+    const [proposals, ssot] = readPair(pf, sf);
+    process.stdout.write(JSON.stringify(openQuestions(proposals, ssot), null, 2));
+  } else if (cmd === 'linked') {
+    // linked <proposals.md> [<ssot.md>]: decisions that answered a question, nothing written.
+    const [pf, sf] = args;
+    const [proposals, ssot] = readPair(pf, sf);
+    process.stdout.write(JSON.stringify(answeredLinks(proposals, ssot), null, 2));
+  } else if (cmd === 'cite') {
+    // cite <spec.md> <proposals.md> [<ssot.md>]: what the spec's decision sections cite, nothing written.
+    const [specf, pf, sf] = args;
+    const [proposals, ssot] = readPair(pf, sf);
+    process.stdout.write(JSON.stringify(specCitations(readFileSync(specf, 'utf8'), proposals, ssot), null, 2));
+  } else if (cmd === 'pending') {
+    // pending <decisions.md> [<category>]: a bare count, or {category, count, ids} for one category.
+    const d = parse(readFileSync(args[0], 'utf8'));
+    if (args[1]) process.stdout.write(JSON.stringify(pendingIn(d, args[1]), null, 2) + '\n');
+    else console.log(d.decisions.filter(x => PENDING.includes(x.meta.status)).length);
+  } else if (cmd === 'ticket-plan') {
+    // ticket-plan <feature> <proposals.md> [<ssot.md>]: the ticket cards with their edges, nothing written.
+    const [feature, pf, sf] = args;
+    const [proposals, ssot] = readPair(pf, sf);
+    process.stdout.write(JSON.stringify(ticketPlan(feature, proposals, ssot), null, 2));
+  } else if (cmd === 'publish-tickets') {
+    // publish-tickets <feature> <proposals.md> <ssot.md> <issues dir> --next <cmd>
+    const [feature, pf, sf, dir, flag, next] = args;
+    if (flag !== '--next' || !next) { console.error('usage: publish-tickets <feature> <proposals.md> <ssot.md> <issues dir> --next <command>'); process.exit(2); }
+    const [proposals, ssot] = readPair(pf, sf);
+    const r = publishTickets(feature, proposals, ssot, dir, { next });
+    process.stdout.write(JSON.stringify(r, null, 2));
+  } else if (cmd === 'question-first') {
+    // question-first <decisions.md>...: lift the closing question out of every Context.
+    for (const f of args) { const d = parse(readFileSync(f, 'utf8')); const n = questionFirst(d); writeFileSync(f, serialize(d)); console.log(`${f}: ${n} questions lifted`); }
+  } else if (cmd === 'fold') {
+    // fold <plan.json> <proposals.md> <ssot.md>: combine proposals per the plan.
+    const [pf, prf, sf] = args;
+    const plan = JSON.parse(readFileSync(pf, 'utf8'));
+    const proposals = parse(readFileSync(prf, 'utf8'));
+    const ssot = existsSync(sf) ? parse(readFileSync(sf, 'utf8')) : { decisions: [] };
+    const r = fold(plan, proposals, ssot);
+    writeFileSync(prf, serialize(proposals));
+    console.log(JSON.stringify(r, null, 2));
+  } else if (cmd === 'tickets') {
+    // tickets <feature> <issues dir>: ticket documents as JSON
+    const [feature, dir] = args; const { readdirSync } = await import('node:fs');
+    const docs = readdirSync(dir).filter(x => /^\d+-.*\.md$/.test(x)).sort().map(f => ticketDocument(feature, `${dir}/${f}`, readFileSync(`${dir}/${f}`, 'utf8')));
+    process.stdout.write(JSON.stringify(docs, null, 2));
+  } else if (cmd === 'triage') {
+    // triage <verdicts.json> --out <dir>: clear.json for apply, words.json for the terminal.
+    const [vf, flag, dir] = args;
+    const raw = JSON.parse(readFileSync(vf, 'utf8')); const verdicts = raw.verdicts || raw;
+    const t = triage(verdicts);
+    if (flag !== '--out' || !dir) { console.error('usage: sync.mjs triage <verdicts.json> --out <dir>'); process.exit(2); }
+    const out = dir;
+    const { mkdirSync } = await import('node:fs'); mkdirSync(out, { recursive: true });
+    writeFileSync(`${out}/clear.json`, JSON.stringify({ sentAt: raw.sentAt || null, verdicts: t.clear }, null, 2));
+    writeFileSync(`${out}/words.json`, JSON.stringify({ sentAt: raw.sentAt || null, verdicts: t.words }, null, 2));
+    // rewrites.json is the part of words.json that `apply` may take after the ratifier's yes:
+    // amend and accepted change verdicts. A question-shaped reject or a term never goes to apply.
+    const rewrites = Object.fromEntries(Object.entries(t.words).filter(([, v]) => v.verdict === 'amend' || v.verdict === 'change'));
+    writeFileSync(`${out}/rewrites.json`, JSON.stringify({ sentAt: raw.sentAt || null, verdicts: rewrites }, null, 2));
+    const n = o => Object.keys(o).length;
+    console.log(`${n(t.clear)} clear, ${n(t.words)} with words, ${n(t.other)} other` + (n(t.other) ? ` (${Object.keys(t.other).join(', ')})` : ''));
+  } else if (cmd === 'next-id') {
+    const [pf, sf] = args;
+    const [proposals, ssot] = readPair(pf, sf);
+    console.log(nextId(proposals, ssot));
+  } else if (cmd === 'images') {
+    // images <assets.json> <_images.json>: which images prepare found that still need an upload.
+    const [af, imf] = args;
+    const assets = loadAssets(af);
+    process.stdout.write(JSON.stringify(staleImages(assets, JSON.parse(readFileSync(imf, 'utf8'))), null, 2));
+  } else if (cmd === 'asset') {
+    // asset <assets.json> <path> <asset id>: record one upload, keyed by path and hash.
+    const [af, path, id] = args;
+    const assets = loadAssets(af);
+    recordAsset(assets, path, id);
+    writeFileSync(af, JSON.stringify(assets, null, 2) + '\n');
+  } else if (cmd === 'undrawn') {
+    // undrawn <proposals.md> [<ssot.md>]: screenless cards with no drawn picture, nothing written.
+    const [pf, sf] = args;
+    const [proposals, ssot] = readPair(pf, sf);
+    process.stdout.write(JSON.stringify(undrawn(proposals, ssot), null, 2));
+  } else if (cmd === 'draw') {
+    // draw <spec.json> [<out.svg>]: diagram.mjs draws it; the result is checked before it is written.
+    const [specf, outf] = args;
+    const svg = draw(JSON.parse(readFileSync(specf, 'utf8')));
+    const check = svgCheck(svg);
+    if (check.problems.length) { console.error(`drawn svg fails the check: ${check.problems.join('; ')}`); process.exit(1); }
+    if (outf) writeFileSync(outf, svg); else process.stdout.write(svg);
+  } else if (cmd === 'attach-svg') {
+    // attach-svg <decisions.md> <id> <svg path>: check the file, then set the card's svg line.
+    const [df, id, path] = args;
+    if (!df || !id || !path) { console.error('usage: sync.mjs attach-svg <decisions.md> <id> <svg path>'); process.exit(2); }
+    if (!existsSync(path)) { console.error(`${path}: file missing`); process.exit(1); }
+    const check = svgCheck(readFileSync(path, 'utf8'));
+    if (check.problems.length) { console.error(`${path}: ${check.problems.join('; ')}`); process.exit(1); }
+    const doc = parse(readFileSync(df, 'utf8'));
+    if (!attachSvg(doc, id, path)) { console.error(`${id} is not in ${df}`); process.exit(1); }
+    writeFileSync(df, serialize(doc));
+    console.log(`${id}: svg ${path}`);
+  } else {
+    console.error('usage: sync.mjs export|apply|answers|questions|linked|cite|pending|prepare|terms|question-first|fold|tickets|triage|next-id|images|asset|undrawn|draw|attach-svg ...'); process.exit(2);
+  }
+}

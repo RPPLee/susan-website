@@ -1,0 +1,14 @@
+{
+  "assets/social/linkedin-banner-company-dark.png": {
+    "id": "560c0f1fa409c9774858c46403c2fb7b",
+    "sha256": "52f8bc30713915c7962e0647ce076bd6071b35c86dc8949d0ba4cc732eeff377"
+  },
+  "assets/social/linkedin-banner-personal-dark.png": {
+    "id": "5536d08e4b0d3994efa9cc776b9a1991",
+    "sha256": "96227d50f8dc4fe30ea169ecdce3a7d348229ad9683649b916c0a80c6cd67362"
+  },
+  "assets/social/linkedin-banner-personal-light.png": {
+    "id": "634a2e955a8472af1cbde026b87f2c6b",
+    "sha256": "d3541f15403ba6423caa53c9f7be3e18bffdbf266758bdf2def7a7aa18407faf"
+  }
+}
