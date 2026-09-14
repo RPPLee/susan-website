@@ -147,23 +147,23 @@ Last extracted: 8ea23c5
 
 **What it touches.** assets/social/linkedin-banner-personal-dark.png, assets/social/linkedin-banner-personal-light.png, docs/research/linkedin-banner/, LinkedIn profile.
 
-## op-067 · Her programs are featured on her profile as link cards to the site
+## op-067 · Her offerings are featured on her profile as link cards to the site, one colour each
 - category: LinkedIn
 - status: proposed
 - image: docs/ssot/decisions/images/presence/op-067.png
-- caption: Featured on Susan's profile, 2026-09-14: Programs, Tapestry, Turning Point Tenders, then the Substack and the OG post.
+- caption: Featured on Susan's profile, 2026-09-14: BizBlitz and VizBlitz in gold, Conversation With An OG in teal, Turning Point Tenders in dark teal, then the Substack and the OG post.
 - screen: LinkedIn profile, Featured section
 - source: Susan via Lee 2026-09-14
 - work: done
 
-**Context.** Susan wants her programs on her profile the way the company page lists what Metaphase offers. A personal profile has no Products or Programs section; it has Featured (link, post, image and document cards near the top), Services (LinkedIn's fixed category list) and Projects under Accomplishments, which she rightly says is the wrong word. Featured link cards show a picture, a title and two lines of text and open the page on the site.
+**Context.** Susan wants her offerings on her profile the way the company page lists what Metaphase offers. A personal profile has no Products or Programs section; it has Featured (picture cards near the top), Services (LinkedIn's fixed category list) and Projects under Accomplishments, which she rightly says is the wrong word. Featured link cards show a picture, a title and two lines of text and open the page on the site. Her first pass had Tapestry and a combined Programs card; she asked for those to go and for Conversation With An OG and the two Blitz sessions instead, each in its own colour.
 
-**Question.** How do her programs appear on her personal profile?
+**Question.** How do her offerings appear on her personal profile?
 
-**Decision.** 1. Featured carries, in this order: the Programs page, Tapestry, Turning Point Tenders, Experience Matters (the Substack about page), and her Conversation With An OG post. 2. Each site link shows a branded card rendered from `docs/research/share-images/card.html`; the site now sets `og:image` on every page, with the Programs page and the two program services getting their own cards and everything else a site card. 3. The Services section keeps LinkedIn's categories; the programs are named in About and the headline, which stay Susan's copy (op-026).
+**Decision.** 1. Featured carries, in this order: BizBlitz and VizBlitz (gold), Conversation With An OG (teal), Turning Point Tenders (dark teal), Experience Matters (the Substack about page), and her Conversation With An OG post. 2. Each site link shows a branded card rendered from `docs/research/share-images/card.html` in that colour; the site sets `og:image` on every page, with these pages getting their own cards and everything else a site card. 3. Conversation With An OG, until now only a LinkedIn post, is a page on the site written from that post, free, 60 minutes. 4. `/blitz/` presents BizBlitz and VizBlitz together and links to both service pages. 5. Tapestry is not featured. 6. The Services section keeps LinkedIn's categories; About and the headline stay Susan's copy (op-026).
 
-**Why.** Featured is the only place on a personal profile that shows offerings as pictures near the top, and linking to the site sends readers to the full page, the flyer and the contact form.
+**Why.** Featured is the only place on a personal profile that shows offerings as pictures near the top, and linking to the site sends readers to the full page and the contact form. One colour per card makes three offerings read as three things at a glance.
 
-**What else was considered.** Projects under Accomplishments (wrong word, buried); a LinkedIn Services page (fixed categories, no program names); an image-only Featured card (no link).
+**What else was considered.** Projects under Accomplishments (wrong word, buried); a LinkedIn Services page (fixed categories, no program names); image-only Featured cards (no link); featuring the OG post alone (no branded picture, no page to send people to).
 
-**What it touches.** LinkedIn profile, assets/social/share-*.png, _config.yml defaults, pages/programs.html, _services/tapestry.md, _services/turning-point-tenders.md.
+**What it touches.** LinkedIn profile, assets/social/share-*.png, _config.yml defaults, _services/conversation-with-an-og.md, pages/blitz.html, _services/turning-point-tenders.md.
