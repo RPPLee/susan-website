@@ -235,8 +235,8 @@ Feature name: Susan's online presence
 ## op-011 · Put the matching banner on the Metaphase company page
 - category: LinkedIn
 - status: approved
-- image: assets/social/linkedin-banner-company-dark.png
-- caption: The company banner, dark version, at LinkedIn's 1512 by 256 size.
+- image: docs/ssot/decisions/images/presence/op-011.png
+- caption: The company page header with the dark banner up, 2026-09-14.
 - screen: LinkedIn company page header
 - source: Lee on the approval page 2026-09-14
 
@@ -257,8 +257,8 @@ Feature name: Susan's online presence
 ## op-012 · Feature her Substack on her profile
 - category: LinkedIn
 - status: approved
-- image: none
-- caption:
+- image: docs/ssot/decisions/images/presence/op-012.png
+- caption: Contact info listing metaphasemgt.com and metaphase.substack.com, 2026-09-14. Featured still waits on Lee.
 - screen: LinkedIn profile, Featured section
 - source: Lee on the approval page 2026-09-14
 
@@ -301,8 +301,8 @@ Feature name: Susan's online presence
 ## op-014 · Fill in the Metaphase company page
 - category: LinkedIn
 - status: approved
-- image: none
-- caption:
+- image: docs/ssot/decisions/images/presence/op-014.png
+- caption: The company About page: website, headquarters and specialties, 2026-09-14.
 - screen: LinkedIn company page
 - source: Lee on the approval page 2026-09-14
 
@@ -600,8 +600,8 @@ Feature name: Susan's online presence
 ## op-031 · The personal banner goes up in the dark version
 - category: LinkedIn
 - status: approved
-- image: assets/social/linkedin-banner-personal-dark.png
-- caption: The dark personal banner at 1584 by 396.
+- image: docs/ssot/decisions/images/presence/op-031.png
+- caption: Susan's profile header with the dark banner up, 2026-09-14.
 - screen: LinkedIn profile header
 - source: grill 2026-09-14
 

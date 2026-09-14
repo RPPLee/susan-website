@@ -89,6 +89,7 @@ Last extracted: 8ea23c5
 - status: proposed
 - image: none
 - caption:
+- svg: docs/ssot/decisions/images/presence/op-063.svg
 - screen: none (toolchain)
 - source: ticket 01
 
@@ -103,3 +104,24 @@ Last extracted: 8ea23c5
 **What else was considered.** Pinning the Gemfile to the `github-pages` gem so the local build drops to Jekyll 3.10; leaving the mismatch.
 
 **What it touches.** `.github/workflows/jekyll.yml`, `docs/agents/build.md`.
+
+## op-064 · The company banner's headline moves right so the logo tile does not cover it
+- category: LinkedIn
+- status: proposed
+- image: docs/ssot/decisions/images/presence/op-011.png
+- caption: The company page today: the logo tile sits over "IDEA".
+- screen: LinkedIn company page header
+- source: ticket 02
+- work: pending
+
+**Context.** op-002 rendered the company banner at 1512 by 256 with the headline centred, and op-011 put the dark version up on 2026-09-14. On a company page LinkedIn overlays the square logo tile on the lower left of the banner, where on a profile the round photo sits lower still. The tile covers the "I" and part of the "D" of "IDEA to IMPACT" and the start of the tagline line. The personal banner is not affected; its left third was left empty for the photo.
+
+**Question.** Does the company banner get re-rendered with the headline clear of the logo tile?
+
+**Decision.** 1. The company banner is re-rendered with the headline, rule and tagline line shifted right so nothing sits under the logo tile, and the logo mark top right stays. 2. Both versions (dark and light) are re-rendered the same way. 3. The dark version replaces the one on the company page and op-011's screenshot is retaken.
+
+**Why.** The headline is the point of the banner; a covered first word reads as a mistake to anyone who lands on the page.
+
+**What else was considered.** Leaving it, since the banner is otherwise legible; centring the headline in the right two thirds instead of shifting it.
+
+**What it touches.** assets/social/linkedin-banner-company-dark.png, assets/social/linkedin-banner-company-light.png, LinkedIn company page.

@@ -10,5 +10,21 @@
   "assets/social/linkedin-banner-personal-light.png": {
     "id": "634a2e955a8472af1cbde026b87f2c6b",
     "sha256": "d3541f15403ba6423caa53c9f7be3e18bffdbf266758bdf2def7a7aa18407faf"
+  },
+  "docs/ssot/decisions/images/presence/op-031.png": {
+    "id": "38c02f120c5b3156839112ef95f62255",
+    "sha256": "a317a740d97420d7f9c401322f72ab45c4a55e274fc946145815cd563ca5b839"
+  },
+  "docs/ssot/decisions/images/presence/op-011.png": {
+    "id": "5c58abb34785b012f54fc39be4c3b514",
+    "sha256": "83ea85d50867af534cfe9da3dea6eba631a03c0055a354ac8a9895228e4a1545"
+  },
+  "docs/ssot/decisions/images/presence/op-012.png": {
+    "id": "ab8f1e6923f5cd568ef1346100359d81",
+    "sha256": "df462d4139efe3da28f1845d5a05449e0a299e65a8f27e3d9d50cef5234d6735"
+  },
+  "docs/ssot/decisions/images/presence/op-014.png": {
+    "id": "8bba78d256e9c9685acdc33eff73ef17",
+    "sha256": "9a3d510a5430eabe93bc5af908b60e1f93e9142ba262d1304c202f4781526ca8"
   }
 }

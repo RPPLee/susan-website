@@ -9,7 +9,7 @@ import { mkdtempSync, writeFileSync, readFileSync, existsSync, readdirSync } fro
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parse, serialize, apply, answers, openQuestions, answeredLinks, specCitations, questionFirst, fold, clauses, toDocuments, ticketDocument, triage, nextId, assetId, staleImages, recordAsset, pendingIn, ticketPlan, publishTickets, svgCheck, undrawn, attachSvg } from './sync.mjs';
+import { parse, serialize, apply, answers, openQuestions, answeredLinks, specCitations, questionFirst, fold, clauses, toDocuments, ticketDocument, triage, nextId, assetId, staleImages, recordAsset, pendingIn, ticketPlan, publishTickets, svgCheck, undrawn, attachSvg, attachImage } from './sync.mjs';
 import { draw, TOKENS } from './diagram.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -807,6 +807,30 @@ test('undrawn lists screenless cards without a picture, skipping questions and r
   ssot.decisions[1].meta.screen = 'none (algorithm/data)'; ssot.decisions[1].meta.status = 'approved'; ssot.decisions[1].meta.svg = 'x.svg';
   const q = parse(questionFixture); q.decisions[0].meta.screen = 'none (algorithm/data)'; proposals.decisions.push(q.decisions[0]);
   assert.deepEqual(undrawn(proposals, ssot), [{ id: 'sm-001', title: 'The sheet has one height', file: 'proposals' }]);
+});
+
+test('attach-image checks the file and sets the image and caption lines', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'ssot-'));
+  const md = join(dir, 'p.md'); writeFileSync(md, screenless);
+  const png = join(dir, 'sm-001.png'); writeFileSync(png, 'not really a png');
+  const svg = join(dir, 'sm-001.svg'); writeFileSync(svg, '<svg/>');
+  assert.throws(() => execFileSync('node', [cli, 'attach-image', md, 'sm-001', join(dir, 'missing.png')], { stdio: 'pipe' }), /file missing/);
+  assert.throws(() => execFileSync('node', [cli, 'attach-image', md, 'sm-001', svg], { stdio: 'pipe' }), /attach-svg/);
+  assert.throws(() => execFileSync('node', [cli, 'attach-image', md, 'sm-009', png], { stdio: 'pipe' }), /sm-009/);
+  assert.equal(readFileSync(md, 'utf8'), screenless);
+  execFileSync('node', [cli, 'attach-image', md, 'sm-001', png, 'The sheet, captured.']);
+  const after = readFileSync(md, 'utf8');
+  assert.ok(after.includes(`- image: ${png}\n- caption: The sheet, captured.\n- screen:`), after);
+  assert.equal(serialize(parse(after)), after);
+  // Without a caption the old caption stays; attaching again replaces the path.
+  execFileSync('node', [cli, 'attach-image', md, 'sm-001', png]);
+  assert.equal(readFileSync(md, 'utf8'), after);
+  // The pure function on a doc, and on a card with no image line at all.
+  const doc = parse(screenless); assert.equal(attachImage(doc, 'sm-404', 'y.png'), false);
+  delete doc.decisions[1].meta.image;
+  assert.equal(attachImage(doc, 'sm-002', 'y.png'), true);
+  assert.deepEqual(Object.keys(doc.decisions[1].meta), ['category', 'status', 'image', 'caption', 'screen', 'source']);
+  assert.equal(doc.decisions[1].meta.image, 'y.png');
 });
 
 test('attach-svg checks the file, sets the meta line after caption, and prepare inlines it', () => {

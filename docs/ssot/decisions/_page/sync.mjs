@@ -23,6 +23,7 @@
 //   node sync.mjs undrawn <proposals.md> [<ssot.md>]   -> screenless cards with no drawn picture yet
 //   node sync.mjs draw <spec.json> [<out.svg>]         -> draw a diagram from a spec (diagram.mjs), checked
 //   node sync.mjs attach-svg <decisions.md> <id> <svg path>  -> check the file and set the card's `svg:` line
+//   node sync.mjs attach-image <decisions.md> <id> <png path> [<caption>]  -> check the file and set the card's `image:` (and `caption:`) lines
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -645,6 +646,22 @@ export function attachSvg(doc, id, path) {
   return true;
 }
 
+/** Set a card's `image:` line (and `caption:` when given) to a captured screenshot; false when the id is not in the doc. */
+export function attachImage(doc, id, path, caption) {
+  const d = doc.decisions.find(x => x.id === id);
+  if (!d) return false;
+  const keys = Object.keys(d.meta);
+  if (!keys.includes('image')) {
+    const meta = {};
+    for (const k of keys) { if (k === 'caption' || k === 'svg' || k === 'screen') { if (meta.image === undefined) meta.image = ''; } meta[k] = d.meta[k]; }
+    if (meta.image === undefined) meta.image = '';
+    d.meta = meta;
+  }
+  d.meta.image = path;
+  if (caption !== undefined) d.meta.caption = caption;
+  return true;
+}
+
 // The assets map (`_page/assets.json`) keys a repo image path to the artifact
 // asset it was uploaded as. New entries are {id, sha256}; the first entries
 // were bare ids and still resolve. An image is uploaded again only when its
@@ -854,7 +871,17 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split('/').pop()
     if (!attachSvg(doc, id, path)) { console.error(`${id} is not in ${df}`); process.exit(1); }
     writeFileSync(df, serialize(doc));
     console.log(`${id}: svg ${path}`);
+  } else if (cmd === 'attach-image') {
+    // attach-image <decisions.md> <id> <png path> [<caption>]: check the file, then set the card's image (and caption) lines.
+    const [df, id, path, caption] = args;
+    if (!df || !id || !path) { console.error('usage: sync.mjs attach-image <decisions.md> <id> <png path> [<caption>]'); process.exit(2); }
+    if (!existsSync(path)) { console.error(`${path}: file missing`); process.exit(1); }
+    if (!/\.(png|jpe?g)$/i.test(path)) { console.error(`${path}: a screenshot is a .png or .jpg; a drawn picture goes through attach-svg`); process.exit(1); }
+    const doc = parse(readFileSync(df, 'utf8'));
+    if (!attachImage(doc, id, path, caption)) { console.error(`${id} is not in ${df}`); process.exit(1); }
+    writeFileSync(df, serialize(doc));
+    console.log(`${id}: image ${path}`);
   } else {
-    console.error('usage: sync.mjs export|apply|answers|questions|linked|cite|pending|prepare|terms|question-first|fold|tickets|triage|next-id|images|asset|undrawn|draw|attach-svg ...'); process.exit(2);
+    console.error('usage: sync.mjs export|apply|answers|questions|linked|cite|pending|prepare|terms|question-first|fold|tickets|triage|next-id|images|asset|undrawn|draw|attach-svg|attach-image ...'); process.exit(2);
   }
 }

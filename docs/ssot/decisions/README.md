@@ -178,7 +178,9 @@ the page's colour tokens (`var(--token, fallback)`, no raster, no stock art, no 
 the file into the page document, where the page shows it in the picture box in both themes.
 The spec files live beside the run that drew them (`.scratch/ssot/diagrams/`) and are not the
 source of truth; the SVG is. `sync.mjs undrawn` lists what still needs one. A card that names a
-screen is captured, not drawn (ticket 08).
+screen is captured, not drawn (ticket 08): the capture goes to
+`docs/ssot/decisions/images/<feature>/<id>.png` and `sync.mjs attach-image` sets the card's
+`image:` and `caption:` lines, so no one edits the record by hand for a screenshot either.
 
 ## Vocabulary
 
@@ -228,7 +230,7 @@ the page into the two files), `answers` (close an open question with a decision)
 `answeredLinks` (decisions that answered a question), `specCitations` (what a spec's decision
 sections cite), `pendingIn` (the pending cards of one category), `ticketPlan` (ticket cards with
 their blocking edges), `publishTickets` (approved ticket cards to files), `fold`, `clauses` and
-`ticketDocument`, `svgCheck`, `undrawn` and `attachSvg`; `_page/diagram.mjs` exports `draw` and the token list. Tests: `node --test docs/ssot/decisions/_page/sync.test.mjs`;
+`ticketDocument`, `svgCheck`, `undrawn`, `attachSvg` and `attachImage`; `_page/diagram.mjs` exports `draw` and the token list. Tests: `node --test docs/ssot/decisions/_page/sync.test.mjs`;
 every case feeds a markdown fixture and checks the markdown that comes out, and the last case
 round-trips the real presence record and proposals. CLI:
 
@@ -253,6 +255,7 @@ node docs/ssot/decisions/_page/sync.mjs asset <assets.json> <path> <asset id> # 
 node docs/ssot/decisions/_page/sync.mjs undrawn <proposals.md> [<ssot.md>]   # screenless cards with no drawn picture, as JSON; questions and ruled-out cards are skipped
 node docs/ssot/decisions/_page/sync.mjs draw <spec.json> [<out.svg>]         # draw a diagram from a spec; refuses one that fails the check
 node docs/ssot/decisions/_page/sync.mjs attach-svg <decisions.md> <id> <svg path>  # check the file, set the card's svg line
+node docs/ssot/decisions/_page/sync.mjs attach-image <decisions.md> <id> <png path> [<caption>]  # check the file, set the card's image and caption lines
 ```
 
 `triage` sorts the page's verdicts the way the skills apply them: approve, withdraw and reject with
