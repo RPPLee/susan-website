@@ -31,7 +31,15 @@ function feedFromSettings() {
 async function read(from) {
   if (!from) throw new Error("no Substack address in the settings");
   if (!/^https?:\/\//.test(from)) return readFileSync(from, "utf8");
-  const response = await fetch(from, { signal: AbortSignal.timeout(20000) });
+  // Substack answers 403 to requests without a browser-like User-Agent, which is what GitHub's
+  // runners send by default.
+  const response = await fetch(from, {
+    headers: {
+      "User-Agent": "Mozilla/5.0 (compatible; metaphasemgt.com Insights; +https://metaphasemgt.com/insights/)",
+      Accept: "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
+    },
+    signal: AbortSignal.timeout(20000),
+  });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return response.text();
 }
