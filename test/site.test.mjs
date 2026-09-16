@@ -136,6 +136,26 @@ test("the contact form leads to a thank-you page on the site", () => {
   }
 });
 
+// op-035, ticket 09: every page's footer carries Substack's subscribe form, so a signup lands in
+// Susan's Substack list. Insights already has the form at the top, so its footer leaves it out.
+test("the footer carries Substack's subscribe form", () => {
+  const { destination, result } = buildSite();
+  try {
+    assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
+    const { social } = loadYaml("_data/settings.yml");
+    const footer = (p) => {
+      const html = readFileSync(join(destination, p), "utf8");
+      return html.slice(html.indexOf('<footer class="site-footer">'));
+    };
+    for (const p of ["index.html", "services/coaching/index.html", "contact/index.html"]) {
+      assert.ok(footer(p).includes(`<iframe src="${social.substack}embed"`), `${p} footer has no subscribe form`);
+    }
+    assert.ok(!footer("insights/index.html").includes("<iframe"), "Insights shows the subscribe form twice");
+  } finally {
+    rmSync(destination, { recursive: true, force: true });
+  }
+});
+
 // Susan changes her own links and contact details in the editor (2026-09-16). Every LinkedIn and
 // Substack link, email address and phone number on the site comes from the site settings, so a
 // change there reaches every page, and nothing hard-coded is left behind.

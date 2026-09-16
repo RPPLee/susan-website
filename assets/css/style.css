@@ -1321,3 +1321,30 @@ section {
     margin: 0 auto 24px;
   }
 }
+
+/* ===== Footer subscribe form (op-035, ticket 09) ===== */
+.footer-subscribe {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding: 32px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-subscribe h4 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.footer-subscribe p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-subscribe iframe {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px;
+  background: #fff;
+}

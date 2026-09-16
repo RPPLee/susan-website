@@ -24,6 +24,16 @@
       </div>
     </div>
 
+    {% if site.data.settings.social.substack and page.url != '/insights/' %}
+    <div class="footer-subscribe">
+      <div>
+        <h4>Experience Matters</h4>
+        <p>Susan's writing, by email when she publishes.</p>
+      </div>
+      <iframe src="{{ site.data.settings.social.substack }}embed" title="Subscribe to Experience Matters" width="480" height="150" frameborder="0" scrolling="no" loading="lazy"></iframe>
+    </div>
+    {% endif %}
+
     <div class="footer-bottom">
       <p>&copy; {{ 'now' | date: '%Y' }} {{ site.data.settings.title }}. All rights reserved.</p>
     </div>
