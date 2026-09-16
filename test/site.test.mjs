@@ -134,6 +134,8 @@ test("social links and contact details on every page come from the site settings
     for (const p of htmlFiles(destination)) {
       const html = readFileSync(join(destination, p), "utf8");
       for (const [, href] of html.matchAll(/href="(https:\/\/[^"]*(?:linkedin\.com|substack\.com)[^"]*)"/g)) {
+        // Posts and the archive on her Substack come from the feed (test/insights.test.mjs).
+        if (href.startsWith(social.substack) && /^(p\/|archive$)/.test(href.slice(social.substack.length))) continue;
         assert.ok(allowed.has(href), `${p} links to ${href}, which is not in the site settings`);
       }
       for (const [, address] of html.matchAll(/href="mailto:([^"?]+)/g)) {
