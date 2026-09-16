@@ -36,3 +36,11 @@ Lee closed op-021 (Pages CMS, op-029) and op-024 (ignore the Stripe email, op-03
 - Done on 2026-09-14 outside the tickets: the personal banner trimmed to headline and logo (op-066 proposed); Featured on Susan's profile now shows BizBlitz and VizBlitz, Conversation With An OG and Turning Point Tenders as coloured link cards plus the Substack and the OG post (op-067 proposed); every site page has a share image (`assets/social/share-*.png`, rendered from `docs/research/share-images/card.html`); two new pages, `/services/conversation-with-an-og/` and `/blitz/`; the homepage intro moved into `_data/settings.yml`. Pages CMS is installed and Lee's round trip is proven (three minutes, commit under his name).
 - Lee's machine cannot build the site today (system Ruby 2.6, Jekyll 3.9; the Gemfile wants 4.3). op-048 covers the fix.
 - Next: `/implement-lee presence` does not exist yet; use `/implement ticket 06`, then 07 to 11 in order, `/clear` between tickets. Pushes to `main` need the RPPLee account (`gh auth switch -u RPPLee && gh auth setup-git`, then switch back to lbm54).
+
+## 2026-09-16
+
+- Lee narrowed the round to tickets 14, 07, 08, 09. Susan no longer wants bookings: 06 is wontfix (op-070). The Substack look (11) waits until after the website work.
+- Built and live: 14 (form `mgavwrdd` in Lee's Formspree, emailing lee@rightpathprogramming.com, then /thanks/, op-071), 07 (testimonials, hidden while empty), 08 (bio in `pages/about.md` behind "Publish the new bio", off), 09 (Substack form in every footer).
+- Built outside the tickets: 10 (Insights page, homepage Latest Writing as op-069); every social link and contact detail editable under Site settings > Links.
+- Open: a test message through the live contact form and a test Substack signup, both waiting on Lee's yes. Susan switches on the new bio after reading it. Proposals op-069, op-070 and op-071 wait on the page.
+- Substack blocks GitHub's runners (403); the feed script falls back to api.rss2json.com.
