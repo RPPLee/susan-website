@@ -61,6 +61,11 @@ test("site settings expose fields that exist in the data file, and not the menu"
   const names = settings.fields.map((field) => field.name);
   assert.ok(!names.includes("menu"), "the menu is navigation and stays with Lee (op-047)");
   assert.ok(!names.includes("baseurl"), "baseurl is a build setting and stays with Lee");
+
+  // Susan changes her own links and contact details (2026-09-16).
+  const group = (name) => settings.fields.find((field) => field.name === name).fields.map((field) => field.name);
+  assert.deepEqual(group("social"), ["linkedin", "linkedin_company", "substack"]);
+  for (const name of ["email", "phone", "location"]) assert.ok(group("author").includes(name), `author.${name} is not editable`);
 });
 
 test("the About and Programs pages expose their front matter and body", () => {

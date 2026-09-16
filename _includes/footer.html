@@ -4,18 +4,20 @@
       <div class="footer-info">
         <h3>{{ site.data.settings.title }}</h3>
         <p>{{ site.data.settings.tagline }}</p>
-        <p class="location"><i class="fas fa-map-marker-alt"></i> Berkeley, California</p>
+        <p class="location"><i class="fas fa-map-marker-alt"></i> {{ site.data.settings.author.location }}</p>
       </div>
 
       <div class="footer-social">
         <a href="{{ '/contact/' | relative_url }}" aria-label="Contact">
           <i class="fas fa-paper-plane"></i>
         </a>
-        <a href="https://www.linkedin.com/in/{{ site.data.settings.social.linkedin }}/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        {% if site.data.settings.social.linkedin %}
+        <a href="{{ site.data.settings.social.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
           <i class="fab fa-linkedin"></i>
         </a>
+        {% endif %}
         {% if site.data.settings.social.substack %}
-        <a href="https://{{ site.data.settings.social.substack }}.substack.com/" target="_blank" rel="noopener" aria-label="Substack">
+        <a href="{{ site.data.settings.social.substack }}" target="_blank" rel="noopener" aria-label="Substack">
           {% include substack-icon.html %}
         </a>
         {% endif %}

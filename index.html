@@ -127,10 +127,18 @@ title: Home
           <i class="fas fa-paper-plane"></i>
           <span>Send a Message</span>
         </a>
-        <a href="https://www.linkedin.com/in/{{ site.data.settings.social.linkedin }}/" target="_blank" rel="noopener" class="contact-link">
+        {% if site.data.settings.social.linkedin %}
+        <a href="{{ site.data.settings.social.linkedin }}" target="_blank" rel="noopener" class="contact-link">
           <i class="fab fa-linkedin"></i>
           <span>LinkedIn</span>
         </a>
+        {% endif %}
+        {% if site.data.settings.social.substack %}
+        <a href="{{ site.data.settings.social.substack }}" target="_blank" rel="noopener" class="contact-link">
+          {% include substack-icon.html %}
+          <span>Substack</span>
+        </a>
+        {% endif %}
       </div>
     </div>
   </div>

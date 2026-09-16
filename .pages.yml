@@ -165,16 +165,14 @@ content:
         type: object
         fields:
           - name: linkedin
-            label: LinkedIn profile name
-            description: The part after linkedin.com/in/
+            label: Your LinkedIn profile
+            description: The full address of your profile, copied from the browser. Leave empty to hide the link.
             type: string
           - name: linkedin_company
-            label: LinkedIn company page id
+            label: Metaphase LinkedIn page
+            description: The full address of the company page. Leave empty to hide the link.
             type: string
           - name: substack
-            label: Substack name
-            description: The part before .substack.com
-            type: string
-          - name: email
-            label: Contact email
+            label: Substack
+            description: The full address of your Substack, for example https://metaphase.substack.com/. Leave empty to hide the link.
             type: string

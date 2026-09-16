@@ -117,26 +117,51 @@ function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-// Susan asked on 2026-09-16 how to add her Substack next to LinkedIn. The address lives in the
-// site settings so she can change it in the editor.
-test("the footer links to Susan's Substack and on the contact page, next to LinkedIn", () => {
+// Susan changes her own links and contact details in the editor (2026-09-16). Every LinkedIn and
+// Substack link, email address and phone number on the site comes from the site settings, so a
+// change there reaches every page, and nothing hard-coded is left behind.
+test("social links and contact details on every page come from the site settings", () => {
   const { destination, result } = buildSite();
   try {
     assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
-    const { social } = loadYaml("_data/settings.yml");
-    assert.ok(social.substack, "settings.yml has no social.substack");
-    for (const p of ["index.html", "about/index.html"]) {
-      const html = readFileSync(join(destination, p), "utf8");
-      const footer = html.slice(html.indexOf('<footer class="site-footer">'));
-      assert.ok(
-        footer.includes(`href="https://${social.substack}.substack.com/"`),
-        `${p} has no Substack link in the footer`,
-      );
-      assert.match(footer, /aria-label="Substack"/);
+    const { social, author } = loadYaml("_data/settings.yml");
+    for (const key of ["linkedin", "linkedin_company", "substack"]) {
+      assert.match(social[key], /^https:\/\//, `social.${key} must be a full address Susan can paste`);
     }
-    const contact = readFileSync(join(destination, "contact/index.html"), "utf8");
-    assert.ok(contact.includes(`href="https://${social.substack}.substack.com/" target="_blank" rel="noopener" class="contact-link"`), "the contact page has no Substack button");
+    const allowed = new Set([social.linkedin, social.linkedin_company, social.substack]);
+    const phoneDigits = author.phone.replace(/\D/g, "");
+
+    for (const p of htmlFiles(destination)) {
+      const html = readFileSync(join(destination, p), "utf8");
+      for (const [, href] of html.matchAll(/href="(https:\/\/[^"]*(?:linkedin\.com|substack\.com)[^"]*)"/g)) {
+        assert.ok(allowed.has(href), `${p} links to ${href}, which is not in the site settings`);
+      }
+      for (const [, address] of html.matchAll(/href="mailto:([^"?]+)/g)) {
+        assert.equal(address, author.email, `${p} has a mailto link that is not the settings email`);
+      }
+      for (const [, number] of html.matchAll(/href="tel:([^"]+)"/g)) {
+        assert.ok(number.replace(/\D/g, "").endsWith(phoneDigits), `${p} has a phone link that is not the settings phone`);
+      }
+    }
+
+    const page = (p) => readFileSync(join(destination, p), "utf8");
+    const footer = (p) => page(p).slice(page(p).indexOf('<footer class="site-footer">'));
+    for (const p of ["index.html", "about/index.html"]) {
+      assert.ok(footer(p).includes(`href="${social.linkedin}"`), `${p} footer has no LinkedIn link`);
+      assert.ok(footer(p).includes(`href="${social.substack}"`), `${p} footer has no Substack link`);
+      assert.ok(footer(p).includes(author.location), `${p} footer does not show the settings location`);
+    }
+    const contact = page("contact/index.html");
+    for (const href of allowed) assert.ok(contact.includes(`href="${href}"`), `the contact page has no link to ${href}`);
   } finally {
     rmSync(destination, { recursive: true, force: true });
   }
 });
+
+function htmlFiles(root, dir = "") {
+  return readdirSync(join(root, dir), { withFileTypes: true }).flatMap((entry) => {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) return htmlFiles(root, path);
+    return entry.name.endsWith(".html") ? [path] : [];
+  });
+}

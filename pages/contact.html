@@ -43,16 +43,20 @@ permalink: /contact/
       </div>
 
       <div style="display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-top: 48px;">
-        <a href="https://www.linkedin.com/in/{{ site.data.settings.social.linkedin }}/" target="_blank" rel="noopener" class="contact-link">
+        {% if site.data.settings.social.linkedin %}
+        <a href="{{ site.data.settings.social.linkedin }}" target="_blank" rel="noopener" class="contact-link">
           <i class="fab fa-linkedin"></i>
           <span>Susan Mills on LinkedIn</span>
         </a>
-        <a href="https://www.linkedin.com/company/97186879/" target="_blank" rel="noopener" class="contact-link">
+        {% endif %}
+        {% if site.data.settings.social.linkedin_company %}
+        <a href="{{ site.data.settings.social.linkedin_company }}" target="_blank" rel="noopener" class="contact-link">
           <i class="fab fa-linkedin"></i>
           <span>Metaphase on LinkedIn</span>
         </a>
+        {% endif %}
         {% if site.data.settings.social.substack %}
-        <a href="https://{{ site.data.settings.social.substack }}.substack.com/" target="_blank" rel="noopener" class="contact-link">
+        <a href="{{ site.data.settings.social.substack }}" target="_blank" rel="noopener" class="contact-link">
           {% include substack-icon.html %}
           <span>Susan Mills on Substack</span>
         </a>
@@ -64,12 +68,12 @@ permalink: /contact/
           <i class="fas fa-map-marker-alt"></i> Metaphase Management Associates
         </p>
         <p style="color: var(--text-light); margin-top: 4px;">
-          Berkeley, California
+          {{ site.data.settings.author.location }}
         </p>
         <p style="color: var(--text-light);">
-          <i class="fas fa-phone"></i> <a href="tel:+15105243434">510-524-3434</a>
+          <i class="fas fa-phone"></i> <a href="tel:{{ site.data.settings.author.phone | remove: '-' | remove: ' ' | remove: '(' | remove: ')' | remove: '.' }}">{{ site.data.settings.author.phone }}</a>
           &nbsp;&middot;&nbsp;
-          <i class="fas fa-envelope"></i> <a href="mailto:susanmills@metaphasemgt.com">susanmills@metaphasemgt.com</a>
+          <i class="fas fa-envelope"></i> <a href="mailto:{{ site.data.settings.author.email }}">{{ site.data.settings.author.email }}</a>
         </p>
       </div>
     </div>
