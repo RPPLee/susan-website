@@ -1,0 +1,34 @@
+---
+layout: default
+title: Insights
+permalink: /insights/
+description: Susan Mills writes Experience Matters on Substack, reflections on business, travel and learning since 1946.
+---
+{%- assign substack = site.data.settings.social.substack -%}
+{%- assign posts = site.data.insights -%}
+
+<section class="page-content insights">
+  <div class="container">
+    <h1 class="page-title">Insights</h1>
+    <p class="section-subtitle">Susan writes <em>Experience Matters</em> on Substack: reflections on business, personal and spiritual explorations gathered over the decades. New posts appear here within a day.</p>
+
+    {% if substack %}
+    <div class="substack-subscribe">
+      <iframe src="{{ substack }}embed" title="Subscribe to Experience Matters" width="480" height="150" frameborder="0" scrolling="no"></iframe>
+    </div>
+    {% endif %}
+
+    {% if posts and posts.size > 0 %}
+    <div class="post-grid">
+      {% for post in posts %}
+      {% include post-card.html post=post %}
+      {% endfor %}
+    </div>
+    {% if substack %}
+    <p class="insights-more"><a href="{{ substack }}archive" target="_blank" rel="noopener">All posts on Substack <i class="fas fa-arrow-right"></i></a></p>
+    {% endif %}
+    {% else %}
+    <p class="insights-fallback">Susan's posts are on Substack{% if substack %}: <a href="{{ substack }}" target="_blank" rel="noopener">read them there</a>{% endif %}.</p>
+    {% endif %}
+  </div>
+</section>

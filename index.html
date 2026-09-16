@@ -97,6 +97,25 @@ title: Home
   </div>
 </section>
 
+<!-- Latest Writing: the newest Substack posts, when the feed has been read (op-069) -->
+{% if site.data.insights and site.data.insights.size > 0 %}
+<section class="writing" id="writing">
+  <div class="container">
+    <span class="eyebrow">Experience Matters</span>
+    <h2 class="section-title">Latest Writing</h2>
+    <p class="section-subtitle">Reflections from Susan's Substack.</p>
+    <div class="post-grid">
+      {% for post in site.data.insights limit: 3 %}
+      {% include post-card.html post=post %}
+      {% endfor %}
+    </div>
+    <div class="writing-cta">
+      <a href="{{ '/insights/' | relative_url }}" class="btn btn-secondary">More Insights</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
 <!-- About Preview Section -->
 <section class="about-preview">
   <div class="container">

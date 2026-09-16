@@ -1,6 +1,6 @@
 # 10: The Insights page, refreshed daily from the feed
 
-**Status:** ready-for-agent
+**Status:** done (2026-09-16)
 **Blocked by:** 01 (touches .github/workflows/jekyll.yml), 05 (touches assets/css/style.css), 06 (touches _data/settings.yml), 07 (touches assets/css/style.css), 09 (touches assets/css/style.css).
 **Next:** `/implement-lee presence`
 
@@ -10,10 +10,10 @@
 
 **Touches:** scripts/insights-feed.mjs, .github/workflows/jekyll.yml, pages/insights.html, _data/settings.yml, .gitignore, assets/css/style.css, test
 
-- [ ] The script reads a URL or a file and writes the data file with the ten newest posts
-- [ ] The workflow runs it before the build, on push and daily at 13:00 UTC
-- [ ] The data file is gitignored
-- [ ] The page lists the posts from the fixture feed in the test and shows the fallback line without the file
-- [ ] Insights is in the menu after Services
+- [x] The script reads a URL or a file and writes the data file with the ten newest posts
+- [x] The workflow runs it before the build, on push and daily at 13:00 UTC
+- [x] The data file is gitignored
+- [x] The page lists the posts from the fixture feed in the test and shows the fallback line without the file
+- [x] Insights is in the menu after Services
 
 Next: /implement-lee presence

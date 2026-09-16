@@ -26,6 +26,8 @@ menu:
     url: /programs/
   - title: Services
     url: /#services
+  - title: Insights
+    url: /insights/
   - title: About
     url: /about/
   - title: Contact

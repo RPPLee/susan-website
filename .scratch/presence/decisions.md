@@ -189,3 +189,28 @@ Last extracted: 8ea23c5
 **What else was considered.** Leaving it off the homepage; a fourth group for free offers.
 
 **What it touches.** _services/conversation-with-an-og.md, the homepage services section.
+
+## op-069 · The homepage shows her three newest Substack posts
+- category: Website
+- status: proposed
+- linked: op-007, op-037
+- image: none
+- caption:
+- screen: Homepage, Latest Writing section
+- source: Lee in the terminal 2026-09-16 ("by adding substack she also meant to feature some of her articles on her website like she was doing on LinkedIn"); built with ticket 10
+- work: done
+
+**Context.** Susan asked on 2026-09-16 how to add her Substack to the website. On LinkedIn her Featured section shows her writing as cards (op-067). op-037 put the posts on a separate Insights page only.
+
+**Question.** Does her writing appear on the homepage, and how?
+
+**Decision.**
+1. A Latest Writing section after the services shows the three newest posts from the same daily feed as Insights, each with its image, date, title and excerpt, opening on Substack.
+2. A More Insights button leads to the Insights page.
+3. The section is absent when the feed has not been read.
+
+**Why.** Visitors see she writes without finding the menu item, the way her LinkedIn Featured cards show it.
+
+**What else was considered.** Posts Susan picks by hand in the editor instead of the newest three; a link to Substack only.
+
+**What it touches.** index.html, _includes/post-card.html, assets/css/style.css.
