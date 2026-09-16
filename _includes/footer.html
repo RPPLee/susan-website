@@ -7,6 +7,13 @@
         <p class="location"><i class="fas fa-map-marker-alt"></i> {{ site.data.settings.author.location }}</p>
       </div>
 
+      {% if site.data.settings.social.substack and page.url != '/insights/' %}
+      <div class="footer-subscribe">
+        <p><strong>Experience Matters</strong> &middot; Susan's writing, by email</p>
+        <iframe src="{{ site.data.settings.social.substack }}embed" title="Subscribe to Experience Matters" width="420" height="150" frameborder="0" scrolling="no" loading="lazy"></iframe>
+      </div>
+      {% endif %}
+
       <div class="footer-social">
         <a href="{{ '/contact/' | relative_url }}" aria-label="Contact">
           <i class="fas fa-paper-plane"></i>
@@ -23,16 +30,6 @@
         {% endif %}
       </div>
     </div>
-
-    {% if site.data.settings.social.substack and page.url != '/insights/' %}
-    <div class="footer-subscribe">
-      <div>
-        <h4>Experience Matters</h4>
-        <p>Susan's writing, by email when she publishes.</p>
-      </div>
-      <iframe src="{{ site.data.settings.social.substack }}embed" title="Subscribe to Experience Matters" width="480" height="150" frameborder="0" scrolling="no" loading="lazy"></iframe>
-    </div>
-    {% endif %}
 
     <div class="footer-bottom">
       <p>&copy; {{ 'now' | date: '%Y' }} {{ site.data.settings.title }}. All rights reserved.</p>
