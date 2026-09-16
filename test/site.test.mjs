@@ -116,3 +116,27 @@ test("the homepage shows the services in three groups from the collection", () =
 function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
+
+// Susan asked on 2026-09-16 how to add her Substack next to LinkedIn. The address lives in the
+// site settings so she can change it in the editor.
+test("the footer links to Susan's Substack and on the contact page, next to LinkedIn", () => {
+  const { destination, result } = buildSite();
+  try {
+    assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
+    const { social } = loadYaml("_data/settings.yml");
+    assert.ok(social.substack, "settings.yml has no social.substack");
+    for (const p of ["index.html", "about/index.html"]) {
+      const html = readFileSync(join(destination, p), "utf8");
+      const footer = html.slice(html.indexOf('<footer class="site-footer">'));
+      assert.ok(
+        footer.includes(`href="https://${social.substack}.substack.com/"`),
+        `${p} has no Substack link in the footer`,
+      );
+      assert.match(footer, /aria-label="Substack"/);
+    }
+    const contact = readFileSync(join(destination, "contact/index.html"), "utf8");
+    assert.ok(contact.includes(`href="https://${social.substack}.substack.com/" target="_blank" rel="noopener" class="contact-link"`), "the contact page has no Substack button");
+  } finally {
+    rmSync(destination, { recursive: true, force: true });
+  }
+});

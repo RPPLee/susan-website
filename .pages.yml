@@ -171,6 +171,10 @@ content:
           - name: linkedin_company
             label: LinkedIn company page id
             type: string
+          - name: substack
+            label: Substack name
+            description: The part before .substack.com
+            type: string
           - name: email
             label: Contact email
             type: string
