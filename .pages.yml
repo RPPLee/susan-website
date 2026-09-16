@@ -118,6 +118,36 @@ content:
         options:
           format: html
 
+  - name: testimonials
+    label: Testimonials
+    description: Quotes from clients, shown on the homepage. The section stays hidden until there is at least one.
+    type: file
+    path: _data/testimonials.yml
+    format: yaml
+    fields:
+      - name: testimonials
+        label: Testimonials
+        type: object
+        list: true
+        fields:
+          - name: quote
+            label: Quote
+            description: Their words, without quotation marks.
+            type: text
+            required: true
+          - name: name
+            label: Name
+            type: string
+            required: true
+          - name: title
+            label: Title
+            description: Optional, for example "Founder".
+            type: string
+          - name: organization
+            label: Organization
+            description: Optional.
+            type: string
+
   - name: settings
     label: Site settings
     description: Details used across the site.

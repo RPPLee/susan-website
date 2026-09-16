@@ -10,10 +10,10 @@ import { repo, loadYaml, frontMatter } from "./jekyll.mjs";
 const config = loadYaml(".pages.yml");
 const entries = Object.fromEntries(config.content.map((entry) => [entry.label, entry]));
 
-test("the sidebar lists Services, Programs, About, Site settings and Media", () => {
+test("the sidebar lists Services, Programs, About, Testimonials, Site settings and Media", () => {
   assert.deepEqual(
     config.content.map((entry) => entry.label),
-    ["Services", "Programs", "About", "Site settings"],
+    ["Services", "Programs", "About", "Testimonials", "Site settings"],
   );
   assert.equal(config.media.label, "Media");
 });
@@ -116,4 +116,14 @@ test("the editor offers each service's group as a choice of the three (op-045)",
     const value = frontMatter(join("_services", file)).group;
     assert.ok(ids.includes(value), `${file} has group ${JSON.stringify(value)}`);
   }
+});
+
+test("testimonials are a list Susan edits with name, title, organization and quote", () => {
+  const entry = entries.Testimonials;
+  assert.ok(entry, "the editor has no Testimonials entry");
+  assert.equal(entry.type, "file");
+  assert.equal(entry.path, "_data/testimonials.yml");
+  const list = entry.fields.find((field) => field.name === "testimonials");
+  assert.ok(list && list.list === true && list.type === "object", "testimonials must be a list of objects");
+  assert.deepEqual(list.fields.map((field) => field.name), ["quote", "name", "title", "organization"]);
 });

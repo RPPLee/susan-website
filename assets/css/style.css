@@ -1248,3 +1248,51 @@ section {
 .thanks-page .cta-buttons {
   justify-content: center;
 }
+
+/* ===== Testimonials (op-040) ===== */
+.testimonials {
+  padding: 80px 0;
+  background: var(--bg-secondary);
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+  margin-top: 40px;
+}
+
+.testimonial {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-color);
+  border-radius: 12px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.testimonial blockquote p {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--text-color);
+}
+
+.testimonial blockquote p::before { content: "\201C"; }
+.testimonial blockquote p::after { content: "\201D"; }
+
+.testimonial figcaption {
+  margin-top: 20px;
+}
+
+.testimonial cite {
+  display: block;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.testimonial figcaption span {
+  color: var(--text-light);
+  font-size: 0.95rem;
+}

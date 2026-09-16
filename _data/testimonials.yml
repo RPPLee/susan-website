@@ -1,0 +1,3 @@
+# Testimonials shown on the homepage (op-040). Add them in the editor under Testimonials.
+# The section stays hidden while the list is empty; never put placeholder quotes here.
+testimonials: []

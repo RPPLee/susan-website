@@ -1,31 +1,18 @@
 // The Insights page and the homepage's latest writing (op-007, op-036, op-037, op-044).
-// The feed is a fixture file; nothing here reaches Substack. Each build gets its own data folder
-// inside the repo (Jekyll only reads data from inside the source), holding a copy of _data plus
-// whatever the feed script wrote.
+// The feed is a fixture file; nothing here reaches Substack. Each build gets its own copy of _data
+// (buildWithData) plus whatever the feed script wrote.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { basename, join } from "node:path";
-import { repo, run, loadYaml } from "./jekyll.mjs";
+import { join } from "node:path";
+import { repo, run, loadYaml, buildWithData } from "./jekyll.mjs";
 
 const fixture = join(repo, "test/fixtures/substack-feed.xml");
 
 function build({ feed }) {
-  const data = mkdtempSync(join(repo, ".test-data-"));
-  const destination = mkdtempSync(join(tmpdir(), "metaphase-insights-"));
-  cpSync(join(repo, "_data"), data, { recursive: true });
-  rmSync(join(data, "insights.json"), { force: true });
-  let script;
-  if (feed) script = run("node", ["scripts/insights-feed.mjs", feed, join(data, "insights.json")]);
-  const config = join(data, "_test_config.yml");
-  writeFileSync(config, `data_dir: ${basename(data)}\n`);
-  const result = run("bundle", ["exec", "jekyll", "build", "--config", `_config.yml,${config}`, "--destination", destination]);
-  const cleanup = () => {
-    rmSync(data, { recursive: true, force: true });
-    rmSync(destination, { recursive: true, force: true });
-  };
-  return { data, destination, result, script, cleanup };
+  const b = buildWithData((data) => feed && run("node", ["scripts/insights-feed.mjs", feed, join(data, "insights.json")]));
+  return { ...b, script: b.extra };
 }
 
 test("the feed script keeps the ten newest posts with title, date, link, excerpt and image", () => {

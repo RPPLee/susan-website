@@ -2,8 +2,9 @@
 // Ruby ships the YAML parser the site is built with, so the tests keep no npm dependencies.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { basename, join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const repo = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -31,4 +32,23 @@ export function frontMatter(relativePath) {
   const match = text.match(/^---\n([\s\S]*?)\n---\n/);
   assert.ok(match, `${relativePath} has no front matter`);
   return parseYaml(match[1], `front matter of ${relativePath}`);
+}
+
+// Builds the site with a private copy of _data that a test may change first. Jekyll only reads
+// data from inside the source, so the copy is a dot folder in the repo (ignored by git and the build).
+export function buildWithData(prepare = () => {}) {
+  const data = mkdtempSync(join(repo, ".test-data-"));
+  const destination = mkdtempSync(join(tmpdir(), "metaphase-build-"));
+  cpSync(join(repo, "_data"), data, { recursive: true });
+  rmSync(join(data, "insights.json"), { force: true });
+  const extra = prepare(data);
+  const config = join(data, "_test_config.yml");
+  writeFileSync(config, `data_dir: ${basename(data)}\n`);
+  const result = run("bundle", ["exec", "jekyll", "build", "--config", `_config.yml,${config}`, "--destination", destination]);
+  const page = (path) => readFileSync(join(destination, path), "utf8");
+  const cleanup = () => {
+    rmSync(data, { recursive: true, force: true });
+    rmSync(destination, { recursive: true, force: true });
+  };
+  return { data, destination, result, extra, page, cleanup };
 }
