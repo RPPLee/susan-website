@@ -2,10 +2,7 @@
 # Stays with Lee; the editor offers the ids as a choice (.pages.yml).
 - id: individuals
   title: Individuals
-  note: For you
 - id: groups
   title: Groups
-  note: For a circle, cohort or team
 - id: organizations
   title: Organizations
-  note: For a business or initiative
