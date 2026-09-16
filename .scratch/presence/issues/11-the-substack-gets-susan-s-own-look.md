@@ -1,6 +1,6 @@
 # 11: The Substack gets Susan's own look
 
-**Status:** ready-for-agent
+**Status:** after the website work (Lee, 2026-09-16: "we can worry about substack later")
 **Blocked by:** None (can start immediately).
 **Next:** `/implement-lee presence`
 
@@ -16,3 +16,7 @@
 - [ ] Screenshot on op-017
 
 Next: /implement-lee presence
+
+## Comments
+
+2026-09-16, Lee: the current round is 14, 07, 08, 09 only. The Substack look waits.

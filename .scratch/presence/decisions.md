@@ -214,3 +214,51 @@ Last extracted: 8ea23c5
 **What else was considered.** Posts Susan picks by hand in the editor instead of the newest three; a link to Substack only.
 
 **What it touches.** index.html, _includes/post-card.html, assets/css/style.css.
+
+## op-070 · No booking button on the site
+- category: Website
+- status: proposed
+- linked: op-034, op-055, op-065
+- image: none
+- caption:
+- screen: Homepage hero, Contact page
+- source: Lee in the terminal 2026-09-16 ("she no longer wants to support bookings and things")
+- work: done
+
+**Context.** op-034 approved one booking link to a Google Calendar appointment schedule, built by ticket 06. op-065 already removed registration and payments.
+
+**Question.** Does the site offer a way to book time with Susan?
+
+**Decision.**
+1. No booking button or appointment schedule. The contact form is the way in.
+2. Ticket 06 is closed as wontfix, and its "who she works with" hero line goes with it.
+
+**Why.** Susan no longer wants to take bookings through the site.
+
+**What else was considered.** Keeping the hero line without the button.
+
+**What it touches.** Ticket 06; nothing built changes.
+
+## op-071 · The contact form sends to Lee's new Formspree form and thanks the sender on the site
+- category: Website
+- status: proposed
+- linked: op-065
+- image: none
+- caption:
+- screen: Contact page, thank-you page
+- source: Lee in the terminal 2026-09-16; ticket 14
+- work: pending
+
+**Context.** The contact page posted to Formspree form `meeljpzb`, which lives in an account Lee cannot see; a test message on 2026-09-14 never reached him. Formspree's own redirect after sending needs a paid plan.
+
+**Question.** Where do contact messages go, and what does the sender see afterwards?
+
+**Decision.**
+1. The page posts to form `mgavwrdd` in Lee's Formspree account, which emails lee@rightpathprogramming.com.
+2. The page sends the message in the background and opens /thanks/ on the site. If sending fails, it says so and keeps what they typed.
+
+**Why.** Lee can see and manage the form, and the thank-you page keeps visitors on metaphasemgt.com on the free plan.
+
+**What else was considered.** Recovering the old form; Formspree's paid redirect.
+
+**What it touches.** pages/contact.html, pages/thanks.html, Formspree.

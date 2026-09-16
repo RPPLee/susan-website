@@ -1,21 +1,24 @@
-# 14: The contact form delivers and thanks the sender on the site
+# 14: The contact form delivers to Lee's new Formspree form and thanks the sender on the site
 
-**Status:** ready-for-human
-**Blocked by:** None (Lee's check comes first; the agent's part can start any time).
+**Status:** ready-for-agent
+**Blocked by:** None (can start immediately).
 **Next:** `/implement 14`
 
-**What to build:** A message sent from metaphasemgt.com/contact/ reaches Susan's inbox, and the sender lands on a thank-you page on the site instead of Formspree's generic one.
+**What to build:** A message sent from metaphasemgt.com/contact/ goes to the new Formspree form `mgavwrdd` ("Metaphase website contact", in Lee's Formspree account, emailing lee@rightpathprogramming.com), and the sender lands on a thank-you page on the site. Formspree's redirect setting needs a paid plan, so the page sends the form in the background and opens /thanks/ itself; without JavaScript the plain form post still reaches Formspree.
 
-**Decisions:** op-065 (the form is the only way in; no registration or payment). Proposal to write once Lee's check is done.
+**Decisions:** op-065 (the form is the only way in); op-071 (the new form and the on-site thank-you page).
 
-**Touches:** pages/contact.html, pages/thanks.html, test/site.test.mjs, the Formspree dashboard
+**Touches:** pages/contact.html, pages/thanks.html, test/site.test.mjs
 
-- [ ] Lee signs in at formspree.io, opens form `meeljpzb`, and reads the recipient address and whether it is verified
-- [ ] The test submission of 2026-09-14 ("Test from Claude Code, ignore") is in the form's Submissions tab
-- [ ] The recipient is susanmills@metaphasemgt.com and verified; Susan has received a test message
-- [ ] The form carries a `_next` field pointing at /thanks/, and /thanks/ exists with a short note and a way back
-- [ ] The site test checks the `_next` field and that /thanks/ builds
+- [x] A new form exists in Lee's Formspree account (`mgavwrdd`, created 2026-09-16)
+- [ ] The contact page posts to `mgavwrdd`, not the old `meeljpzb`
+- [ ] A successful send opens /thanks/; a failed send says so on the page and keeps the message
+- [ ] /thanks/ exists with a short note and a way back, and is not in the sitemap
+- [ ] The site test checks the form address and that /thanks/ builds
+- [ ] A test message from the live site arrives at lee@rightpathprogramming.com
 
 ## Comments
 
-2026-09-14, from the check: the page posts to Formspree form `meeljpzb` with a honeypot and a fixed subject. A test POST returned `ok: true`, so the form is active, not disabled and not over quota. The test did not reach Lee's Gmail, inbox or spam, so the form delivers somewhere else, most likely Susan's address. Whether that address is verified in Formspree, or the mail lands in her spam, can only be seen in the dashboard, which needs Lee's password. The two Formspree submissions in Lee's mail (October 2025) came from a different form on his own site.
+2026-09-14, from the first check: the old form `meeljpzb` accepted a test POST, but the message never reached Lee. On 2026-09-16 Lee's Formspree account had no forms at all, so `meeljpzb` belongs to another account. Lee asked for a new form in his own account.
+
+2026-09-16: the new form emails lee@rightpathprogramming.com, the only address on the account. To send to Susan too, add susanmills@metaphasemgt.com under Account > Linked Emails (she confirms by email), then pick it in the form's settings.

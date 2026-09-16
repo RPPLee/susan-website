@@ -73,7 +73,9 @@ test("register buttons go to the contact form and /register/ redirects there", (
     assert.doesNotMatch(redirect, /<form/);
 
     const contact = page("contact/index.html");
-    assert.match(contact, /<form action="https:\/\/formspree\.io\/f\/meeljpzb" method="POST"/);
+    // op-071: the form in Lee's Formspree account; the old one reached nobody he could see.
+    assert.match(contact, /<form action="https:\/\/formspree\.io\/f\/mgavwrdd" method="POST"/);
+    assert.doesNotMatch(contact, /meeljpzb/);
     assert.match(contact, /susanmills@metaphasemgt\.com/);
   } finally {
     rmSync(destination, { recursive: true, force: true });
@@ -116,6 +118,23 @@ test("the homepage shows the services in three groups from the collection", () =
 function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
+
+// op-071: after sending, the visitor lands on a thank-you page on the site. The contact page
+// opens it once Formspree accepts the message.
+test("the contact form leads to a thank-you page on the site", () => {
+  const { destination, result } = buildSite();
+  try {
+    assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
+    const contact = readFileSync(join(destination, "contact/index.html"), "utf8");
+    assert.match(contact, /data-thanks="\/thanks\/"/, "the contact form does not name the thank-you page");
+    const thanks = readFileSync(join(destination, "thanks/index.html"), "utf8");
+    assert.match(thanks, /<h1[^>]*>Thank you/);
+    assert.match(thanks, /href="\/"/, "the thank-you page has no way back");
+    assert.match(thanks, /<meta name="robots" content="noindex">/);
+  } finally {
+    rmSync(destination, { recursive: true, force: true });
+  }
+});
 
 // Susan changes her own links and contact details in the editor (2026-09-16). Every LinkedIn and
 // Substack link, email address and phone number on the site comes from the site settings, so a

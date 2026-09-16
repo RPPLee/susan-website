@@ -1,6 +1,6 @@
 # 06: Booking link and the "who she works with" line
 
-**Status:** ready-for-agent
+**Status:** wontfix
 **Blocked by:** 01 (touches test), 04 (touches .pages.yml), 05 (touches index.html).
 **Next:** `/implement-lee presence`
 
@@ -18,3 +18,7 @@
 - [ ] The test asserts the button address and the line on both pages
 
 Next: /implement-lee presence
+
+## Comments
+
+2026-09-16, Lee: Susan no longer wants bookings on the site, so there is no booking button (op-070). The "who she works with" line goes with it for now; it can come back as its own card.
