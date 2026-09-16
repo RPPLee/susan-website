@@ -34,6 +34,7 @@ export function frontMatter(relativePath) {
   return parseYaml(match[1], `front matter of ${relativePath}`);
 }
 
+// Test files run in parallel, so every test build skips Jekyll's shared .jekyll-cache folder.
 // Builds the site with a private copy of _data that a test may change first. Jekyll only reads
 // data from inside the source, so the copy is a dot folder in the repo (ignored by git and the build).
 export function buildWithData(prepare = () => {}) {
@@ -44,7 +45,7 @@ export function buildWithData(prepare = () => {}) {
   const extra = prepare(data);
   const config = join(data, "_test_config.yml");
   writeFileSync(config, `data_dir: ${basename(data)}\n`);
-  const result = run("bundle", ["exec", "jekyll", "build", "--config", `_config.yml,${config}`, "--destination", destination]);
+  const result = run("bundle", ["exec", "jekyll", "build", "--config", `_config.yml,${config}`, "--disable-disk-cache", "--destination", destination]);
   const page = (path) => readFileSync(join(destination, path), "utf8");
   const cleanup = () => {
     rmSync(data, { recursive: true, force: true });

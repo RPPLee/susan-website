@@ -10,7 +10,7 @@ import { repo, run, loadYaml, frontMatter } from "./jekyll.mjs";
 
 function buildSite() {
   const destination = mkdtempSync(join(tmpdir(), "metaphase-site-"));
-  const result = run("bundle", ["exec", "jekyll", "build", "--strict_front_matter", "--destination", destination]);
+  const result = run("bundle", ["exec", "jekyll", "build", "--strict_front_matter", "--disable-disk-cache", "--destination", destination]);
   return { destination, result };
 }
 

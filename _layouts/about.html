@@ -1,41 +1,21 @@
 ---
 layout: default
-title: About
-permalink: /about/
 ---
+{%- comment -%} The About page around the bio Susan edits (op-057). The specialties, impact and
+company sections stay here with Lee. {%- endcomment -%}
 
 <section class="page-content">
   <div class="container">
-    <h1 class="page-title">About Us</h1>
+    <h1 class="page-title">{{ page.heading | default: "About Us" }}</h1>
 
     <div class="about-content">
       <div class="about-text">
-        <h2>Susan Mills, Founder &amp; CEO</h2>
-        <p>
-          Susan Mills is a business companion to entrepreneurs and community initiatives. For over four decades, Susan has successfully guided over 200 companies and individual clients through profound shifts in markets, technology, finances, and personal circumstances.
-        </p>
-        <p>
-          Most of this work focused on competitive performances whose financial returns were the hallmark of excellence. Today, Susan works toward building a more balanced, respectful, and appreciative world. She applies her energy and attention to helping clients build their 'new future' in the context of their communities and values.
-        </p>
-        <p>
-          Susan specializes in transforming concepts into products, founders into teams, and needs into shared opportunities. She articulates distinct market positions and designs practical management systems that embed values into operational decision-making. She is a creative business model designer and financial partnership builder.
-        </p>
-
-        <h3 style="margin-top: 32px; margin-bottom: 16px;">Background</h3>
-        <p>
-          Susan is deeply experienced in navigating the chaos of disruptive market shifts to find success, particularly in the information technology sector. Her early career included Time Inc.'s Washington bureau, followed by 25 years in telecom and IT. She was recruited by Accel Partners and Seven Rosen to lead marketing for Aristacom, creators of the first commercial computer-telephony integration product.
-        </p>
-        <p>
-          She served as a board member of NATA (North American Telecommunications Association) and has particular expertise in new systems such as blockchain-managed services, gift economies, and peer-based saving and lending circles.
-        </p>
-
-        <div class="education">
-          <h3>Education</h3>
-          <div class="education-item">
-            <i class="fas fa-graduation-cap"></i>
-            <span>MBA, Saint Mary's College of California</span>
-          </div>
-        </div>
+        <img src="{{ '/assets/images/susan-profile-2.jpg' | relative_url }}" alt="Susan Mills" class="about-photo">
+        {% if page.show_new_bio %}
+        {{ content }}
+        {% else %}
+        {% include about-bio-current.html %}
+        {% endif %}
       </div>
 
       <div class="about-skills">

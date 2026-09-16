@@ -13,7 +13,7 @@ and field in it exists in the site, so a rename on either side fails `npm test`.
 |---|---|---|
 | Services | `_services/*.md` | Title, tagline, price, duration, format, group and the page text of each service. The group (Individuals, Groups or Organizations) is where the service sits on the homepage. Prices are free text, shown as written. |
 | Programs | `pages/programs.html` | The New Programs page: title, search description, and the page HTML. |
-| About | `pages/about.html` | The About page: title and the page HTML. Ticket 08 replaces the HTML with a body she edits as text. |
+| About | `pages/about.md` | Her bio as text, plus "Publish the new bio". While that switch is off, the page shows the old bio from `_includes/about-bio-current.html`. The rest of the page is `_layouts/about.html`. |
 | Site settings | `_data/settings.yml` | Site name, tagline, description, the homepage intro; Susan's name, title, email, phone and location; the LinkedIn and email links. |
 | Media | `assets/images/` | Upload and pick images. Images only. |
 

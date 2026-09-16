@@ -103,20 +103,25 @@ content:
 
   - name: about
     label: About
-    description: The About page. The page text is HTML; change words, not tags.
+    description: Your bio on the About page. The specialties and impact sections below it stay as they are.
     type: file
-    path: pages/about.html
+    path: pages/about.md
     format: yaml-frontmatter
     fields:
       - name: title
         label: Title
         type: string
         required: true
+      - name: show_new_bio
+        label: Publish the new bio
+        description: Read and edit the bio below first. While this is off, visitors see the old bio.
+        type: boolean
       - name: body
-        label: Page text
-        type: code
+        label: Bio
+        type: rich-text
         options:
-          format: html
+          format: markdown
+          media: images
 
   - name: testimonials
     label: Testimonials
