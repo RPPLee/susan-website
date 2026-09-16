@@ -1,34 +1,37 @@
 <footer class="site-footer">
   <div class="container">
     <div class="footer-content">
-      <div class="footer-info">
-        <h3>{{ site.data.settings.title }}</h3>
-        <p>{{ site.data.settings.tagline }}</p>
-        <p class="location"><i class="fas fa-map-marker-alt"></i> {{ site.data.settings.author.location }}</p>
+      <div class="footer-brand">
+        <div class="footer-info">
+          <h3>{{ site.data.settings.title }}</h3>
+          <p>{{ site.data.settings.tagline }}</p>
+          <p class="location"><i class="fas fa-map-marker-alt"></i> {{ site.data.settings.author.location }}</p>
+        </div>
+
+        <div class="footer-social">
+          <a href="{{ '/contact/' | relative_url }}" aria-label="Contact">
+            <i class="fas fa-paper-plane"></i>
+          </a>
+          {% if site.data.settings.social.linkedin %}
+          <a href="{{ site.data.settings.social.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          {% endif %}
+          {% if site.data.settings.social.substack %}
+          <a href="{{ site.data.settings.social.substack }}" target="_blank" rel="noopener" aria-label="Substack">
+            {% include substack-icon.html %}
+          </a>
+          {% endif %}
+        </div>
       </div>
 
       {% if site.data.settings.social.substack and page.url != '/insights/' %}
       <div class="footer-subscribe">
-        <p><strong>Experience Matters</strong> &middot; Susan's writing, by email</p>
+        <h4>Subscribe to Experience Matters</h4>
+        <p>Susan's writing, by email when she publishes.</p>
         <iframe src="{{ site.data.settings.social.substack }}embed" title="Subscribe to Experience Matters" width="420" height="150" frameborder="0" scrolling="no" loading="lazy"></iframe>
       </div>
       {% endif %}
-
-      <div class="footer-social">
-        <a href="{{ '/contact/' | relative_url }}" aria-label="Contact">
-          <i class="fas fa-paper-plane"></i>
-        </a>
-        {% if site.data.settings.social.linkedin %}
-        <a href="{{ site.data.settings.social.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <i class="fab fa-linkedin"></i>
-        </a>
-        {% endif %}
-        {% if site.data.settings.social.substack %}
-        <a href="{{ site.data.settings.social.substack }}" target="_blank" rel="noopener" aria-label="Substack">
-          {% include substack-icon.html %}
-        </a>
-        {% endif %}
-      </div>
     </div>
 
     <div class="footer-bottom">
