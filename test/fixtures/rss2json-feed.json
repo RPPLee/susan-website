@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "feed": {
+  "title": "Experience Matters"
+ },
+ "items": [
+  {
+   "title": "Post B",
+   "pubDate": "2026-09-06 10:45:06",
+   "link": "https://metaphase.substack.com/p/post-b",
+   "guid": "y",
+   "author": "Susan Mills",
+   "thumbnail": "",
+   "description": "",
+   "content": "",
+   "enclosure": {},
+   "categories": []
+  },
+  {
+   "title": "Post A &amp; B",
+   "pubDate": "2026-09-11 14:26:47",
+   "link": "https://metaphase.substack.com/p/post-a",
+   "guid": "x",
+   "author": "Susan Mills",
+   "thumbnail": "",
+   "description": "Excerpt A",
+   "content": "<p>x</p>",
+   "enclosure": {
+    "link": "https://images.example/a.jpg?x=1&amp;y=2",
+    "type": "image/jpeg"
+   },
+   "categories": []
+  }
+ ]
+}

@@ -47,6 +47,22 @@ test("the feed script keeps the ten newest posts with title, date, link, excerpt
   }
 });
 
+// Substack blocks GitHub's runners, so the deploy reads the feed through rss2json.com.
+test("the feed script reads rss2json's JSON as well as RSS", () => {
+  const out = mkdtempSync(join(tmpdir(), "metaphase-feed-"));
+  try {
+    const result = run("node", ["scripts/insights-feed.mjs", join(repo, "test/fixtures/rss2json-feed.json"), join(out, "insights.json")]);
+    assert.equal(result.status, 0, result.stderr);
+    const posts = JSON.parse(readFileSync(join(out, "insights.json"), "utf8"));
+    assert.deepEqual(posts, [
+      { title: "Post A & B", date: "2026-09-11T14:26:47.000Z", link: "https://metaphase.substack.com/p/post-a", excerpt: "Excerpt A", image: "https://images.example/a.jpg?x=1&y=2" },
+      { title: "Post B", date: "2026-09-06T10:45:06.000Z", link: "https://metaphase.substack.com/p/post-b", excerpt: "", image: "" },
+    ]);
+  } finally {
+    rmSync(out, { recursive: true, force: true });
+  }
+});
+
 test("an unreachable feed leaves no data file and does not fail the build step", () => {
   const out = mkdtempSync(join(tmpdir(), "metaphase-feed-"));
   try {
