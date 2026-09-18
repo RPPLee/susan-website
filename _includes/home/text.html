@@ -1,0 +1,10 @@
+<section class="home-text">
+  <div class="container">
+    {% if include.block.eyebrow %}<span class="eyebrow">{{ include.block.eyebrow | escape }}</span>{% endif %}
+    {% if include.block.heading %}<h2 class="section-title">{{ include.block.heading | escape }}</h2>{% endif %}
+    <div class="home-text-body">{{ include.block.text | markdownify }}</div>
+    {% if include.block.button_label and include.block.button_url %}
+    <div class="home-text-cta"><a href="{% include href.html url=include.block.button_url %}" class="btn btn-primary">{{ include.block.button_label | escape }}</a></div>
+    {% endif %}
+  </div>
+</section>

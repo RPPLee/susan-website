@@ -262,3 +262,129 @@ Last extracted: 8ea23c5
 **What else was considered.** Recovering the old form; Formspree's paid redirect.
 
 **What it touches.** pages/contact.html, pages/thanks.html, Formspree.
+
+## op-072 · The homepage is a list of blocks Susan edits, reorders, adds to and removes from
+- category: Website
+- status: proposed
+- image: none
+- caption:
+- screen: Homepage; Pages CMS, Home page
+- source: Susan through Lee in the terminal 2026-09-18
+- work: pending
+
+**Context.** The homepage was hand-written HTML in `index.html`. Susan could change only the intro paragraph, from Site settings. She wants to change every word on the page, including the headline, the line under it and the buttons, and to remove sections or add new ones.
+
+**Question.** How much of the homepage can Susan change in the editor?
+
+**Decision.**
+1. The homepage renders the blocks in `_data/home.yml`, in order. The editor shows them as a block list she can edit, reorder, add to and remove from.
+2. The block types are: headline banner, schedule a call, services, latest Insights, testimonials, about Susan, get in touch, cards, and free text.
+3. The "Now Enrolling" programs section is gone. Tapestry and Turning Point Tenders stay in Our Services and on the Programs page.
+4. A service's homepage card text becomes an editor field.
+
+**Why.** She asked for wide freedom over the page, and blocks give it without letting a save break the layout.
+
+**What else was considered.** A fixed set of sections, each with a show or hide switch; less freedom for the same work.
+
+**What it touches.** index.html, _includes/home/, _data/home.yml, .pages.yml, _data/settings.yml (the intro moves into the banner block).
+
+## op-073 · Insights becomes a blog on the site, and the Substack feed and forms come off
+- category: Website
+- status: proposed
+- image: none
+- caption:
+- screen: Insights page, a post page, homepage, footer; Pages CMS, Insights posts
+- source: Susan through Lee in the terminal 2026-09-18
+- work: pending
+
+**Context.** Reverses op-007, op-035, op-036, op-037 and the proposed op-069. Insights listed her Substack posts from a feed read once a day, and every footer carried Substack's subscribe form. Susan wants a small blog of tips on her own site, written by her.
+
+**Question.** Where do Susan's tips live, and what happens to the Substack pieces?
+
+**Decision.**
+1. Insights posts are files in `_posts`, written in the editor's rich-text field: headings, bold, lists, links, quotes and uploaded pictures. Each post has a title, date, summary, optional picture and a Published switch for drafts.
+2. Each post gets a page at /insights/<title>/. The Insights page lists them newest first, and the homepage shows the newest three once one exists.
+3. The feed script, the daily rebuild, the subscribe form in the footer and the one on Insights are removed.
+4. The link to her Substack stays in the footer and contact links, from Site settings. She hides it by emptying the field.
+
+**Why.** One place to write, under her own name and address, with no third party between a save and the site.
+
+**What else was considered.** Keeping the footer subscribe form; it would sign people up to a newsletter the site no longer shows.
+
+**What it touches.** _posts/, _layouts/post.html, pages/insights.html, _includes/post-card.html, _includes/footer.html, .github/workflows/jekyll.yml, scripts/ (emptied), .pages.yml.
+
+## op-074 · "Schedule a time" for Conversation With An OG, through a Google Calendar booking page
+- category: Website
+- status: proposed
+- image: none
+- caption:
+- screen: Homepage call to action; Conversation With An OG page; Pages CMS, Site settings
+- source: Susan through Lee in the terminal 2026-09-18
+- work: pending
+
+**Context.** Reverses op-070 (no booking button). Susan wants the homepage's main call to action to be Conversation With An OG: a visitor reads what the call is, clicks, and a time gets arranged. Her mail is on Google Workspace, which includes Calendar's appointment schedules.
+
+**Question.** How does a visitor arrange the free conversation?
+
+**Decision.**
+1. A "Schedule a call" block sits under the homepage banner: what the conversation is, three facts, and a "Schedule a time" button. The same button is on the Conversation With An OG page.
+2. The button opens the address in Site settings > Booking page. That address is a Google Calendar appointment schedule Susan creates in her own calendar.
+3. While the field is empty, the button opens the contact form with the subject filled in.
+4. Conversation With An OG leaves Our Services. Its page keeps its address, because her LinkedIn Featured card links to it.
+5. VizBlitz moves from Organizations to Individuals.
+
+**Why.** Google's booking page is free with the account she has, shows her real availability, and puts the meeting in her calendar. The fallback means the button works today.
+
+**What else was considered.** Calendly and Cal.com, which add an account to manage; an embedded calendar on the page, which is heavier and harder for her to change.
+
+**What it touches.** _includes/home/call.html, _layouts/service.html, _data/settings.yml, _services/conversation-with-an-og.md, _services/vizblitz.md, .pages.yml.
+
+## op-075 · The About page carries her LinkedIn About, without the impact section
+- category: Website
+- status: proposed
+- image: none
+- caption:
+- screen: About page
+- source: Susan through Lee in the terminal 2026-09-18
+- work: pending
+
+**Context.** Amends op-057. Lee's third-person draft waited behind a "Publish the new bio" switch while visitors saw an older bio. Susan wants the About page to match her LinkedIn profile and does not want the Our Impact section.
+
+**Question.** What does the About page say?
+
+**Decision.**
+1. The bio is her LinkedIn About, word for word and in the first person, as read from her profile on 2026-09-18, without its "(website: Metaphasemgt.com)" aside.
+2. Background is drawn from her LinkedIn experience entries, and Education lists both degrees shown there.
+3. The publish switch and the old bio are removed. The page body is the bio, and she edits it in the editor.
+4. The Our Impact section is removed. Specialties and About Metaphase Management stay.
+5. The Performance service is renamed Performance Alignment. Its address stays /services/performance/.
+
+**Why.** One voice across LinkedIn and the site, and one bio instead of two.
+
+**What else was considered.** Keeping the third-person rewrite, which says the same things but is not her wording.
+
+**What it touches.** pages/about.md, _layouts/about.html, _includes/about-bio-current.html (deleted), _services/performance.md, .pages.yml.
+
+## op-076 · A light facelift: serif headings, a warmer banner, softer cards
+- category: Brand
+- status: proposed
+- image: none
+- caption:
+- screen: Every page
+- source: Lee in the terminal 2026-09-18
+- work: pending
+
+**Context.** Lee asked for quick, low-effort changes that make the site look better without changing much. The colours are unchanged.
+
+**Question.** What changes in the look?
+
+**Decision.**
+1. Headings are set in Fraunces, a serif, over Inter for body text.
+2. The banner gets a faint teal and gold wash, and the line under the headline becomes small gold capitals.
+3. Buttons are pill-shaped, section titles get a short gold rule, and cards get rounder corners and a softer shadow.
+
+**Why.** All of it is CSS in one block at the end of the stylesheet, so any part can be taken out.
+
+**What else was considered.** A new layout or photography, which is not low effort.
+
+**What it touches.** assets/css/style.css, _layouts/default.html (the font link).

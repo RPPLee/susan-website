@@ -1,0 +1,23 @@
+---
+layout: default
+---
+<article class="post">
+  <div class="container">
+    <a href="{{ '/insights/' | relative_url }}" class="back-link"><i class="fas fa-arrow-left"></i> All Insights</a>
+    <header class="post-header">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+      <h1>{{ page.title | escape }}</h1>
+      {% if page.summary %}<p class="post-summary">{{ page.summary | escape }}</p>{% endif %}
+    </header>
+    {% if page.image %}
+    <img src="{{ page.image | relative_url }}" alt="" class="post-image">
+    {% endif %}
+    <div class="post-body">
+      {{ content }}
+    </div>
+    <footer class="post-footer">
+      <p>{{ site.data.settings.author.name }}, {{ site.data.settings.title }}</p>
+      <a href="{{ '/contact/' | relative_url }}" class="btn btn-primary">Get in Touch</a>
+    </footer>
+  </div>
+</article>

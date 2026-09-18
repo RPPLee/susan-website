@@ -1,0 +1,26 @@
+<section class="services" id="services">
+  <div class="container">
+    <h2 class="section-title">{{ include.block.heading | default: "Our Services" | escape }}</h2>
+    {% if include.block.text %}<p class="section-subtitle">{{ include.block.text | escape }}</p>{% endif %}
+
+{% assign services = site.services | sort: "order" %}
+{% for group in site.data.service_groups %}
+{% assign in_group = services | where: "group", group.id %}
+{% if in_group.size > 0 %}
+    <section class="service-group" id="{{ group.id }}">
+      <h3 class="service-group-title">{{ group.title }}</h3>
+      <div class="services-grid">
+{% for service in in_group %}
+        <a href="{{ service.url | relative_url }}" class="service-card service-card-{{ service.group }}">
+          <div class="service-card-content">
+            <h4>{{ service.title | escape }}</h4>
+            <p>{{ service.summary | default: service.tagline }}</p>
+          </div>
+        </a>
+{% endfor %}
+      </div>
+    </section>
+{% endif %}
+{% endfor %}
+  </div>
+</section>

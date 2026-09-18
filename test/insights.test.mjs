@@ -1,121 +1,63 @@
-// The Insights page and the homepage's latest writing (op-007, op-036, op-037, op-044).
-// The feed is a fixture file; nothing here reaches Substack. Each build gets its own copy of _data
-// (buildWithData) plus whatever the feed script wrote.
+// Insights is a blog on the site (Lee, 2026-09-18): Susan writes posts in the editor, each gets a
+// page under /insights/, the Insights page lists them newest first, and the homepage shows the
+// newest. The posts here are written into a private copy of the source (buildCopy).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { repo, run, loadYaml, buildWithData } from "./jekyll.mjs";
+import { buildCopy } from "./jekyll.mjs";
 
-const fixture = join(repo, "test/fixtures/substack-feed.xml");
+const post = ({ title, published = true, image = "" }) => `---
+title: "${title}"
+published: ${published}
+summary: Summary of ${title}.
+${image ? `image: ${image}\n` : ""}---
 
-function build({ feed }) {
-  const b = buildWithData((data) => feed && run("node", ["scripts/insights-feed.mjs", feed, join(data, "insights.json")]));
-  return { ...b, script: b.extra };
-}
+## A heading
 
-test("the feed script keeps the ten newest posts with title, date, link, excerpt and image", () => {
-  const out = mkdtempSync(join(tmpdir(), "metaphase-feed-"));
-  try {
-    const result = run("node", ["scripts/insights-feed.mjs", fixture, join(out, "insights.json")]);
-    assert.equal(result.status, 0, result.stderr);
-    const posts = JSON.parse(readFileSync(join(out, "insights.json"), "utf8"));
-    assert.equal(posts.length, 10);
-    assert.deepEqual(posts.map((p) => p.title), ["Post 12", "Post 11", "Post 10", "Post 09", "Post 08", "Post 07", "Post 06", "Post 05", "Post 04", "Post 03"]);
-    assert.equal(posts[0].link, "https://metaphase.substack.com/p/post-12");
-    assert.equal(posts[0].date, "2026-09-06T14:00:00.000Z");
-    assert.equal(posts[0].excerpt, "Excerpt for post 12, with “quotes” & an ampersand");
-    assert.equal(posts[0].image, "https://substackcdn.com/image/post-12.jpg");
-    assert.equal(posts[1].excerpt, "");
-    assert.equal(posts[1].image, "");
-  } finally {
-    rmSync(out, { recursive: true, force: true });
-  }
-});
+Some **bold** words and a picture.
 
-// Substack blocks GitHub's runners, so the deploy reads the feed through rss2json.com.
-test("the feed script reads rss2json's JSON as well as RSS", () => {
-  const out = mkdtempSync(join(tmpdir(), "metaphase-feed-"));
-  try {
-    const result = run("node", ["scripts/insights-feed.mjs", join(repo, "test/fixtures/rss2json-feed.json"), join(out, "insights.json")]);
-    assert.equal(result.status, 0, result.stderr);
-    const posts = JSON.parse(readFileSync(join(out, "insights.json"), "utf8"));
-    assert.deepEqual(posts, [
-      { title: "Post A & B", date: "2026-09-11T14:26:47.000Z", link: "https://metaphase.substack.com/p/post-a", excerpt: "Excerpt A", image: "https://images.example/a.jpg?x=1&y=2" },
-      { title: "Post B", date: "2026-09-06T10:45:06.000Z", link: "https://metaphase.substack.com/p/post-b", excerpt: "", image: "" },
-    ]);
-  } finally {
-    rmSync(out, { recursive: true, force: true });
-  }
-});
+![A chart](/assets/images/chart.png)
+`;
 
-test("an unreachable feed leaves no data file and does not fail the build step", () => {
-  const out = mkdtempSync(join(tmpdir(), "metaphase-feed-"));
-  try {
-    const result = run("node", ["scripts/insights-feed.mjs", join(out, "missing.xml"), join(out, "insights.json")]);
-    assert.equal(result.status, 0, "the script must exit 0 so the deploy still runs");
-    assert.ok(!existsSync(join(out, "insights.json")));
-  } finally {
-    rmSync(out, { recursive: true, force: true });
-  }
-});
-
-test("the Insights page lists the posts, each opening on Substack, under the subscribe form", () => {
-  const b = build({ feed: fixture });
-  try {
-    assert.equal(b.script.status, 0, b.script.stderr);
-    assert.equal(b.result.status, 0, `jekyll build failed\n${b.result.stdout}\n${b.result.stderr}`);
-    const { social } = loadYaml("_data/settings.yml");
-    const html = readFileSync(join(b.destination, "insights/index.html"), "utf8");
-    const main = html.slice(html.indexOf("<main>"), html.indexOf("</main>"));
-
-    const form = main.indexOf(`src="${social.substack}embed"`);
-    assert.ok(form > -1, "the Insights page has no Substack subscribe form");
-    const links = [...main.matchAll(/<h3><a href="(https:\/\/metaphase\.substack\.com\/p\/[^"]+)"[^>]*>([^<]+)<\/a><\/h3>/g)];
-    assert.deepEqual(links.map((m) => m[2]).slice(0, 2), ["Post 12", "Post 11"]);
-    assert.equal(links.length, 10);
-    assert.ok(main.indexOf(links[0][0]) > form, "the subscribe form must come before the posts");
-    assert.match(main, /Excerpt for post 12, with “quotes” &amp; an ampersand/);
-    assert.match(main, /September 6, 2026/);
-    assert.doesNotMatch(main, /posts are on Substack/);
-  } finally {
-    b.cleanup();
-  }
-});
-
-test("without the data file the Insights page still builds and points to Substack", () => {
-  const b = build({ feed: null });
+test("a post Susan writes gets a page, a card on Insights and a place on the homepage", () => {
+  const b = buildCopy((source) => {
+    writeFileSync(join(source, "_posts/2026-09-01-older-tip.md"), post({ title: "Older tip" }));
+    writeFileSync(join(source, "_posts/2026-09-10-newer-tip.md"), post({ title: "Newer tip", image: "/assets/images/tip.jpg" }));
+    writeFileSync(join(source, "_posts/2026-09-12-a-draft.md"), post({ title: "A draft", published: false }));
+  });
   try {
     assert.equal(b.result.status, 0, `jekyll build failed\n${b.result.stderr}`);
-    const { social } = loadYaml("_data/settings.yml");
-    const html = readFileSync(join(b.destination, "insights/index.html"), "utf8");
-    assert.match(html, /posts are on Substack/);
-    assert.ok(html.includes(`href="${social.substack}"`));
-    assert.ok(html.includes(`src="${social.substack}embed"`));
-    const home = readFileSync(join(b.destination, "index.html"), "utf8");
-    assert.doesNotMatch(home, /id="writing"/, "the homepage shows an empty writing section");
+
+    const page = b.page("insights/newer-tip/index.html");
+    assert.match(page, /<h1>Newer tip<\/h1>/);
+    assert.match(page, /<time datetime="2026-09-10[^"]*">September 10, 2026<\/time>/);
+    assert.match(page, /<h2[^>]*>A heading<\/h2>/);
+    assert.match(page, /<strong>bold<\/strong>/);
+    assert.match(page, /<img src="\/assets\/images\/chart\.png" alt="A chart"/);
+    assert.match(page, /<img src="\/assets\/images\/tip\.jpg" alt="" class="post-image">/);
+    assert.match(page, /href="\/insights\/"/, "the post has no way back to Insights");
+
+    const titles = (html) => [...html.matchAll(/<h3><a href="(\/insights\/[^"]+\/)">([^<]+)<\/a><\/h3>/g)].map((m) => m[2]);
+    const insights = b.page("insights/index.html");
+    assert.deepEqual(titles(insights), ["Newer tip", "Older tip"]);
+    assert.match(insights, /Summary of Newer tip\./);
+    assert.ok(!existsSync(join(b.destination, "insights/a-draft/index.html")), "an unpublished post was built");
+
+    assert.deepEqual(titles(b.page("index.html")), ["Newer tip", "Older tip"]);
   } finally {
     b.cleanup();
   }
 });
 
-test("the homepage features the three newest posts and links to Insights", () => {
-  const b = build({ feed: fixture });
+test("with no posts, Insights says so and the homepage leaves the section out", () => {
+  const b = buildCopy();
   try {
     assert.equal(b.result.status, 0, `jekyll build failed\n${b.result.stderr}`);
-    const home = readFileSync(join(b.destination, "index.html"), "utf8");
-    const section = home.match(/<section class="writing" id="writing">([\s\S]*?)<\/section>/);
-    assert.ok(section, "the homepage has no writing section");
-    const titles = [...section[1].matchAll(/<h3><a href="https:\/\/metaphase\.substack\.com\/p\/[^"]+"[^>]*>([^<]+)<\/a><\/h3>/g)].map((m) => m[1]);
-    assert.deepEqual(titles, ["Post 12", "Post 11", "Post 10"]);
-    assert.match(section[1], /href="\/insights\/"/);
+    if (b.page("insights/index.html").includes("post-card")) return; // Susan has published by now
+    assert.match(b.page("insights/index.html"), /The first tips are on their way\./);
+    assert.doesNotMatch(b.page("index.html"), /<section class="writing"/);
   } finally {
     b.cleanup();
   }
-});
-
-test("Insights is in the menu after Services", () => {
-  const titles = loadYaml("_data/settings.yml").menu.map((item) => item.title);
-  assert.equal(titles[titles.indexOf("Services") + 1], "Insights");
 });

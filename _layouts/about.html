@@ -1,8 +1,8 @@
 ---
 layout: default
 ---
-{%- comment -%} The About page around the bio Susan edits (op-057). The specialties, impact and
-company sections stay here with Lee. {%- endcomment -%}
+{%- comment -%} The About page around the bio Susan edits (op-057). The specialties and company sections
+stay here with Lee. {%- endcomment -%}
 
 <section class="page-content">
   <div class="container">
@@ -11,11 +11,7 @@ company sections stay here with Lee. {%- endcomment -%}
     <div class="about-content">
       <div class="about-text">
         <img src="{{ '/assets/images/susan-profile-2.jpg' | relative_url }}" alt="Susan Mills" class="about-photo">
-        {% if page.show_new_bio %}
         {{ content }}
-        {% else %}
-        {% include about-bio-current.html %}
-        {% endif %}
       </div>
 
       <div class="about-skills">
@@ -59,64 +55,8 @@ company sections stay here with Lee. {%- endcomment -%}
   </div>
 </section>
 
-<!-- Impact Section -->
-<section style="padding: 60px 0; background: var(--bg-secondary);">
-  <div class="container">
-    <h2 class="section-title">Our Impact</h2>
-
-    <div style="max-width: 800px; margin: 0 auto;">
-
-      <div style="background: var(--bg-color); padding: 32px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--primary-color);">
-          <i class="fas fa-network-wired" style="margin-right: 8px;"></i>Telecommunications to Information Technology
-        </h3>
-        <p style="color: var(--text-light);">
-          Helped transform telecommunications into information technology as the break-up of AT&T's monopoly became the dot-com industry's competitive digital services.
-        </p>
-      </div>
-
-      <div style="background: var(--bg-color); padding: 32px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--primary-color);">
-          <i class="fas fa-handshake" style="margin-right: 8px;"></i>Community Collaborations
-        </h3>
-        <p style="color: var(--text-light);">
-          Reinvented community collaborations, weaving university, municipal, and business strengths into regional festivals and year-long community development initiatives.
-        </p>
-      </div>
-
-      <div style="background: var(--bg-color); padding: 32px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--primary-color);">
-          <i class="fas fa-seedling" style="margin-right: 8px;"></i>New Business Segments
-        </h3>
-        <p style="color: var(--text-light);">
-          Opened new business segments challenged with uncertainty and confusion, including women-led services, cannabis dispensary licensing, and Web3/community local currency.
-        </p>
-      </div>
-
-      <div style="background: var(--bg-color); padding: 32px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--primary-color);">
-          <i class="fas fa-recycle" style="margin-right: 8px;"></i>Circular Economy Innovation
-        </h3>
-        <p style="color: var(--text-light);">
-          Introduced an industry-scale circular-economy model for environmental and social impact, weaving regenerative agriculture, renewable energy, mining of toxic sites with restorative practices to harvest Rare Earth Elements, and blending clean waste streams into new construction materials.
-        </p>
-      </div>
-
-      <div style="background: var(--bg-color); padding: 32px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--primary-color);">
-          <i class="fas fa-gift" style="margin-right: 8px;"></i>Gift Economy Practices
-        </h3>
-        <p style="color: var(--text-light);">
-          Explored gift economy practices, a cultural exchange that pairs with business and economic development to balance stress and opportunity.
-        </p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 <!-- Company Info Section -->
-<section style="padding: 60px 0;">
+<section style="padding: 60px 0; background: var(--bg-secondary);">
   <div class="container">
     <div style="max-width: 700px; margin: 0 auto; text-align: center;">
       <h2 class="section-title">About Metaphase Management</h2>

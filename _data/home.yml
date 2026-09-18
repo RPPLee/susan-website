@@ -1,0 +1,46 @@
+sections:
+  - type: hero
+    heading: Navigate the Journey from Idea to Impact
+    tagline: Strategic Management & Business Consulting
+    text: For over four decades, Metaphase Management has helped hundreds of companies and communities define clear purpose, develop value-based partnerships, reach new markets, and gain customer trust.
+    buttons:
+      - label: Explore Services
+        url: /#services
+        style: primary
+      - label: New Programs
+        url: /programs/
+        style: secondary
+  - type: call
+    eyebrow: A free hour
+    heading: Conversation With An OG
+    text: A free one-hour conversation, questions and dialog, for people under 40 and anyone else navigating these complex times. It is rooted in deep listening and nonjudgmental holding of complex issues, with perspectives gained through eight decades of rich experiences, challenges and insights.
+    points:
+      - 60 minutes, one-on-one
+      - In person, by phone or by video
+      - Free
+    button_label: Schedule a time
+    more_label: What the conversation is
+    more_url: /services/conversation-with-an-og/
+  - type: services
+    heading: Our Services
+    text: We blend coaching, strategic planning, and hands-on management into a curated suite of support tailored to each client's purpose and objectives.
+  - type: posts
+    eyebrow: Tips
+    heading: Latest Insights
+    text: Short tips from Susan on business, leadership and change.
+    count: 3
+    button_label: More Insights
+  - type: testimonials
+    heading: What Clients Say
+  - type: about
+    heading: Meet Susan Mills
+    image: /assets/images/susan-profile-1.jpg
+    text: |-
+      Susan Mills is a business companion to entrepreneurs and community initiatives. For over four decades, Susan has guided 200+ global leaders, startups, initiatives and local communities to financial success and social impact.
+
+      She specializes in transforming concepts into products, founders into teams, and needs into shared opportunities. Susan brings joy and insight to tough and confusing times.
+    button_label: Learn More
+    button_url: /about/
+  - type: contact
+    heading: Let's Work Together
+    text: Ready to navigate your next transition? Whether you're a startup founder, community leader, or organization in need of strategic guidance, we'd love to hear from you.

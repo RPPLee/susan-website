@@ -1,0 +1,21 @@
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>{{ include.block.heading | escape }}</h1>
+        {% if include.block.tagline %}<p class="tagline">{{ include.block.tagline | escape }}</p>{% endif %}
+        {% if include.block.text %}<p class="description">{{ include.block.text | escape }}</p>{% endif %}
+        {% if include.block.buttons and include.block.buttons.size > 0 %}
+        <div class="hero-buttons">
+          {% for button in include.block.buttons %}
+          <a href="{% include href.html url=button.url %}" class="btn btn-{{ button.style | default: 'primary' }}">{{ button.label | escape }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      <div class="hero-image">
+        <img src="{{ '/favicon.svg' | relative_url }}" alt="Metaphase Management Associates" class="hero-logo-mark">
+      </div>
+    </div>
+  </div>
+</section>

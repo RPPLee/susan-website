@@ -1,6 +1,6 @@
 ---
 layout: service
-title: Performance
+title: Performance Alignment
 tagline: Aligning Intentions to Actions
 icon: fas fa-chart-line
 duration: Custom engagements
@@ -10,11 +10,11 @@ order: 7
 group: organizations
 ---
 
-## What is Performance?
+## What is Performance Alignment?
 
 Aligning intentions to actions to ensure ongoing accountability, adaptability, and functional help. This work supports and supplements the capabilities of leaders and team members when outside perspectives -- and another pair of hands -- can help.
 
-As with all our services, Performance work is always customized to client circumstances.
+As with all our services, Performance Alignment work is always customized to client circumstances.
 
 ## Three Areas of Focus
 

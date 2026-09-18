@@ -1,6 +1,6 @@
 # Pages CMS configuration: what Susan can edit at app.pagescms.org (op-020, op-047, op-053).
 # Layouts, includes, navigation, the workflow, _config.yml and this file stay with Lee.
-# Later tickets add their fields here as they add them to the site (testimonials, booking link).
+# The homepage is a list of blocks (_data/home.yml); a new block type needs a file in _includes/home/ too.
 # The note for editors is docs/agents/editor.md.
 
 settings:
@@ -23,6 +23,184 @@ media:
   rename: safe
 
 content:
+  - name: home
+    label: Home page
+    description: The homepage, top to bottom. Each section is a block. Edit a block's words, drag blocks to reorder them, remove one, or add a new one.
+    type: file
+    path: _data/home.yml
+    format: yaml
+    fields:
+      - name: sections
+        label: Sections
+        type: block
+        list: true
+        blockKey: type
+        blocks:
+          - name: hero
+            label: Headline banner
+            fields:
+              - { name: heading, label: Headline, type: string, required: true }
+              - { name: tagline, label: Line under the headline, type: string }
+              - { name: text, label: Paragraph, type: text }
+              - name: buttons
+                label: Buttons
+                description: Add, remove or reorder the buttons. A link inside the site starts with a slash, for example /programs/ or /#services.
+                type: object
+                list: true
+                fields:
+                  - { name: label, label: Words on the button, type: string, required: true }
+                  - { name: url, label: Link, type: string, required: true }
+                  - name: style
+                    label: Look
+                    type: select
+                    options:
+                      values:
+                        - { value: primary, label: Filled }
+                        - { value: secondary, label: Outline }
+          - name: call
+            label: Schedule a call
+            description: The button opens your booking page once its address is in Site settings, and the contact form until then.
+            fields:
+              - { name: eyebrow, label: Small line above the heading, type: string }
+              - { name: heading, label: Heading, type: string, required: true }
+              - { name: text, label: What the call is, type: text }
+              - { name: points, label: Short facts, type: string, list: true }
+              - { name: button_label, label: Words on the button, type: string }
+              - { name: more_label, label: Words on the second link, type: string }
+              - { name: more_url, label: Second link, type: string }
+          - name: services
+            label: Services
+            description: The service cards come from Services in the sidebar.
+            fields:
+              - { name: heading, label: Heading, type: string }
+              - { name: text, label: Paragraph, type: text }
+          - name: posts
+            label: Latest Insights
+            description: Your newest Insights posts. Hidden until you have published one.
+            fields:
+              - { name: eyebrow, label: Small line above the heading, type: string }
+              - { name: heading, label: Heading, type: string }
+              - { name: text, label: Paragraph, type: text }
+              - { name: count, label: How many posts, type: number }
+              - { name: button_label, label: Words on the button, type: string }
+          - name: testimonials
+            label: Testimonials
+            description: The quotes come from Testimonials in the sidebar. Hidden until there is one.
+            fields:
+              - { name: heading, label: Heading, type: string }
+          - name: about
+            label: About Susan
+            fields:
+              - { name: heading, label: Heading, type: string, required: true }
+              - name: image
+                label: Photo
+                type: image
+                options: { media: images }
+              - name: text
+                label: Text
+                type: rich-text
+                options: { format: markdown, media: false }
+              - { name: button_label, label: Words on the button, type: string }
+              - { name: button_url, label: Button link, type: string }
+          - name: contact
+            label: Get in touch
+            fields:
+              - { name: heading, label: Heading, type: string, required: true }
+              - { name: text, label: Paragraph, type: text }
+          - name: cards
+            label: Cards
+            description: A heading and a row of cards, for example to announce programs.
+            fields:
+              - { name: eyebrow, label: Small line above the heading, type: string }
+              - { name: heading, label: Heading, type: string }
+              - { name: text, label: Paragraph, type: text }
+              - name: cards
+                label: Cards
+                type: object
+                list: true
+                fields:
+                  - { name: title, label: Title, type: string, required: true }
+                  - { name: tagline, label: Tagline, type: string }
+                  - { name: text, label: Text, type: text }
+                  - { name: url, label: Link, type: string }
+                  - { name: link_label, label: Words on the link, type: string }
+          - name: text
+            label: Text
+            description: A heading and free text, with an optional button.
+            fields:
+              - { name: eyebrow, label: Small line above the heading, type: string }
+              - { name: heading, label: Heading, type: string }
+              - name: text
+                label: Text
+                type: rich-text
+                options: { format: markdown, media: images }
+              - { name: button_label, label: Words on the button, type: string }
+              - { name: button_url, label: Button link, type: string }
+
+  - name: posts
+    label: Insights posts
+    description: Your tips. Each post gets its own page and a card on the Insights page, newest first.
+    type: collection
+    path: _posts
+    format: yaml-frontmatter
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, date, published]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Date
+        description: Posts are listed newest first. A post dated in the future waits until that day.
+        type: date
+        required: true
+      - name: published
+        label: Published
+        description: Turn off to keep a draft that visitors cannot see.
+        type: boolean
+        default: true
+      - name: summary
+        label: Summary
+        description: One or two sentences, shown on the post's card and under its title.
+        type: text
+      - name: image
+        label: Picture
+        description: Optional. Shown on the card and at the top of the post.
+        type: image
+        options:
+          media: images
+      - name: body
+        label: Post
+        type: rich-text
+        options:
+          format: markdown
+          media: images
+
+  - name: insights
+    label: Insights page
+    description: The heading and the line above the list of posts.
+    type: file
+    path: pages/insights.html
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        label: Heading
+        type: string
+        required: true
+      - name: intro
+        label: Line under the heading
+        type: text
+      - name: description
+        label: Description for search engines
+        type: text
+
   - name: services
     label: Services
     description: One page per service. The homepage shows each under its group, in order.
@@ -50,6 +228,10 @@ content:
         label: Tagline
         description: One line under the title.
         type: string
+      - name: summary
+        label: Homepage card text
+        description: Optional. The card shows the tagline when this is empty.
+        type: text
       - name: price
         label: Price
         description: Shown as written, for example "$250 initial session, $150/hour thereafter" or "Contact for pricing".
@@ -74,6 +256,8 @@ content:
               label: Groups
             - value: organizations
               label: Organizations
+            - value: hidden
+              label: Not on the homepage
       - name: body
         label: Page text
         type: rich-text
@@ -103,7 +287,7 @@ content:
 
   - name: about
     label: About
-    description: Your bio on the About page. The specialties and impact sections below it stay as they are.
+    description: Your bio on the About page. The specialties beside it and the company section below it stay as they are.
     type: file
     path: pages/about.md
     format: yaml-frontmatter
@@ -112,10 +296,6 @@ content:
         label: Title
         type: string
         required: true
-      - name: show_new_bio
-        label: Publish the new bio
-        description: Read and edit the bio below first. While this is off, visitors see the old bio.
-        type: boolean
       - name: body
         label: Bio
         type: rich-text
@@ -172,10 +352,10 @@ content:
         label: Description
         description: One sentence about the firm, for search engines and previews.
         type: text
-      - name: intro
-        label: Homepage intro
-        description: The paragraph under the headline on the homepage.
-        type: text
+      - name: booking_url
+        label: Booking page
+        description: The address of your Google Calendar booking page. "Schedule a time" buttons open it. Leave empty and they open the contact form instead.
+        type: string
       - name: author
         label: Susan
         type: object

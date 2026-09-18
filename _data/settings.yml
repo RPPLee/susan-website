@@ -2,7 +2,6 @@
 title: Metaphase Management Associates
 tagline: From Idea to Meaningful Impact
 description: We help clients navigate the journey from idea to meaningful impact.
-intro: For over four decades, Metaphase Management has helped hundreds of companies and communities define clear purpose, develop value-based partnerships, reach new markets, and gain customer trust.
 baseurl: ""
 
 # Author Info
@@ -19,6 +18,9 @@ social:
   linkedin: https://www.linkedin.com/in/susan-mills-coaching/
   linkedin_company: https://www.linkedin.com/company/97186879/
   substack: https://metaphase.substack.com/
+
+# Where "Schedule a time" buttons go. Empty sends them to the contact form.
+booking_url: ""
 
 # Navigation Menu
 menu:

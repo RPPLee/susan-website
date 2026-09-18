@@ -3,9 +3,6 @@ name: Deploy Jekyll site to Pages
 on:
   push:
     branches: ["main"]
-  # Once a day, so a new Substack post reaches the Insights page without anyone pushing (op-036).
-  schedule:
-    - cron: "0 13 * * *"
   workflow_dispatch:
 
 permissions:
@@ -35,8 +32,6 @@ jobs:
         run: bundle install
       - name: Test the built site
         run: npm test
-      - name: Read Susan's Substack posts
-        run: node scripts/insights-feed.mjs
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Build with Jekyll

@@ -65,6 +65,12 @@ defaults:
       path: ""
     values:
       image: /assets/social/share-default.png
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      permalink: /insights/:title/
 
 # Collections
 collections:

@@ -41,7 +41,6 @@ export function buildWithData(prepare = () => {}) {
   const data = mkdtempSync(join(repo, ".test-data-"));
   const destination = mkdtempSync(join(tmpdir(), "metaphase-build-"));
   cpSync(join(repo, "_data"), data, { recursive: true });
-  rmSync(join(data, "insights.json"), { force: true });
   const extra = prepare(data);
   const config = join(data, "_test_config.yml");
   writeFileSync(config, `data_dir: ${basename(data)}\n`);
@@ -52,4 +51,22 @@ export function buildWithData(prepare = () => {}) {
     rmSync(destination, { recursive: true, force: true });
   };
   return { data, destination, result, extra, page, cleanup };
+}
+
+// Builds a private copy of the site's source, which a test may add files to first (an Insights
+// post, say). Only what the build reads is copied.
+export function buildCopy(prepare = () => {}) {
+  const source = mkdtempSync(join(tmpdir(), "metaphase-source-"));
+  const destination = mkdtempSync(join(tmpdir(), "metaphase-build-"));
+  for (const name of ["_config.yml", "_data", "_includes", "_layouts", "_posts", "_services", "pages", "index.html", "assets/css"]) {
+    cpSync(join(repo, name), join(source, name), { recursive: true });
+  }
+  prepare(source);
+  const result = run("bundle", ["exec", "jekyll", "build", "--source", source, "--disable-disk-cache", "--destination", destination]);
+  const page = (path) => readFileSync(join(destination, path), "utf8");
+  const cleanup = () => {
+    rmSync(source, { recursive: true, force: true });
+    rmSync(destination, { recursive: true, force: true });
+  };
+  return { source, destination, result, page, cleanup };
 }

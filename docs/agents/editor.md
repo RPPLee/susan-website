@@ -11,25 +11,38 @@ and field in it exists in the site, so a rename on either side fails `npm test`.
 
 | Sidebar entry | File | What changes |
 |---|---|---|
-| Services | `_services/*.md` | Title, tagline, price, duration, format, group and the page text of each service. The group (Individuals, Groups or Organizations) is where the service sits on the homepage. Prices are free text, shown as written. |
+| Home page | `_data/home.yml` | The homepage as a list of blocks. She edits a block's words, drags blocks to reorder them, removes one, or adds one: headline banner (headline, line under it, paragraph, buttons), schedule a call, services, latest Insights, testimonials, about Susan, get in touch, cards, free text. |
+| Insights posts | `_posts/*.md` | Her blog. Title, date, a Published switch for drafts, summary, picture, and the post in the rich-text editor (headings, bold, lists, links, quotes, uploaded pictures). Each post is a page at `/insights/<title>/`. |
+| Insights page | `pages/insights.html` | The heading and the line above the list of posts. |
+| Services | `_services/*.md` | Title, tagline, homepage card text, price, duration, format, group and the page text of each service. The group (Individuals, Groups, Organizations, or Not on the homepage) is where the service sits on the homepage. Prices are free text, shown as written. |
 | Programs | `pages/programs.html` | The New Programs page: title, search description, and the page HTML. |
-| About | `pages/about.md` | Her bio as text, plus "Publish the new bio". While that switch is off, the page shows the old bio from `_includes/about-bio-current.html`. The rest of the page is `_layouts/about.html`. |
-| Site settings | `_data/settings.yml` | Site name, tagline, description, the homepage intro; Susan's name, title, email, phone and location; the LinkedIn and email links. |
+| About | `pages/about.md` | Her bio as text. The rest of the page is `_layouts/about.html`. |
+| Testimonials | `_data/testimonials.yml` | Client quotes. The homepage block stays hidden until there is one. |
+| Site settings | `_data/settings.yml` | Site name, tagline, description; the booking page address; Susan's name, title, email, phone and location; the LinkedIn and Substack links. |
 | Media | `assets/images/` | Upload and pick images. Images only. |
 
-The Programs and About pages open as HTML source for now. Susan changes words between the tags;
-tickets 06 and 08 turn the pieces she edits often into fields.
+The Programs page opens as HTML source. Susan changes words between the tags.
+
+Each homepage block type is a template in `_includes/home/<type>.html`, offered under `blocks` in
+`.pages.yml` and rendered by the `case` in `index.html`. A new type needs all three;
+`test/editor.test.mjs` fails when one is missing or when the editor offers a field the template
+never reads.
+
+"Schedule a time" buttons (the homepage call block and the Conversation With An OG page) open
+Site settings > Booking page, a Google Calendar appointment schedule Susan creates in her own
+calendar. While that field is empty they open the contact form.
 
 Not exposed: layouts, includes, the menu, the specialties list, the group list in
 `_data/service_groups.yml`, `_config.yml`, the workflow and `.pages.yml` itself. Adding or
 deleting a service is off too: a new service needs an icon, an order and a share image, which
-stay with Lee. The homepage card text is the tagline, or the `summary` key where one exists
-(the three newest services); `summary` is not an editor field yet. The short
-bio in the settings file is not exposed either, since nothing on the site shows it yet; ticket 08
-adds it with the About page.
+stay with Lee.
 
-Front-matter keys the editor does not list (`layout`, `icon`, `order`, `new`, `summary`) survive a save because
+Front-matter keys the editor does not list (`layout`, `icon`, `order`, `new`, `booking`) survive a save because
 `settings.content.merge` is on.
+
+Addresses her LinkedIn Featured cards link to must keep working: `/services/conversation-with-an-og/`,
+`/services/turning-point-tenders/` and `/blitz/`. Nothing on the site writes to LinkedIn; a change
+here shows there only as the preview image and title LinkedIn re-reads for those links.
 
 ## Saves and who they are from
 
@@ -47,8 +60,7 @@ A save rewrites the file from the editor. Keys the editor does not list survive
 1. Push `.pages.yml` to `main`.
 2. Open https://app.pagescms.org, sign in with GitHub as `RPPLee`, and install the Pages CMS
    GitHub App on the `RPPLee/susan-website` repository only.
-3. Open the repository in Pages CMS. The sidebar shows Services, Programs, About, Site settings
-   and Media.
+3. Open the repository in Pages CMS. The sidebar shows the entries in the table above.
 4. Prove the round trip: open Services, change one price, press Save. Check that the commit
    appears on `main` with Lee as its author (`git log -1 --format='%an <%ae>'` after a pull),
    the deploy workflow runs, and the new price is on metaphasemgt.com. Note how long it took.

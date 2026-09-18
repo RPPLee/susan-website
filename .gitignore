@@ -20,8 +20,7 @@ Thumbs.db
 *.swp
 *.swo
 
-# Insights data, written from the Substack feed before each build (op-036)
-_data/insights.json
+# Private copies of the site the tests build from
 .test-data-*/
 
 # Misc

@@ -1,0 +1,18 @@
+<section class="about-preview">
+  <div class="container">
+    <div class="about-preview-content">
+      {% if include.block.image %}
+      <div class="about-preview-image">
+        <img src="{{ include.block.image | relative_url }}" alt="Susan Mills">
+      </div>
+      {% endif %}
+      <div class="about-preview-text">
+        <h2>{{ include.block.heading | escape }}</h2>
+        {{ include.block.text | markdownify }}
+        {% if include.block.button_label and include.block.button_url %}
+        <a href="{% include href.html url=include.block.button_url %}" class="btn btn-primary">{{ include.block.button_label | escape }} <i class="fas fa-arrow-right"></i></a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

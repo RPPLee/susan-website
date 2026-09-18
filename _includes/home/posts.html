@@ -1,0 +1,19 @@
+{%- comment -%} The newest Insights posts. Hidden until Susan has published one. {%- endcomment -%}
+{% if site.posts.size > 0 %}
+<section class="writing" id="writing">
+  <div class="container">
+    {% if include.block.eyebrow %}<span class="eyebrow">{{ include.block.eyebrow | escape }}</span>{% endif %}
+    <h2 class="section-title">{{ include.block.heading | default: "Latest Insights" | escape }}</h2>
+    {% if include.block.text %}<p class="section-subtitle">{{ include.block.text | escape }}</p>{% endif %}
+    <div class="post-grid">
+      {% assign count = include.block.count | default: 3 %}
+      {% for post in site.posts limit: count %}
+      {% include post-card.html post=post %}
+      {% endfor %}
+    </div>
+    <div class="writing-cta">
+      <a href="{{ '/insights/' | relative_url }}" class="btn btn-secondary">{{ include.block.button_label | default: "More Insights" | escape }}</a>
+    </div>
+  </div>
+</section>
+{% endif %}

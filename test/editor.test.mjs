@@ -3,17 +3,17 @@
 // that the sidebar shows exactly what Susan may change, and that nothing else is exposed.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { repo, loadYaml, frontMatter } from "./jekyll.mjs";
 
 const config = loadYaml(".pages.yml");
 const entries = Object.fromEntries(config.content.map((entry) => [entry.label, entry]));
 
-test("the sidebar lists Services, Programs, About, Testimonials, Site settings and Media", () => {
+test("the sidebar lists the home page, Insights, Services, Programs, About, Testimonials, Site settings and Media", () => {
   assert.deepEqual(
     config.content.map((entry) => entry.label),
-    ["Services", "Programs", "About", "Testimonials", "Site settings"],
+    ["Home page", "Insights posts", "Insights page", "Services", "Programs", "About", "Testimonials", "Site settings"],
   );
   assert.equal(config.media.label, "Media");
 });
@@ -68,13 +68,13 @@ test("site settings expose fields that exist in the data file, and not the menu"
   for (const name of ["email", "phone", "location"]) assert.ok(group("author").includes(name), `author.${name} is not editable`);
 });
 
-test("the About and Programs pages expose their front matter and body", () => {
-  for (const label of ["About", "Programs"]) {
+test("the About, Programs and Insights pages expose front matter that exists", () => {
+  for (const label of ["About", "Programs", "Insights page"]) {
     const entry = entries[label];
     assert.equal(entry.type, "file");
     assert.equal(entry.format, "yaml-frontmatter", `${label} must keep its front matter separate from its body`);
     const names = entry.fields.map((field) => field.name);
-    assert.ok(names.includes("body"), `${label} has no body field`);
+    if (label !== "Insights page") assert.ok(names.includes("body"), `${label} has no body field`);
     const data = frontMatter(entry.path);
     for (const name of names.filter((name) => name !== "body")) {
       assert.ok(name in data, `${label} field ${name} is not in ${entry.path}`);
@@ -103,18 +103,18 @@ test("saves carry the editor's own name and keep the keys the editor does not ma
   assert.equal(config.settings?.content?.merge, true);
 });
 
-test("the editor offers each service's group as a choice of the three (op-045)", () => {
+test("the editor offers each service's group as a choice of the three, or off the homepage (op-045)", () => {
   const group = entries.Services.fields.find((field) => field.name === "group");
   assert.ok(group, "services collection has no group field");
   assert.equal(group.type, "select");
   const ids = loadYaml("_data/service_groups.yml").map((g) => g.id);
   assert.deepEqual(ids, ["individuals", "groups", "organizations"]);
-  assert.deepEqual(group.options.values.map((v) => v.value), ids);
+  assert.deepEqual(group.options.values.map((v) => v.value), [...ids, "hidden"]);
   assert.equal(group.required, true);
 
   for (const file of readdirSync(join(repo, "_services"))) {
     const value = frontMatter(join("_services", file)).group;
-    assert.ok(ids.includes(value), `${file} has group ${JSON.stringify(value)}`);
+    assert.ok([...ids, "hidden"].includes(value), `${file} has group ${JSON.stringify(value)}`);
   }
 });
 
@@ -126,4 +126,41 @@ test("testimonials are a list Susan edits with name, title, organization and quo
   const list = entry.fields.find((field) => field.name === "testimonials");
   assert.ok(list && list.list === true && list.type === "object", "testimonials must be a list of objects");
   assert.deepEqual(list.fields.map((field) => field.name), ["quote", "name", "title", "organization"]);
+});
+
+// Lee, 2026-09-18: the homepage is a list of blocks Susan edits, reorders, adds to and removes from.
+// Every block type the editor offers needs a template, and every field it offers must be one the
+// template reads, or her words would go nowhere.
+test("every home page block the editor offers has a template that reads its fields", () => {
+  const sections = entries["Home page"].fields.find((field) => field.name === "sections");
+  assert.equal(sections.type, "block");
+  assert.equal(sections.list, true);
+  assert.equal(sections.blockKey, "type");
+  const index = readFileSync(join(repo, "index.html"), "utf8");
+  for (const block of sections.blocks) {
+    const path = join(repo, "_includes/home", `${block.name}.html`);
+    assert.ok(existsSync(path), `no template for the ${block.name} block`);
+    assert.ok(index.includes(`{% when "${block.name}" %}`), `index.html does not render the ${block.name} block`);
+    const template = readFileSync(path, "utf8");
+    for (const field of block.fields) {
+      assert.ok(template.includes(`block.${field.name}`), `the ${block.name} template never reads ${field.name}`);
+    }
+  }
+  const offered = sections.blocks.map((block) => block.name);
+  for (const block of loadYaml("_data/home.yml").sections) {
+    assert.ok(offered.includes(block.type), `home.yml has a ${block.type} block the editor does not offer`);
+  }
+});
+
+test("Insights posts are a collection Susan writes in the rich-text editor, with pictures", () => {
+  const posts = entries["Insights posts"];
+  assert.equal(posts.type, "collection");
+  assert.equal(posts.path, "_posts");
+  assert.match(posts.filename, /^\{year\}-\{month\}-\{day\}-/, "Jekyll reads a post's date from its file name");
+  const field = (name) => posts.fields.find((f) => f.name === name);
+  assert.equal(field("body").type, "rich-text");
+  assert.equal(field("body").options.media, "images");
+  assert.equal(field("image").type, "image");
+  assert.equal(field("date").type, "date");
+  assert.equal(field("published").type, "boolean");
 });

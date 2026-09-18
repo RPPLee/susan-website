@@ -1,0 +1,17 @@
+<section class="new-programs">
+  <div class="container">
+    {% if include.block.eyebrow %}<span class="eyebrow">{{ include.block.eyebrow | escape }}</span>{% endif %}
+    {% if include.block.heading %}<h2 class="section-title">{{ include.block.heading | escape }}</h2>{% endif %}
+    {% if include.block.text %}<p class="section-subtitle">{{ include.block.text | escape }}</p>{% endif %}
+    <div class="new-programs-grid">
+      {% for card in include.block.cards %}
+      <article class="new-program-card">
+        <h3>{{ card.title | escape }}</h3>
+        {% if card.tagline %}<p class="new-program-tagline">{{ card.tagline | escape }}</p>{% endif %}
+        {% if card.text %}<p>{{ card.text | escape }}</p>{% endif %}
+        {% if card.url %}<a href="{% include href.html url=card.url %}" class="new-program-link">{{ card.link_label | default: "Learn more" | escape }} <i class="fas fa-arrow-right"></i></a>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

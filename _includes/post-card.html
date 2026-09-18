@@ -1,14 +1,14 @@
-{%- comment -%} One Substack post from _data/insights.json, opening on Substack. {%- endcomment -%}
+{%- comment -%} One Insights post, from _posts. {%- endcomment -%}
 <article class="post-card">
-  {% if include.post.image != "" %}
-  <a href="{{ include.post.link }}" target="_blank" rel="noopener" class="post-card-image" tabindex="-1" aria-hidden="true">
-    <img src="{{ include.post.image }}" alt="" loading="lazy">
+  {% if include.post.image %}
+  <a href="{{ include.post.url | relative_url }}" class="post-card-image" tabindex="-1" aria-hidden="true">
+    <img src="{{ include.post.image | relative_url }}" alt="" loading="lazy">
   </a>
   {% endif %}
   <div class="post-card-body">
-    <time datetime="{{ include.post.date }}">{{ include.post.date | date: "%B %-d, %Y" }}</time>
-    <h3><a href="{{ include.post.link }}" target="_blank" rel="noopener">{{ include.post.title | escape }}</a></h3>
-    {% if include.post.excerpt != "" %}<p>{{ include.post.excerpt | escape }}</p>{% endif %}
-    <a href="{{ include.post.link }}" target="_blank" rel="noopener" class="post-card-link">Read on Substack <i class="fas fa-arrow-right"></i></a>
+    <time datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: "%B %-d, %Y" }}</time>
+    <h3><a href="{{ include.post.url | relative_url }}">{{ include.post.title | escape }}</a></h3>
+    <p>{{ include.post.summary | default: include.post.excerpt | strip_html | truncatewords: 40 | escape }}</p>
+    <a href="{{ include.post.url | relative_url }}" class="post-card-link">Read more <i class="fas fa-arrow-right"></i></a>
   </div>
 </article>

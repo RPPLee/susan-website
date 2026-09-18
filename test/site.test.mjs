@@ -3,10 +3,10 @@
 // Nothing here reaches Substack, Stripe, LinkedIn or Google.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { repo, run, loadYaml, frontMatter } from "./jekyll.mjs";
+import { repo, run, loadYaml, frontMatter, buildWithData } from "./jekyll.mjs";
 
 function buildSite() {
   const destination = mkdtempSync(join(tmpdir(), "metaphase-site-"));
@@ -23,12 +23,19 @@ test("the site builds and the homepage renders", () => {
       `jekyll build failed (exit ${result.status})\n${result.stdout}\n${result.stderr}`,
     );
     const home = readFileSync(join(destination, "index.html"), "utf8");
-    assert.match(home, /<h1>Navigate the Journey from Idea to Impact<\/h1>/);
     assert.match(home, /<title>[^<]*Metaphase Management Associates[^<]*<\/title>/);
-    // The hero intro comes from the site settings so Susan can change it in the editor (op-004).
-    const { intro } = loadYaml("_data/settings.yml");
-    assert.ok(intro, "settings.yml has no intro");
-    assert.ok(home.includes(intro), "the homepage does not show the intro from settings.yml");
+    // The homepage is the list of blocks Susan edits (_data/home.yml): every block's heading is on
+    // the page unless the block hides itself while it has nothing to show, and in her order.
+    const { sections } = loadYaml("_data/home.yml");
+    const hero = sections.find((block) => block.type === "hero");
+    assert.ok(home.includes(`<h1>${escapeHtml(hero.heading)}</h1>`), "the hero headline is not the one in home.yml");
+    assert.ok(home.includes(escapeHtml(hero.text)), "the hero paragraph is not the one in home.yml");
+    for (const button of hero.buttons) assert.ok(home.includes(`href="${button.url}"`), `no hero button to ${button.url}`);
+    const shown = sections.filter((block) => !["posts", "testimonials"].includes(block.type) && block.heading);
+    const positions = shown.map((block) => home.indexOf(escapeHtml(block.heading)));
+    assert.ok(positions.every((at) => at >= 0), "a block's heading is missing from the homepage");
+    assert.deepEqual(positions, [...positions].sort((a, b) => a - b), "the blocks are not in home.yml's order");
+    assert.doesNotMatch(home, /Now Enrolling/);
   } finally {
     rmSync(destination, { recursive: true, force: true });
   }
@@ -96,7 +103,11 @@ test("the homepage shows the services in three groups from the collection", () =
     const services = readdirSync(join(repo, "_services"))
       .map((file) => frontMatter(join("_services", file)))
       .sort((a, b) => a.order - b.order);
-    for (const service of services) expected[service.group].push(escapeHtml(service.title));
+    for (const service of services) if (service.group !== "hidden") expected[service.group].push(escapeHtml(service.title));
+    // Lee, 2026-09-18: VizBlitz is for individuals, and Conversation With An OG is the homepage's
+    // call to action, not a service card.
+    assert.ok(expected.individuals.includes("VizBlitz"));
+    assert.ok(!Object.values(expected).flat().includes("Conversation With An OG"));
 
     const groups = [...home.matchAll(/<section class="service-group" id="([^"]+)">([\s\S]*?)<\/section>/g)];
     assert.deepEqual(groups.map((m) => m[1]), groupList.filter((g) => expected[g.id].length).map((g) => g.id));
@@ -110,7 +121,7 @@ test("the homepage shows the services in three groups from the collection", () =
       if (!expected[id].length) continue;
       assert.match(home, new RegExp(`<section class="service-group" id="${id}">\\s*<h3 class="service-group-title">${title}</h3>\\s*<div class="services-grid">`), `the ${id} heading has a note under it`);
     }
-    const servicesSection = home.slice(home.indexOf('<section class="services"'), home.indexOf("<!-- Latest Writing"));
+    const servicesSection = home.slice(home.indexOf('<section class="services"'), home.indexOf("</section>", home.lastIndexOf('<section class="service-group"')) + 1);
     assert.doesNotMatch(servicesSection, /service-price/, "a price is on a homepage card");
     assert.doesNotMatch(home, /<!-- BizBlitz -->/, "the hand-written cards are still on the homepage");
   } finally {
@@ -119,7 +130,7 @@ test("the homepage shows the services in three groups from the collection", () =
 });
 
 function escapeHtml(text) {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 // op-071: after sending, the visitor lands on a thank-you page on the site. The contact page
@@ -139,23 +150,38 @@ test("the contact form leads to a thank-you page on the site", () => {
   }
 });
 
-// op-035, ticket 09: every page's footer carries Substack's subscribe form, so a signup lands in
-// Susan's Substack list. Insights already has the form at the top, so its footer leaves it out.
-test("the footer carries Substack's subscribe form", () => {
+// Lee, 2026-09-18: Insights is a blog on the site, so no page embeds Substack any more. The link
+// to her Substack stays, from the site settings.
+test("no page embeds Substack", () => {
   const { destination, result } = buildSite();
   try {
     assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
-    const { social } = loadYaml("_data/settings.yml");
-    const footer = (p) => {
-      const html = readFileSync(join(destination, p), "utf8");
-      return html.slice(html.indexOf('<footer class="site-footer">'));
-    };
-    for (const p of ["index.html", "services/coaching/index.html", "contact/index.html"]) {
-      assert.ok(footer(p).includes(`<iframe src="${social.substack}embed"`), `${p} footer has no subscribe form`);
+    for (const p of htmlFiles(destination)) {
+      assert.doesNotMatch(readFileSync(join(destination, p), "utf8"), /<iframe[^>]*substack/, `${p} embeds Substack`);
     }
-    assert.ok(!footer("insights/index.html").includes("<iframe"), "Insights shows the subscribe form twice");
   } finally {
     rmSync(destination, { recursive: true, force: true });
+  }
+});
+
+// Lee, 2026-09-18: the homepage's call to action and the Conversation With An OG page carry a
+// "Schedule a time" button. It opens the booking page named in the site settings, and the contact
+// form while there is none. The OG page keeps its address: LinkedIn's Featured card links to it.
+test("schedule buttons open the booking page, or the contact form while there is none", () => {
+  for (const booking_url of ["", "https://calendar.app.google/example"]) {
+    const b = buildWithData((data) => {
+      const path = join(data, "settings.yml");
+      writeFileSync(path, readFileSync(path, "utf8").replace(/^booking_url:.*$/m, `booking_url: "${booking_url}"`));
+    });
+    try {
+      assert.equal(b.result.status, 0, `jekyll build failed\n${b.result.stderr}`);
+      for (const p of ["index.html", "services/conversation-with-an-og/index.html"]) {
+        const [, href] = b.page(p).match(/<a href="([^"]+)"[^>]*>\s*<i class="fas fa-calendar-check"><\/i> Schedule a time/) || [];
+        assert.equal(href, booking_url || "/contact/?program=Conversation+With+An+OG", `${p} schedule button`);
+      }
+    } finally {
+      b.cleanup();
+    }
   }
 });
 
@@ -176,8 +202,6 @@ test("social links and contact details on every page come from the site settings
     for (const p of htmlFiles(destination)) {
       const html = readFileSync(join(destination, p), "utf8");
       for (const [, href] of html.matchAll(/href="(https:\/\/[^"]*(?:linkedin\.com|substack\.com)[^"]*)"/g)) {
-        // Posts and the archive on her Substack come from the feed (test/insights.test.mjs).
-        if (href.startsWith(social.substack) && /^(p\/|archive$)/.test(href.slice(social.substack.length))) continue;
         assert.ok(allowed.has(href), `${p} links to ${href}, which is not in the site settings`);
       }
       for (const [, address] of html.matchAll(/href="mailto:([^"?]+)/g)) {

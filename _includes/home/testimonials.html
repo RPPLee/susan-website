@@ -1,0 +1,28 @@
+{%- comment -%} Hidden until Susan adds a testimonial in the editor (op-040). {%- endcomment -%}
+{% assign testimonials = site.data.testimonials.testimonials %}
+{% if testimonials and testimonials.size > 0 %}
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <h2 class="section-title">{{ include.block.heading | default: "What Clients Say" | escape }}</h2>
+    <div class="testimonial-grid">
+      {% for t in testimonials %}
+      <figure class="testimonial">
+        <blockquote>
+          <p>{{ t.quote | escape }}</p>
+        </blockquote>
+        <figcaption>
+          {%- assign title = t.title | strip -%}
+          {%- assign organization = t.organization | strip -%}
+          <cite>{{ t.name | escape }}</cite>
+          {%- if title.size > 0 and organization.size > 0 %}
+          <span>{{ title | escape }}, {{ organization | escape }}</span>
+          {%- elsif title.size > 0 or organization.size > 0 %}
+          <span>{{ title | append: organization | escape }}</span>
+          {%- endif %}
+        </figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}

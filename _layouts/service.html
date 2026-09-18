@@ -47,7 +47,23 @@ layout: default
       {{ content }}
     </div>
 
+    {%- assign booking = site.data.settings.booking_url | default: "" | strip -%}
     <div class="service-cta">
+      {% if page.booking %}
+      <h3>Schedule a time</h3>
+      <p>Pick an hour that suits you{% if booking == "" %}: send Susan a message and she will reply with times{% endif %}.</p>
+      <div class="cta-buttons">
+        {% if booking != "" %}
+        <a href="{{ booking }}" target="_blank" rel="noopener" class="btn btn-primary">
+          <i class="fas fa-calendar-check"></i> Schedule a time
+        </a>
+        {% else %}
+        <a href="{{ '/contact/' | relative_url }}?program={{ page.title | url_encode }}" class="btn btn-primary">
+          <i class="fas fa-calendar-check"></i> Schedule a time
+        </a>
+        {% endif %}
+      </div>
+      {% else %}
       <h3>Ready to get started?</h3>
       <p>Send Susan a message and she will follow up to talk through fit, timing and next steps.</p>
       <div class="cta-buttons">
@@ -55,6 +71,7 @@ layout: default
           <i class="fas fa-paper-plane"></i> Get in Touch
         </a>
       </div>
+      {% endif %}
     </div>
   </div>
 </section>

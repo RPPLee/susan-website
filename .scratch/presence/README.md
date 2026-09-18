@@ -44,3 +44,10 @@ Lee closed op-021 (Pages CMS, op-029) and op-024 (ignore the Stripe email, op-03
 - Built outside the tickets: 10 (Insights page, homepage Latest Writing as op-069); every social link and contact detail editable under Site settings > Links.
 - Open: a test message through the live contact form and a test Substack signup, both waiting on Lee's yes. Susan switches on the new bio after reading it. Proposals op-069, op-070 and op-071 wait on the page.
 - Substack blocks GitHub's runners (403); the feed script falls back to api.rss2json.com.
+
+## 2026-09-18
+
+- Susan, through Lee: edit every word on the homepage and add or remove sections; a blog of tips called Insights in place of the Substack feed; a call to action for Conversation With An OG that books a time; VizBlitz to Individuals and the OG out of Our Services; About to match LinkedIn, without Our Impact; Performance renamed Performance Alignment; a light facelift.
+- Built on branch `susan-round-2`, not pushed: homepage blocks (`_data/home.yml`, `_includes/home/`), `_posts` blog with the post layout, the Substack feed, cron and both subscribe forms removed, `booking_url` in Site settings with the contact form as fallback, About rewritten from her LinkedIn About (read from her profile that day), the facelift at the end of `style.css`. Proposals op-072 to op-076.
+- Waits on a human: Lee's push to `main`; Susan's Google Calendar appointment schedule, whose address goes in Site settings > Booking page; Lee's round trip in Pages CMS on the Home page block list (reorder, add and remove a block, and confirm the saved `home.yml` still builds); Susan's first sign-in.
+- `sync.test.mjs` case 15 (round trip of the proposals file) already failed on `main` before this round.
