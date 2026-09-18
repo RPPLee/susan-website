@@ -379,7 +379,7 @@ Last extracted: 8ea23c5
 **Question.** What changes in the look?
 
 **Decision.**
-1. Headings are set in Fraunces, a serif, over Inter for body text.
+1. Headings are set in Source Serif 4 over Inter for body text. (Fraunces was tried first; its J and f looked wrong at headline size.)
 2. The banner gets a faint teal and gold wash, and the line under the headline becomes small gold capitals.
 3. Buttons are pill-shaped, section titles get a short gold rule, and cards get rounder corners and a softer shadow.
 

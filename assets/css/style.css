@@ -1521,7 +1521,7 @@ a.service-card:focus-visible {
 
 /* ===== Facelift (Lee, 2026-09-18): serif headings, a warmer hero, softer cards ===== */
 :root {
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
 }
 
 h1, h2, h3,
