@@ -14,7 +14,7 @@ and field in it exists in the site, so a rename on either side fails `npm test`.
 | Home page | `_data/home.yml` | The homepage as a list of blocks. She edits a block's words, drags blocks to reorder them, removes one, or adds one: headline banner (headline, line under it, paragraph, buttons), schedule a call, services, latest Insights, testimonials, about Susan, get in touch, cards, free text. |
 | Insights posts | `_posts/*.md` | Her blog. Title, date, a Published switch for drafts, summary, picture, and the post in the rich-text editor (headings, bold, lists, links, quotes, uploaded pictures). Each post is a page at `/insights/<title>/`. |
 | Insights page | `pages/insights.html` | The heading and the line above the list of posts. |
-| Services | `_services/*.md` | Title, tagline, homepage card text, price, duration, format, group and the page text of each service. The group (Individuals, Groups, Organizations, or Not on the homepage) is where the service sits on the homepage. Prices are free text, shown as written. |
+| Services | `_services/*.md` | Title, tagline, homepage card text, price, duration, format, group, order and the page text of each service. Order is a number; lower comes first within the group. The group (Individuals, Groups, Organizations, or Not on the homepage) is where the service sits on the homepage. Prices are free text, shown as written. |
 | Programs | `pages/programs.html` | The New Programs page as fields: the words at the top, a list of programs (name, tagline, description, facts, links) she can add to, remove from and reorder, and the closing section. The HTML is `_layouts/programs.html`. |
 | About | `pages/about.md` | Her bio as text. The rest of the page is `_layouts/about.html`. |
 | Testimonials | `_data/testimonials.yml` | Client quotes. The homepage block stays hidden until there is one. |
@@ -35,7 +35,7 @@ Not exposed: layouts, includes, the menu, the specialties list, the group list i
 deleting a service is off too: a new service needs an icon, an order and a share image, which
 stay with Lee.
 
-Front-matter keys the editor does not list (`layout`, `icon`, `order`, `new`, `booking`) survive a save because
+Front-matter keys the editor does not list (`layout`, `icon`, `new`, `booking`) survive a save because
 `settings.content.merge` is on.
 
 Addresses her LinkedIn Featured cards link to must keep working: `/services/conversation-with-an-og/`,

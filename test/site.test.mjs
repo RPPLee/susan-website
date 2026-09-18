@@ -107,6 +107,8 @@ test("the homepage shows the services in three groups from the collection", () =
     // Lee, 2026-09-18: VizBlitz is for individuals, and Conversation With An OG is the homepage's
     // call to action, not a service card.
     assert.ok(expected.individuals.includes("VizBlitz"));
+    // Susan sets each card's place with the Order number in the editor.
+    assert.equal(entriesOrderField(), "number");
     assert.ok(!Object.values(expected).flat().includes("Conversation With An OG"));
 
     const groups = [...home.matchAll(/<section class="service-group" id="([^"]+)">([\s\S]*?)<\/section>/g)];
@@ -129,6 +131,11 @@ test("the homepage shows the services in three groups from the collection", () =
   }
 });
 
+function entriesOrderField() {
+  const services = loadYaml(".pages.yml").content.find((entry) => entry.name === "services");
+  return services.fields.find((field) => field.name === "order")?.type;
+}
+
 function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
@@ -150,14 +157,18 @@ test("the contact form leads to a thank-you page on the site", () => {
   }
 });
 
-// Lee, 2026-09-18: Insights is a blog on the site, so no page embeds Substack any more. The link
-// to her Substack stays, from the site settings.
-test("no page embeds Substack", () => {
+// op-035, and Lee on 2026-09-18: Insights is a blog on the site now, but every page's footer still
+// carries Substack's subscribe form, so a signup lands in Susan's Substack list.
+test("the footer carries Substack's subscribe form", () => {
   const { destination, result } = buildSite();
   try {
     assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
-    for (const p of htmlFiles(destination)) {
-      assert.doesNotMatch(readFileSync(join(destination, p), "utf8"), /<iframe[^>]*substack/, `${p} embeds Substack`);
+    const { social } = loadYaml("_data/settings.yml");
+    for (const p of ["index.html", "services/coaching/index.html", "contact/index.html", "insights/index.html"]) {
+      const html = readFileSync(join(destination, p), "utf8");
+      const footer = html.slice(html.indexOf('<footer class="site-footer">'));
+      assert.ok(footer.includes(`<iframe src="${social.substack}embed"`), `${p} footer has no subscribe form`);
+      assert.equal(html.split("<iframe").length, 2, `${p} should embed Substack once, in the footer`);
     }
   } finally {
     rmSync(destination, { recursive: true, force: true });

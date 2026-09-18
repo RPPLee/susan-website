@@ -209,7 +209,7 @@ content:
     format: yaml-frontmatter
     filename: "{primary}.md"
     view:
-      fields: [title, group, price, duration]
+      fields: [title, group, order, price]
       primary: title
       sort: [order, title]
       default:
@@ -258,6 +258,10 @@ content:
               label: Organizations
             - value: hidden
               label: Not on the homepage
+      - name: order
+        label: Order
+        description: Where the card sits within its group on the homepage. Lower numbers come first; the numbers need not be consecutive.
+        type: number
       - name: body
         label: Page text
         type: rich-text

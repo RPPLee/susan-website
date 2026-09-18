@@ -6,7 +6,7 @@ icon: fas fa-comment-dots
 duration: 60 minutes
 price: Free
 format: One-on-one, in person, by phone or video
-order: 10
+order: 11
 group: hidden
 booking: true
 new: true

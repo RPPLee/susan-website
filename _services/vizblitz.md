@@ -6,7 +6,7 @@ icon: fas fa-eye
 duration: 60 minutes
 price: Contact for pricing
 format: One-on-one or small group
-order: 2
+order: 10
 group: individuals
 ---
 

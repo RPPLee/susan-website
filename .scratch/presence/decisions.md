@@ -280,7 +280,7 @@ Last extracted: 8ea23c5
 1. The homepage renders the blocks in `_data/home.yml`, in order. The editor shows them as a block list she can edit, reorder, add to and remove from.
 2. The block types are: headline banner, schedule a call, services, latest Insights, testimonials, about Susan, get in touch, cards, and free text.
 3. The "Now Enrolling" programs section is gone. Tapestry and Turning Point Tenders stay in Our Services and on the Programs page.
-4. A service's homepage card text becomes an editor field.
+4. A service's homepage card text and its order within its group become editor fields.
 
 **Why.** She asked for wide freedom over the page, and blocks give it without letting a save break the layout.
 
@@ -304,12 +304,12 @@ Last extracted: 8ea23c5
 **Decision.**
 1. Insights posts are files in `_posts`, written in the editor's rich-text field: headings, bold, lists, links, quotes and uploaded pictures. Each post has a title, date, summary, optional picture and a Published switch for drafts.
 2. Each post gets a page at /insights/<title>/. The Insights page lists them newest first, and the homepage shows the newest three once one exists.
-3. The feed script, the daily rebuild, the subscribe form in the footer and the one on Insights are removed.
+3. The feed script, the daily rebuild and the subscribe form on the Insights page are removed. The footer keeps Substack's subscribe form (Lee, later the same day).
 4. The link to her Substack stays in the footer and contact links, from Site settings. She hides it by emptying the field.
 
 **Why.** One place to write, under her own name and address, with no third party between a save and the site.
 
-**What else was considered.** Keeping the footer subscribe form; it would sign people up to a newsletter the site no longer shows.
+**What else was considered.** Removing the footer subscribe form as well; Lee asked for it back.
 
 **What it touches.** _posts/, _layouts/post.html, pages/insights.html, _includes/post-card.html, _includes/footer.html, .github/workflows/jekyll.yml, scripts/ (emptied), .pages.yml.
 

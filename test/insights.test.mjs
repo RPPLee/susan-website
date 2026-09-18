@@ -3,7 +3,7 @@
 // newest. The posts here are written into a private copy of the source (buildCopy).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildCopy } from "./jekyll.mjs";
 
@@ -22,6 +22,8 @@ Some **bold** words and a picture.
 
 test("a post Susan writes gets a page, a card on Insights and a place on the homepage", () => {
   const b = buildCopy((source) => {
+    // Susan's real posts stay out of this build, so the lists below are exactly the three written here.
+    for (const file of readdirSync(join(source, "_posts"))) rmSync(join(source, "_posts", file));
     writeFileSync(join(source, "_posts/2026-09-01-older-tip.md"), post({ title: "Older tip" }));
     writeFileSync(join(source, "_posts/2026-09-10-newer-tip.md"), post({ title: "Newer tip", image: "/assets/images/tip.jpg" }));
     writeFileSync(join(source, "_posts/2026-09-12-a-draft.md"), post({ title: "A draft", published: false }));
