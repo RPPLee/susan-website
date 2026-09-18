@@ -74,7 +74,7 @@ test("the About, Programs and Insights pages expose front matter that exists", (
     assert.equal(entry.type, "file");
     assert.equal(entry.format, "yaml-frontmatter", `${label} must keep its front matter separate from its body`);
     const names = entry.fields.map((field) => field.name);
-    if (label !== "Insights page") assert.ok(names.includes("body"), `${label} has no body field`);
+    if (label === "About") assert.ok(names.includes("body"), `${label} has no body field`);
     const data = frontMatter(entry.path);
     for (const name of names.filter((name) => name !== "body")) {
       assert.ok(name in data, `${label} field ${name} is not in ${entry.path}`);
@@ -163,4 +163,13 @@ test("Insights posts are a collection Susan writes in the rich-text editor, with
   assert.equal(field("image").type, "image");
   assert.equal(field("date").type, "date");
   assert.equal(field("published").type, "boolean");
+});
+
+// Lee, 2026-09-18: Susan cannot edit HTML, so the Programs page is fields, and no entry opens as code.
+test("nothing in the editor opens as HTML source", () => {
+  const types = (fields) => fields.flatMap((f) => [f.type, ...types(f.fields || []), ...(f.blocks || []).flatMap((b) => types(b.fields || []))]);
+  for (const entry of config.content) assert.ok(!types(entry.fields).includes("code"), `${entry.label} has a code field`);
+  const layout = readFileSync(join(repo, "_layouts/programs.html"), "utf8");
+  const programs = entries.Programs.fields.find((f) => f.name === "programs");
+  for (const f of programs.fields) assert.ok(layout.includes(`program.${f.name}`), `the Programs layout never reads ${f.name}`);
 });

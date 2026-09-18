@@ -267,23 +267,34 @@ content:
 
   - name: programs
     label: Programs
-    description: The New Programs page. The page text is HTML; change words, not tags.
+    description: The New Programs page. Edit the words at the top, each program, and the closing section. Add, remove or reorder programs.
     type: file
     path: pages/programs.html
     format: yaml-frontmatter
     fields:
-      - name: title
-        label: Title
-        type: string
-        required: true
-      - name: description
-        label: Description for search engines
-        type: text
-      - name: body
-        label: Page text
-        type: code
-        options:
-          format: html
+      - { name: title, label: Title in the browser tab, type: string, required: true }
+      - { name: description, label: Description for search engines, type: text }
+      - { name: eyebrow, label: Small line above the headline, type: string }
+      - { name: heading, label: Headline, type: string }
+      - { name: intro, label: Paragraph under the headline, type: text }
+      - { name: button_label, label: Words on the top button, type: string }
+      - name: programs
+        label: Programs
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Name, type: string, required: true }
+          - { name: kicker, label: Small line above the name, description: 'For example "For groups of 5–10".', type: string }
+          - { name: tagline, label: Tagline, type: string }
+          - name: text
+            label: Description
+            type: rich-text
+            options: { format: markdown, media: false }
+          - { name: facts, label: Short facts, type: string, list: true }
+          - { name: url, label: Link to the full program page, description: 'For example /services/tapestry/.', type: string }
+          - { name: flyer, label: Link to the flyer, description: 'Optional, for example /assets/flyers/tapestry.pdf.', type: string }
+      - { name: closing_heading, label: Closing heading, type: string }
+      - { name: closing_text, label: Closing paragraph, type: text }
 
   - name: about
     label: About

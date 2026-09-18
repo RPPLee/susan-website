@@ -15,13 +15,11 @@ and field in it exists in the site, so a rename on either side fails `npm test`.
 | Insights posts | `_posts/*.md` | Her blog. Title, date, a Published switch for drafts, summary, picture, and the post in the rich-text editor (headings, bold, lists, links, quotes, uploaded pictures). Each post is a page at `/insights/<title>/`. |
 | Insights page | `pages/insights.html` | The heading and the line above the list of posts. |
 | Services | `_services/*.md` | Title, tagline, homepage card text, price, duration, format, group and the page text of each service. The group (Individuals, Groups, Organizations, or Not on the homepage) is where the service sits on the homepage. Prices are free text, shown as written. |
-| Programs | `pages/programs.html` | The New Programs page: title, search description, and the page HTML. |
+| Programs | `pages/programs.html` | The New Programs page as fields: the words at the top, a list of programs (name, tagline, description, facts, links) she can add to, remove from and reorder, and the closing section. The HTML is `_layouts/programs.html`. |
 | About | `pages/about.md` | Her bio as text. The rest of the page is `_layouts/about.html`. |
 | Testimonials | `_data/testimonials.yml` | Client quotes. The homepage block stays hidden until there is one. |
 | Site settings | `_data/settings.yml` | Site name, tagline, description; the booking page address; Susan's name, title, email, phone and location; the LinkedIn and Substack links. |
 | Media | `assets/images/` | Upload and pick images. Images only. |
-
-The Programs page opens as HTML source. Susan changes words between the tags.
 
 Each homepage block type is a template in `_includes/home/<type>.html`, offered under `blocks` in
 `.pages.yml` and rendered by the `case` in `index.html`. A new type needs all three;

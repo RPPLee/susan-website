@@ -1,0 +1,69 @@
+---
+layout: default
+---
+{%- comment -%} The Programs page. Every word is front matter in pages/programs.html, which Susan
+edits as fields in the editor. {%- endcomment -%}
+<section class="programs-hero">
+  <div class="container">
+    {% if page.eyebrow %}<span class="eyebrow">{{ page.eyebrow | escape }}</span>{% endif %}
+    <h1>{{ page.heading | default: page.title | escape }}</h1>
+    {% if page.intro %}<p class="programs-hero-lede">{{ page.intro | escape }}</p>{% endif %}
+    <a href="{{ '/contact/' | relative_url }}" class="btn btn-primary">
+      <i class="fas fa-paper-plane"></i> {{ page.button_label | default: "Get in Touch" | escape }}
+    </a>
+  </div>
+</section>
+
+<section class="programs-list">
+  <div class="container">
+    {% for program in page.programs %}
+    <article class="program-feature{% cycle '', ' program-feature-alt' %}">
+      <div class="program-feature-body">
+        {% if program.kicker %}<span class="program-kicker">{{ program.kicker | escape }}</span>{% endif %}
+        <h2>{% if program.url %}<a href="{% include href.html url=program.url %}">{{ program.title | escape }}</a>{% else %}{{ program.title | escape }}{% endif %}</h2>
+        {% if program.tagline %}<p class="program-tagline">{{ program.tagline | escape }}</p>{% endif %}
+        {{ program.text | markdownify }}
+        {% if program.facts and program.facts.size > 0 %}
+        <ul class="program-facts">
+          {% for fact in program.facts %}
+          <li><i class="fas fa-check"></i> {{ fact | escape }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="program-actions">
+          {% if program.url %}<a href="{% include href.html url=program.url %}" class="btn btn-secondary">Full Program Details</a>{% endif %}
+          <a href="{{ '/contact/' | relative_url }}?program={{ program.title | url_encode }}" class="btn btn-primary">Ask About {{ program.title | escape }}</a>
+        </div>
+        {% if program.flyer %}
+        <p class="program-download">
+          <a href="{% include href.html url=program.flyer %}"><i class="fas fa-file-pdf"></i> Download the {{ program.title | escape }} flyer (PDF)</a>
+        </p>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="contact">
+  <div class="container">
+    <div class="contact-content">
+      {% if page.closing_heading %}<h2 class="section-title">{{ page.closing_heading | escape }}</h2>{% endif %}
+      {% if page.closing_text %}<p>{{ page.closing_text | escape }}</p>{% endif %}
+      <div class="contact-links">
+        <a href="{{ '/contact/' | relative_url }}" class="contact-link">
+          <i class="fas fa-paper-plane"></i>
+          <span>Send Susan a message</span>
+        </a>
+        <a href="mailto:{{ site.data.settings.author.email }}" class="contact-link">
+          <i class="fas fa-envelope"></i>
+          <span>{{ site.data.settings.author.email }}</span>
+        </a>
+        <a href="tel:{{ site.data.settings.author.phone | remove: '-' | remove: ' ' | remove: '(' | remove: ')' | remove: '.' }}" class="contact-link">
+          <i class="fas fa-phone"></i>
+          <span>{{ site.data.settings.author.phone }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
