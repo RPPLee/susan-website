@@ -51,11 +51,27 @@ test("pages carry a share image for link previews", () => {
     const og = (p) => (page(p).match(/<meta property="og:image" content="([^"]+)"/) || [])[1];
     assert.equal(og("programs/index.html"), "https://metaphasemgt.com/assets/social/share-programs.png");
     assert.equal(og("services/tapestry/index.html"), "https://metaphasemgt.com/assets/social/share-tapestry.png");
-    assert.equal(og("services/turning-point-tenders/index.html"), "https://metaphasemgt.com/assets/social/share-turning-point-tenders.png");
+    assert.equal(og("services/pivot-point-passage/index.html"), "https://metaphasemgt.com/assets/social/share-pivot-point-passage.png");
     assert.equal(og("services/conversation-with-an-og/index.html"), "https://metaphasemgt.com/assets/social/share-conversation-with-an-og.png");
     assert.equal(og("blitz/index.html"), "https://metaphasemgt.com/assets/social/share-blitz.png");
     assert.equal(og("index.html"), "https://metaphasemgt.com/assets/social/share-default.png");
     assert.equal(og("about/index.html"), "https://metaphasemgt.com/assets/social/share-default.png");
+  } finally {
+    rmSync(destination, { recursive: true, force: true });
+  }
+});
+
+// Turning Point Tenders was renamed Pivot Point Passage on 2026-09-21. Susan's LinkedIn Featured
+// card and anyone's old bookmark still use the old address, so it forwards to the new page.
+test("the old Turning Point Tenders address forwards to Pivot Point Passage", () => {
+  const { destination, result } = buildSite();
+  try {
+    assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
+    const page = (p) => readFileSync(join(destination, p), "utf8");
+    assert.match(page("services/turning-point-tenders/index.html"), /<meta http-equiv="refresh" content="0; ?url=\/services\/pivot-point-passage\/">/);
+    for (const p of ["services/pivot-point-passage/index.html", "programs/index.html", "index.html"]) {
+      assert.doesNotMatch(page(p), /Turning Point Tenders/, `${p} still says Turning Point Tenders`);
+    }
   } finally {
     rmSync(destination, { recursive: true, force: true });
   }

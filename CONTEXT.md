@@ -59,7 +59,7 @@ _Avoid_: calendar, scheduler
 One of the seven standing offers with a page under `_services/`: BizBlitz, VizBlitz, Coaching, Peer Circles, Team Building, Strategic Planning, Performance.
 
 **Program**:
-A dated, enrolling offer: Tapestry and Turning Point Tenders. Has a flyer, a service page and a registration.
+A dated, enrolling offer: Tapestry and Pivot Point Passage (renamed from Turning Point Tenders on 2026-09-21). Has a flyer, a service page and a registration.
 
 **Group**:
 Where a service sits on the homepage: Individuals, Groups or Organizations (op-033). Each service names one in its `group` front matter; the three are listed in `_data/service_groups.yml` (op-045).

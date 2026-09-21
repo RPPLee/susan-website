@@ -5,7 +5,7 @@
 
 ## What the profile says today
 
-Headline: `NEW: Turning Point Tenders - a six month intensive transition-support program`
+Headline: `NEW: Pivot Point Passage - a six month intensive transition-support program`
 
 About: none. The profile has no About section.
 
@@ -41,7 +41,7 @@ Who I work with
 • Individuals at a turning point in work or life
 
 How I work
-Through Metaphase Management Associates I offer one-hour BizBlitz and VizBlitz sessions, coaching and mentoring, peer circles, team building, strategic planning and hands-on project management. Two six-month programs are enrolling now: Tapestry, story-making that builds community, and Turning Point Tenders, private coaching through a significant life transition.
+Through Metaphase Management Associates I offer one-hour BizBlitz and VizBlitz sessions, coaching and mentoring, peer circles, team building, strategic planning and hands-on project management. Two six-month programs are enrolling now: Tapestry, story-making that builds community, and Pivot Point Passage, private coaching through a significant life transition.
 
 I bring joy and insight to tough and confusing times. I write about eight decades of travel and learning at Experience Matters, my Substack.
 
@@ -56,7 +56,7 @@ metaphasemgt.com | susanmills@metaphasemgt.com
 - "Navigate the journey from idea to impact": the site hero and the company page tagline.
 - The four audiences: the company overview in `metaphase.md` (start-up founders, global businesses, community leaders, individuals) and the two programs.
 - "Eight decades": op-001 in `docs/ssot/decisions/presence.md`, her travels since 1946.
-- "Enrolling now" dates the About; it needs an edit when Tapestry and Turning Point Tenders close.
+- "Enrolling now" dates the About; it needs an edit when Tapestry and Pivot Point Passage close.
 
 ## After Lee's yes
 

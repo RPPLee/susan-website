@@ -49,7 +49,7 @@ The site evolves rather than being redesigned (op-005). Susan gets a free web ed
 33. (dropped by op-065)
 34. (dropped by op-065)
 35. As a prospect, I want retained work to say it is quoted, so that I know to get in touch.
-36. As a prospect interested in Turning Point Tenders, I want the registration form, so that Susan can quote me.
+36. As a prospect interested in Pivot Point Passage, I want the registration form, so that Susan can quote me.
 37. (dropped by op-065: no second Stripe account)
 38. As Susan, I want to ignore the Stripe email, so that I stop worrying about it.
 39. As a LinkedIn visitor, I want Susan's profile and the company page to share a banner family, so that they read as one business.
@@ -75,7 +75,7 @@ The editor is Pages CMS, installed by Lee on the live repo. Lee makes the first 
 
 The editor's configuration exposes exactly what Susan may change: the services as a collection with title, tagline, price, format, duration, group and body; the site settings, including the hero's audience line, the intro, her bio, contact details and the booking link; the testimonials data file; the About page body; the Programs page; and the images folder as media. Layout, navigation, the workflow and the editor configuration itself are not exposed (op-004, op-047).
 
-Services are rendered from the services collection, grouped by a `group` field in each service's front matter with the values individuals, groups and organizations. The homepage's hand-written service cards are replaced by that rendering, so a service Susan edits or regroups changes the homepage without touching a template (op-045). The groups are: Individuals, Coaching & Mentoring and Turning Point Tenders; Groups, Peer Circles and Tapestry; Organizations, BizBlitz, VizBlitz, Team Building, Strategic Planning and Performance. The programs appear in their group and the Programs page stays the enrolling view (op-033).
+Services are rendered from the services collection, grouped by a `group` field in each service's front matter with the values individuals, groups and organizations. The homepage's hand-written service cards are replaced by that rendering, so a service Susan edits or regroups changes the homepage without touching a template (op-045). The groups are: Individuals, Coaching & Mentoring and Pivot Point Passage; Groups, Peer Circles and Tapestry; Organizations, BizBlitz, VizBlitz, Team Building, Strategic Planning and Performance. The programs appear in their group and the Programs page stays the enrolling view (op-033).
 
 The site takes no registrations and no payments. Every button that said "Register" opens the contact form at /contact/ with the program name in the subject, /register/ redirects there, and there is no Metaphase Stripe account; prices stay public and Susan invoices after a conversation (op-065).
 

@@ -39,7 +39,8 @@ Front-matter keys the editor does not list (`layout`, `icon`, `new`, `booking`) 
 `settings.content.merge` is on.
 
 Addresses her LinkedIn Featured cards link to must keep working: `/services/conversation-with-an-og/`,
-`/services/turning-point-tenders/` and `/blitz/`. Nothing on the site writes to LinkedIn; a change
+`/services/pivot-point-passage/` and `/blitz/`. The old `/services/turning-point-tenders/`
+forwards to Pivot Point Passage (`pages/turning-point-tenders.html`). Nothing on the site writes to LinkedIn; a change
 here shows there only as the preview image and title LinkedIn re-reads for those links.
 
 ## Saves and who they are from
