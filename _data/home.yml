@@ -26,30 +26,45 @@ sections:
     more_url: /services/conversation-with-an-og/
   - type: services
     heading: Our Services
-    text: We help clients move through confusing complexity into  a clearer sense of
-      forward direction built upon the integrated wisdom of their personal,
-      business and spiritual strengths
+    text: We guide and support clients as they move through confusing complexity
+      into  a clearer sense of future directions built upon the integrated
+      wisdom of their personal, business and spiritual strengths
   - type: posts
     eyebrow: Tips
-    heading: Latest Insights
-    text: Short tips from Susan on business, leadership and change.
+    heading: Finding insight
+    text: These tools, exercises and suggestions are aids that help make sense of a
+      moment.  Their use can reveal perspectives beyond being stuck in the
+      polarity of either-or choices into a recognition of underlying shared
+      interests and potential solutions
     count: 3
-    button_label: More Insights
+    button_label: Tap Into Insights
   - type: testimonials
     heading: What Clients Say
   - type: about
     heading: Meet Susan Mills
     image: /assets/images/susan-profile-1.jpg
     text: >-
-      Susan Mills is a business companion to entrepreneurs and community
-      initiatives. For over four decades, Susan has guided 200+ global leaders,
-      startups, initiatives and local communities to financial success and
-      social impact.
+      Susan Mills is a skilled companion steeped in helping individuals,
+      business entrepreneurs and community initiatives thrive as they blend
+      personally rewarding and financially practical paths forward. 
 
 
-      She specializes in transforming concepts into products, founders into
-      teams, and needs into shared opportunities. Susan brings joy and insight
-      to tough and confusing times.
+      Susan has decades of success helping large and small clients develop
+      competitive advantage and beome industry leaders.  With this has come
+      Susan's first-hand understanding of the dispiriting human costs of
+      pursuing financial performance only.  
+
+
+      Today, Susan's counsel incorporates considerations for
+      interconnections.  She  helps clients build vitality through
+      multi-dimensional reflection and assessment, collaborations, networks,
+      reciprocity, financial flows and creative diversity.  It has taken a few
+      lessons to understand this deeply!
+
+
+      Susan specializes in transforming solo performance into teamwork and
+      shared value.  Finding  joy and insight  during the  slog through tough
+      and confusing times creates sustained rewards. 
     button_label: Learn More
     button_url: /about/
   - type: contact
