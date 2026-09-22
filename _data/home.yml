@@ -1,10 +1,10 @@
 sections:
   - type: hero
     heading: " The Journey from Idea to Impact"
-    tagline: Strategic  Business Management Consulting and Personal Coaching
-    text: For over four decades, Metaphase Management has helped hundreds of
-      companies and communities define clear purpose, develop value-based
-      partnerships, reach new markets, and gain customer trust.
+    tagline: "Personal Coaching and Business Management Consulting "
+    text: Metaphase Management Associates guides individuals and the leadership
+      teams of companies and community initiatives to define and build
+      a  balanced and purpose focused path forward
     buttons:
       - label: Explore Services
         url: /#services
