@@ -2,9 +2,9 @@ sections:
   - type: hero
     heading: " The Journey from Idea to Impact"
     tagline: "Personal Coaching and Business Management Consulting "
-    text: Metaphase Management Associates guides individuals and the leadership
-      teams of companies and community initiatives to define and build
-      a  balanced , practical and purpose focused path forward
+    text: Metaphase Management Associates guides individuals and teams to define and
+      build a  balanced , practical and purpose focused path forward by blending
+      personal, business and spiritual considerations.
     buttons:
       - label: Explore Services
         url: /#services
