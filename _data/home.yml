@@ -1,9 +1,8 @@
 sections:
   - type: hero
-    heading: " The Journey from Idea to Impact"
+    heading: Journey from Idea to Impact
     tagline: "Personal Coaching and Business Management Consulting "
-    text: Metaphase Management Associates guides individuals and teams to define and
-      build a  balanced , practical and purpose focused path forward by blending
+    text: Build a balanced, practical and purpose focused path forward by blending
       personal, business and spiritual considerations.
     buttons:
       - label: Explore Services
@@ -17,18 +16,10 @@ sections:
     heading: Conversation With An OG
     text: A free hour conversation, questions and dialog, for people under 40 and
       anyone else navigating these complex times.
-    points:
-      - 60 minutes, one-on-one
-      - In person, by phone or by video
-      - Free
-    button_label: Schedule a time
-    more_label: What the conversation is
+    button_label: Request a time
     more_url: /services/conversation-with-an-og/
   - type: services
     heading: Our Services
-    text: We guide and support clients as they move through confusing complexity
-      into  a clearer sense of future directions built upon the integrated
-      wisdom of their personal, business and spiritual strengths
   - type: posts
     eyebrow: Tips
     heading: Finding insight

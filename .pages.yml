@@ -15,12 +15,18 @@ settings:
       rename: "Rename {oldPath} to {newPath} in the editor"
 
 media:
-  name: images
-  label: Media
-  input: assets/images
-  output: /assets/images
-  categories: [image]
-  rename: safe
+  - name: images
+    label: Media
+    input: assets/images
+    output: /assets/images
+    categories: [image]
+    rename: safe
+  - name: banners
+    label: Banners
+    input: assets/social
+    output: /assets/social
+    categories: [image]
+    rename: safe
 
 content:
   - name: home
@@ -58,16 +64,14 @@ content:
                         - { value: primary, label: Filled }
                         - { value: secondary, label: Outline }
           - name: call
-            label: Schedule a call
-            description: The button opens your booking page once its address is in Site settings, and the contact form until then.
+            label: Request a call
+            description: The words link to the page named below. The button opens your booking page once its address is in Site settings, and the contact form until then.
             fields:
               - { name: eyebrow, label: Small line above the heading, type: string }
               - { name: heading, label: Heading, type: string, required: true }
               - { name: text, label: What the call is, type: text }
-              - { name: points, label: Short facts, type: string, list: true }
               - { name: button_label, label: Words on the button, type: string }
-              - { name: more_label, label: Words on the second link, type: string }
-              - { name: more_url, label: Second link, type: string }
+              - { name: more_url, label: Where the words link, description: 'The page about the call, for example /services/conversation-with-an-og/.', type: string }
           - name: services
             label: Services
             description: The service cards come from Services in the sidebar.
@@ -229,8 +233,8 @@ content:
         description: One line under the title.
         type: string
       - name: summary
-        label: Homepage card text
-        description: Optional. The card shows the tagline when this is empty.
+        label: Homepage card sentence
+        description: One or two sentences shown on the homepage card under the tagline.
         type: text
       - name: price
         label: Price
@@ -247,6 +251,24 @@ content:
         label: Stripe payment link
         description: Paste the Payment Link from Stripe (it starts with https://buy.stripe.com/). The page then shows a Pay button. Leave empty and it shows Get in Touch instead.
         type: string
+      - name: image
+        label: Banner
+        description: Optional. A wide picture shown at the top of the page, also used when the page is shared.
+        type: image
+        options: { media: banners }
+      - name: show_header
+        label: Show the name above the banner
+        description: Turn off when the banner already carries the name, as on Conversation With An OG.
+        type: boolean
+        default: true
+      - name: booking
+        label: Request a time button
+        description: On, the page ends with a Request a time button instead of Get in Touch.
+        type: boolean
+        default: false
+      - { name: cta_heading, label: Request heading, description: 'Above the Request a time button, for example "Request a time".', type: string }
+      - { name: cta_text, label: Request text, description: 'The line under that heading.', type: text }
+      - { name: cta_button, label: Words on the Request button, type: string }
       - name: group
         label: Group
         description: Where the service sits on the homepage.
@@ -264,7 +286,7 @@ content:
               label: Not on the homepage
       - name: order
         label: Order
-        description: Where the card sits within its group on the homepage. Lower numbers come first; the numbers need not be consecutive.
+        description: Where the card sits on the homepage. Lower numbers come first; the numbers need not be consecutive.
         type: number
       - name: body
         label: Page text
@@ -304,6 +326,59 @@ content:
           - { name: checkout, label: Stripe payment link, description: 'Optional. Paste the Payment Link from Stripe (starts with https://buy.stripe.com/) and the card shows a Pay button.', type: string }
       - { name: closing_heading, label: Closing heading, type: string }
       - { name: closing_text, label: Closing paragraph, type: text }
+
+  - name: blitz
+    label: BizBlitz and VizBlitz page
+    description: The /blitz/ page. Edit the words at the top, each session, and the closing section.
+    type: file
+    path: pages/blitz.html
+    format: yaml-frontmatter
+    fields:
+      - { name: title, label: Title in the browser tab, type: string, required: true }
+      - { name: description, label: Description for search engines, type: text }
+      - { name: eyebrow, label: Small line above the headline, type: string }
+      - { name: heading, label: Headline, type: string }
+      - { name: intro, label: Paragraph under the headline, type: text }
+      - { name: button_label, label: Words on the top button, type: string }
+      - name: programs
+        label: Sessions
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Name, type: string, required: true }
+          - { name: kicker, label: Small line above the name, type: string }
+          - { name: tagline, label: Tagline, type: string }
+          - name: text
+            label: Description
+            type: rich-text
+            options: { format: markdown, media: false }
+          - { name: facts, label: Short facts, type: string, list: true }
+          - { name: url, label: Link to the full page, description: 'For example /services/bizblitz/.', type: string }
+      - { name: closing_heading, label: Closing heading, type: string }
+      - { name: closing_text, label: Closing paragraph, type: text }
+
+  - name: contact
+    label: Contact page
+    description: The words on the contact page. The form itself and the links under it stay as they are.
+    type: file
+    path: pages/contact.html
+    format: yaml-frontmatter
+    fields:
+      - { name: title, label: Title in the browser tab, type: string, required: true }
+      - { name: heading, label: Heading, type: string }
+      - { name: intro, label: Line under the heading, type: text }
+      - { name: button_label, label: Words on the send button, type: string }
+
+  - name: thanks
+    label: Thank-you page
+    description: What a visitor sees after sending a message or paying.
+    type: file
+    path: pages/thanks.html
+    format: yaml-frontmatter
+    fields:
+      - { name: heading, label: Heading, type: string, required: true }
+      - { name: message, label: After a message, type: text }
+      - { name: paid_message, label: After a payment, type: text }
 
   - name: about
     label: About
@@ -395,7 +470,7 @@ content:
         type: text
       - name: booking_url
         label: Booking page
-        description: The address of your Google Calendar booking page. "Schedule a time" buttons open it. Leave empty and they open the contact form instead.
+        description: The address of your Google Calendar booking page. "Request a time" buttons open it. Leave empty and they open the contact form instead.
         type: string
       - name: author
         label: Susan

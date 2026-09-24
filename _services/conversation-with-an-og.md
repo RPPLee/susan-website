@@ -3,12 +3,13 @@ layout: service
 title: Conversation With An OG
 tagline: A free hour of questions and dialog with an experienced listener
 icon: fas fa-comment-dots
-duration: 60 minutes
-price: Free
-format: One-on-one, in person, by phone or video
 order: 11
 group: hidden
 booking: true
+show_header: false
+cta_heading: Request a time
+cta_text: "Send Susan a message and she will reply with times."
+cta_button: Request a time
 new: true
 image: /assets/social/share-conversation-with-an-og.png
 summary: A free one-hour conversation for people under 40, and anyone else, navigating these complex times.

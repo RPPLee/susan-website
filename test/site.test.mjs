@@ -105,41 +105,31 @@ test("register buttons go to the contact form and /register/ redirects there", (
   }
 });
 
-// op-033 and op-045: the homepage shows the services in three groups, rendered from the
-// collection's `group` field. The expected membership comes from the front matter, so a service
-// Susan regroups in the editor moves on the homepage and the deploy still passes.
-test("the homepage shows the services in three groups from the collection", () => {
+// op-033 and op-045 put the services in three groups; Lee, 2026-09-24: one flat grid in `order`,
+// no group headings, each card with title, tagline, one summary sentence and a Learn more button.
+// The expected cards come from the front matter, so a service Susan hides or reorders in the
+// editor moves on the homepage and the deploy still passes.
+test("the homepage shows the visible services as one grid of cards from the collection", () => {
   const { destination, result } = buildSite();
   try {
     assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
     const home = readFileSync(join(destination, "index.html"), "utf8");
-    const groupList = loadYaml("_data/service_groups.yml");
 
-    const expected = Object.fromEntries(groupList.map((g) => [g.id, []]));
     const services = readdirSync(join(repo, "_services"))
       .map((file) => frontMatter(join("_services", file)))
       .sort((a, b) => a.order - b.order);
-    for (const service of services) if (service.group !== "hidden") expected[service.group].push(escapeHtml(service.title));
-    // Lee, 2026-09-18: VizBlitz is for individuals, and Conversation With An OG is the homepage's
-    // call to action, not a service card.
-    assert.ok(expected.individuals.includes("VizBlitz"));
+    const visible = services.filter((service) => service.group !== "hidden");
+    const expected = visible.map((service) => escapeHtml(service.title));
     // Susan sets each card's place with the Order number in the editor.
     assert.equal(entriesOrderField(), "number");
-    assert.ok(!Object.values(expected).flat().includes("Conversation With An OG"));
+    // Conversation With An OG is the homepage's call to action, not a service card.
+    assert.ok(!expected.includes("Conversation With An OG"));
+    for (const service of visible) assert.ok(service.summary, `${service.title} has no homepage summary sentence`);
 
-    const groups = [...home.matchAll(/<section class="service-group" id="([^"]+)">([\s\S]*?)<\/section>/g)];
-    assert.deepEqual(groups.map((m) => m[1]), groupList.filter((g) => expected[g.id].length).map((g) => g.id));
-
-    // Lee, 2026-09-16: the whole card is the link, and the price lives on the service page only.
-    const titles = (html) => [...html.matchAll(/<a href="\/services\/[^"]+\/" class="service-card[^"]*">\s*<div class="service-card-content">\s*<h4>([^<]+)<\/h4>/g)].map((m) => m[1]);
-    for (const [id, html] of groups.map((m) => [m[1], m[2]])) {
-      assert.deepEqual(titles(html), expected[id], `the ${id} group shows the wrong services`);
-    }
-    for (const { id, title } of groupList) {
-      if (!expected[id].length) continue;
-      assert.match(home, new RegExp(`<section class="service-group" id="${id}">\\s*<h3 class="service-group-title">${title}</h3>\\s*<div class="services-grid">`), `the ${id} heading has a note under it`);
-    }
-    const servicesSection = home.slice(home.indexOf('<section class="services"'), home.indexOf("</section>", home.lastIndexOf('<section class="service-group"')) + 1);
+    const servicesSection = home.slice(home.indexOf('<section class="services"'), home.indexOf("</section>", home.indexOf('<section class="services"')) + 1);
+    assert.doesNotMatch(servicesSection, /service-group/, "the group headings are still on the homepage");
+    const cards = [...servicesSection.matchAll(/<article class="service-card[^"]*">\s*<div class="service-card-content">\s*<h4><a href="(\/services\/[^"]+\/)">([^<]+)<\/a><\/h4>\s*<p class="service-card-tagline">[^<]+<\/p>\s*<p class="service-card-summary">[^<]+<\/p>\s*<a href="\1" class="btn btn-secondary service-card-more"[^>]*>Learn more<\/a>/g)];
+    assert.deepEqual(cards.map((m) => m[2]), expected, "the cards are not the visible services in order");
     assert.doesNotMatch(servicesSection, /service-price/, "a price is on a homepage card");
     assert.doesNotMatch(home, /<!-- BizBlitz -->/, "the hand-written cards are still on the homepage");
   } finally {
@@ -192,7 +182,7 @@ test("the footer carries Substack's subscribe form", () => {
 });
 
 // Lee, 2026-09-18: the homepage's call to action and the Conversation With An OG page carry a
-// "Schedule a time" button. It opens the booking page named in the site settings, and the contact
+// "Request a time" button. It opens the booking page named in the site settings, and the contact
 // form while there is none. The OG page keeps its address: LinkedIn's Featured card links to it.
 test("schedule buttons open the booking page, or the contact form while there is none", () => {
   for (const booking_url of ["", "https://calendar.app.google/example"]) {
@@ -203,7 +193,7 @@ test("schedule buttons open the booking page, or the contact form while there is
     try {
       assert.equal(b.result.status, 0, `jekyll build failed\n${b.result.stderr}`);
       for (const p of ["index.html", "services/conversation-with-an-og/index.html"]) {
-        const [, href] = b.page(p).match(/<a href="([^"]+)"[^>]*>\s*<i class="fas fa-calendar-check"><\/i> Schedule a time/) || [];
+        const [, href] = b.page(p).match(/<a href="([^"]+)"[^>]*>\s*<i class="fas fa-calendar-check"><\/i> Request a time/) || [];
         assert.equal(href, booking_url || "/contact/?program=Conversation+With+An+OG", `${p} schedule button`);
       }
     } finally {

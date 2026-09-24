@@ -7,6 +7,7 @@ duration: Ongoing meetings
 price: "$500 formation and planning"
 checkout: ""
 format: In person or online, up to 10 participants
+summary: Discussion groups of up to ten, planned and facilitated by Susan, that meet regularly to advise, support and act with each other on a shared purpose.
 order: 4
 group: groups
 ---

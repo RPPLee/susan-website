@@ -27,6 +27,10 @@
   .wordmark span { font-weight: 500; font-size: 13px; letter-spacing: 0.22em; margin-top: 7px; }
   .text { position: absolute; left: 72px; right: 72px; bottom: 64px; }
   .kicker { color: #D08529; font-weight: 500; font-size: 20px; letter-spacing: 0.32em; text-transform: uppercase; margin: 0 0 18px 2px; }
+  /* The facts that matter most (free, one hour, one-on-one) as three bold pills. */
+  .facts { display: flex; gap: 14px; margin: 0 0 26px; padding: 0; list-style: none; }
+  .facts li { font-weight: 800; font-size: 26px; letter-spacing: 0.08em; text-transform: uppercase; color: #0A2D2F; background: #F5F1E8; padding: 10px 22px; border-radius: 999px; }
+  .card.gold .facts li { background: #0A2D2F; color: #F5F1E8; }
   h1 { margin: 0 0 22px; font-weight: 800; font-size: 82px; line-height: 1.02; letter-spacing: -0.01em; }
   h1 em { font-style: italic; font-weight: 600; color: #D08529; }
   .rule { width: 160px; height: 5px; background: #D08529; margin: 0 0 24px; }
@@ -36,6 +40,7 @@
   <div class="logo"><img src="logo-graphic.svg" alt=""><div class="wordmark"><b>METAPHASE</b><span>MANAGEMENT ASSOCIATES</span></div></div>
   <div class="text">
     <p class="kicker">__KICKER__</p>
+    <!-- Or, for pills instead of a kicker line: <ul class="facts"><li>Free</li><li>One hour</li><li>One-on-one</li></ul> -->
     <h1>__TITLE__</h1>
     <div class="rule"></div>
     <p>__SUB__</p>

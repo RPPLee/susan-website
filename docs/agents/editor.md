@@ -14,19 +14,23 @@ and field in it exists in the site, so a rename on either side fails `npm test`.
 | Home page | `_data/home.yml` | The homepage as a list of blocks. She edits a block's words, drags blocks to reorder them, removes one, or adds one: headline banner (headline, line under it, paragraph, buttons), schedule a call, services, latest Insights, testimonials, about Susan, get in touch, cards, free text. |
 | Insights posts | `_posts/*.md` | Her blog. Title, date, a Published switch for drafts, summary, picture, and the post in the rich-text editor (headings, bold, lists, links, quotes, uploaded pictures). Each post is a page at `/insights/<title>/`. |
 | Insights page | `pages/insights.html` | The heading and the line above the list of posts. |
-| Services | `_services/*.md` | Title, tagline, homepage card text, price, duration, format, group, order and the page text of each service. Order is a number; lower comes first within the group. The group (Individuals, Groups, Organizations, or Not on the homepage) is where the service sits on the homepage. Prices are free text, shown as written. |
+| Services | `_services/*.md` | Title, tagline, homepage card text, price, duration, format, Stripe link, banner (with a switch to hide the name above it), the Request a time button and its words, group, order and the page text of each service. Order is a number; lower comes first within the group. The group (Individuals, Groups, Organizations, or Not on the homepage) is where the service sits on the homepage. Prices are free text, shown as written. |
+| BizBlitz and VizBlitz page | `pages/blitz.html` | The /blitz/ page, the same fields as Programs. |
+| Contact page | `pages/contact.html` | The heading, the line under it and the words on the send button. |
+| Thank-you page | `pages/thanks.html` | The heading and the two messages, one after a message and one after a payment. |
 | Programs | `pages/programs.html` | The New Programs page as fields: the words at the top, a list of programs (name, tagline, description, facts, links) she can add to, remove from and reorder, and the closing section. The HTML is `_layouts/programs.html`. |
 | About | `pages/about.md` | Her bio as text. The rest of the page is `_layouts/about.html`. |
 | Testimonials | `_data/testimonials.yml` | Client quotes. The homepage block stays hidden until there is one. |
 | Site settings | `_data/settings.yml` | Site name, tagline, description; the booking page address; Susan's name, title, email, phone and location; the LinkedIn and Substack links. |
 | Media | `assets/images/` | Upload and pick images. Images only. |
+| Banners | `assets/social/` | The wide share images, one per page. |
 
 Each homepage block type is a template in `_includes/home/<type>.html`, offered under `blocks` in
 `.pages.yml` and rendered by the `case` in `index.html`. A new type needs all three;
 `test/editor.test.mjs` fails when one is missing or when the editor offers a field the template
 never reads.
 
-"Schedule a time" buttons (the homepage call block and the Conversation With An OG page) open
+"Request a time" buttons (the homepage call block and the Conversation With An OG page) open
 Site settings > Booking page, a Google Calendar appointment schedule Susan creates in her own
 calendar. While that field is empty they open the contact form.
 
@@ -35,7 +39,7 @@ Not exposed: layouts, includes, the menu, the specialties list, the group list i
 deleting a service is off too: a new service needs an icon, an order and a share image, which
 stay with Lee.
 
-Front-matter keys the editor does not list (`layout`, `icon`, `new`, `booking`) survive a save because
+Front-matter keys the editor does not list (`layout`, `icon`, `new`) survive a save because
 `settings.content.merge` is on.
 
 Addresses her LinkedIn Featured cards link to must keep working: `/services/conversation-with-an-og/`,

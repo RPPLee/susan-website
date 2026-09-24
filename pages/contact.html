@@ -2,14 +2,17 @@
 layout: default
 title: Contact
 permalink: /contact/
+heading: Get in Touch
+intro: Ready to navigate your next transition? Whether you're an entrepreneur, community leader, or organization seeking strategic guidance, we'd love to hear from you.
+button_label: Send Message
 ---
 
 <section class="page-content">
   <div class="container">
     <div class="contact-page" style="padding-top: 40px;">
-      <h1 class="page-title" style="text-align: center;">Get in Touch</h1>
+      <h1 class="page-title" style="text-align: center;">{{ page.heading | default: page.title | escape }}</h1>
       <p style="font-size: 1.25rem; color: var(--text-light); margin-bottom: 48px; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;">
-        Ready to navigate your next transition? Whether you're an entrepreneur, community leader, or organization seeking strategic guidance, we'd love to hear from you.
+        {{ page.intro | escape }}
       </p>
 
       <div class="contact-form-wrapper">
@@ -37,7 +40,7 @@ permalink: /contact/
           </div>
 
           <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-            <i class="fas fa-paper-plane"></i> Send Message
+            <i class="fas fa-paper-plane"></i> {{ page.button_label | default: "Send Message" | escape }}
           </button>
           <p class="form-error" role="alert" hidden>Your message could not be sent. Please try again, or email {{ site.data.settings.author.email }}.</p>
         </form>

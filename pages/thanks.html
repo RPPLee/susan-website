@@ -4,14 +4,17 @@ title: Thank You
 permalink: /thanks/
 noindex: true
 sitemap: false
+heading: Thank you
+message: Your message has been sent. We will write back to you soon.
+paid_message: Your payment went through. Stripe emails you a receipt, and Susan will be in touch within two business days to set up your first session.
 ---
 
 <section class="page-content">
   <div class="container">
     <div class="thanks-page">
-      <h1 class="page-title">Thank you</h1>
-      <p id="thanks-message">Your message has been sent. We will write back to you soon.</p>
-      <p id="thanks-paid" hidden>Your payment went through. Stripe emails you a receipt, and Susan will be in touch within two business days to set up your first session.</p>
+      <h1 class="page-title">{{ page.heading | escape }}</h1>
+      <p id="thanks-message">{{ page.message | escape }}</p>
+      <p id="thanks-paid" hidden>{{ page.paid_message | escape }}</p>
       <script>
         // Stripe Payment Links send the buyer to /thanks/?paid=1 after a successful payment.
         if (new URLSearchParams(location.search).get("paid")) {

@@ -310,42 +310,47 @@ section {
 }
 
 .service-card-content {
-  padding: 24px;
+  padding: 36px 28px 32px;
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .service-card-content h4 {
-  font-size: 1.4rem;
-  margin-bottom: 12px;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  transition: color 0.2s ease;
 }
 
-/* The whole card is the link (Lee, 2026-09-16). */
-a.service-card {
+.service-card-content h4 a {
   color: var(--text-color);
   text-decoration: none;
 }
 
-a.service-card:hover h4,
-a.service-card:focus-visible h4 {
+.service-card-content h4 a:hover,
+.service-card-content h4 a:focus-visible {
   color: var(--primary-color);
 }
 
-a.service-card:focus-visible {
-  outline: 3px solid var(--accent-color);
-  outline-offset: 3px;
+.service-card-tagline {
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 14px;
 }
 
-.service-card-content h4 {
-  transition: color 0.2s ease;
-}
-
-
-.service-card-content p {
+.service-card-summary {
   color: var(--text-light);
-  font-size: 0.95rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
   flex: 1;
+  margin-bottom: 24px;
+}
+
+.service-card-more {
+  margin-top: auto;
 }
 
 /* ===== About Preview Section ===== */
@@ -592,6 +597,19 @@ a.service-card:focus-visible {
 .service-tagline {
   font-size: 1.25rem;
   color: var(--text-light);
+}
+
+/* A page whose banner already carries its name keeps the heading for screen readers only. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .service-image {
@@ -1385,20 +1403,22 @@ a.service-card:focus-visible {
   max-width: 620px;
 }
 
-/* The short facts sit on one line, separated by dots. */
-.call-points {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 12px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+/* The words are one link to the page the call is about. */
+.call-link {
+  color: inherit;
+  display: block;
 }
 
-.call-points li + li::before {
-  content: "\00b7";
-  margin: 0 10px;
+.call-link h2 {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-underline-offset: 6px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.call-link:hover h2 {
+  text-decoration-color: var(--accent-color);
 }
 
 .call-action {

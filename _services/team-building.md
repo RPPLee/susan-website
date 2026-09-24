@@ -7,6 +7,7 @@ duration: 3-6 month engagements
 price: "$500 initial planning"
 checkout: ""
 format: In person and/or virtual
+summary: Group performance built on shared vision, clear roles, decision-making parameters and resolution of differences, through confidential input and facilitated sessions.
 order: 5
 group: organizations
 ---

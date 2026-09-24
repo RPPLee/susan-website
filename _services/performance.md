@@ -6,6 +6,7 @@ icon: fas fa-chart-line
 duration: Custom engagements
 price: Retainer or per-task pricing
 format: In person and/or virtual
+summary: Assessment, partnerships and project management that supplement your team when an outside perspective and another pair of hands can help.
 order: 7
 group: organizations
 ---

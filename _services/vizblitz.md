@@ -7,6 +7,7 @@ duration: 60 minutes
 price: Contact for pricing
 checkout: ""
 format: One-on-one or small group
+summary: For individuals. In 60 focused minutes Susan helps you bring future possibilities into sharp focus, anchored in actionable steps.
 order: 10
 group: individuals
 ---

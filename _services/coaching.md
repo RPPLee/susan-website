@@ -7,6 +7,7 @@ duration: 60-minute sessions
 price: "$250 initial session, $150/hour thereafter"
 checkout: ""
 format: In person, phone, or video
+summary: For individuals or groups. Regularly scheduled sessions with a supporting, experienced, reflective confidant, in person or by phone or video, on any topic you bring.
 order: 3
 group: individuals
 ---

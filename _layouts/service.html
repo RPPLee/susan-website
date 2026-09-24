@@ -6,6 +6,9 @@ layout: default
   <div class="container">
     <a href="{{ '/#services' | relative_url }}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Services</a>
 
+    {% if page.image and page.show_header == false %}
+    <h1 class="visually-hidden">{{ page.title }}</h1>
+    {% else %}
     <div class="service-header">
       <div class="service-icon-large">
         <i class="{{ page.icon }}"></i>
@@ -13,6 +16,7 @@ layout: default
       <h1>{{ page.title }}</h1>
       <p class="service-tagline">{{ page.tagline }}</p>
     </div>
+    {% endif %}
 
     {% if page.image %}
     <div class="service-image">
@@ -20,6 +24,7 @@ layout: default
     </div>
     {% endif %}
 
+    {% if page.duration or page.price or page.format %}
     <div class="service-meta">
       {% if page.duration %}
       <div class="meta-item">
@@ -42,6 +47,7 @@ layout: default
       </div>
       {% endif %}
     </div>
+    {% endif %}
 
     <div class="service-content">
       {{ content }}
@@ -50,16 +56,16 @@ layout: default
     {%- assign booking = site.data.settings.booking_url | default: "" | strip -%}
     <div class="service-cta">
       {% if page.booking %}
-      <h3>Schedule a time</h3>
-      <p>Pick an hour that suits you{% if booking == "" %}: send Susan a message and she will reply with times{% endif %}.</p>
+      <h3>{{ page.cta_heading | default: "Request a time" | escape }}</h3>
+      <p>{% if page.cta_text %}{{ page.cta_text | escape }}{% else %}Pick an hour that suits you{% if booking == "" %}: send Susan a message and she will reply with times{% endif %}.{% endif %}</p>
       <div class="cta-buttons">
         {% if booking != "" %}
         <a href="{{ booking }}" target="_blank" rel="noopener" class="btn btn-primary">
-          <i class="fas fa-calendar-check"></i> Schedule a time
+          <i class="fas fa-calendar-check"></i> {{ page.cta_button | default: "Request a time" | escape }}
         </a>
         {% else %}
         <a href="{{ '/contact/' | relative_url }}?program={{ page.title | url_encode }}" class="btn btn-primary">
-          <i class="fas fa-calendar-check"></i> Schedule a time
+          <i class="fas fa-calendar-check"></i> {{ page.cta_button | default: "Request a time" | escape }}
         </a>
         {% endif %}
       </div>

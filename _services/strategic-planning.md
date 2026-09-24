@@ -6,6 +6,7 @@ icon: fas fa-map
 duration: Quarterly engagements
 price: Retained engagement
 format: In person and/or virtual
+summary: In-depth strategic and tactical plans with timelines, covering position and purpose, scenario planning and execution. One client per quarter.
 order: 6
 group: organizations
 ---

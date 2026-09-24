@@ -10,19 +10,21 @@ import { repo, loadYaml, frontMatter } from "./jekyll.mjs";
 const config = loadYaml(".pages.yml");
 const entries = Object.fromEntries(config.content.map((entry) => [entry.label, entry]));
 
-test("the sidebar lists the home page, Insights, Services, Programs, About, Testimonials, Site settings and Media", () => {
+// Lee, 2026-09-24: every page with words on it is in the sidebar, the Blitz, Contact and Thank-you
+// pages included, and the share banners are a second media folder.
+test("the sidebar lists every page with words on it, Site settings, Media and Banners", () => {
   assert.deepEqual(
     config.content.map((entry) => entry.label),
-    ["Home page", "Insights posts", "Insights page", "Services", "Programs", "About", "Testimonials", "Site settings"],
+    ["Home page", "Insights posts", "Insights page", "Services", "Programs", "BizBlitz and VizBlitz page", "Contact page", "Thank-you page", "About", "Testimonials", "Site settings"],
   );
-  assert.equal(config.media.label, "Media");
+  assert.deepEqual(config.media.map((m) => m.label), ["Media", "Banners"]);
 });
 
 test("every path the editor exposes exists in the repo", () => {
   for (const entry of config.content) {
     assert.ok(existsSync(join(repo, entry.path)), `${entry.label} points at missing ${entry.path}`);
   }
-  assert.ok(existsSync(join(repo, config.media.input)), `media folder ${config.media.input} is missing`);
+  for (const m of config.media) assert.ok(existsSync(join(repo, m.input)), `media folder ${m.input} is missing`);
 });
 
 test("services are a collection whose fields match the service front matter", () => {
@@ -92,10 +94,13 @@ test("layouts, includes, the workflow, the build config and the editor config ar
   }
 });
 
-test("media is the images folder, images only", () => {
-  assert.equal(config.media.input, "assets/images");
-  assert.equal(config.media.output, "/assets/images");
-  assert.deepEqual(config.media.categories, ["image"]);
+test("media is the images folder and the banners folder, images only", () => {
+  const [images, banners] = config.media;
+  assert.equal(images.input, "assets/images");
+  assert.equal(images.output, "/assets/images");
+  assert.equal(banners.input, "assets/social");
+  assert.equal(banners.output, "/assets/social");
+  for (const m of config.media) assert.deepEqual(m.categories, ["image"]);
 });
 
 test("saves carry the editor's own name and keep the keys the editor does not manage", () => {
@@ -172,4 +177,10 @@ test("nothing in the editor opens as HTML source", () => {
   const layout = readFileSync(join(repo, "_layouts/programs.html"), "utf8");
   const programs = entries.Programs.fields.find((f) => f.name === "programs");
   for (const f of programs.fields) assert.ok(layout.includes(`program.${f.name}`), `the Programs layout never reads ${f.name}`);
+  const blitz = entries["BizBlitz and VizBlitz page"].fields.find((f) => f.name === "programs");
+  for (const f of blitz.fields) assert.ok(layout.includes(`program.${f.name}`), `the Programs layout never reads ${f.name}`);
+  for (const [label, file] of [["Contact page", "pages/contact.html"], ["Thank-you page", "pages/thanks.html"]]) {
+    const page = readFileSync(join(repo, file), "utf8");
+    for (const f of entries[label].fields) assert.ok(page.includes(`page.${f.name}`) || f.name === "title", `${file} never reads ${f.name}`);
+  }
 });

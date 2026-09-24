@@ -62,7 +62,7 @@ One of the seven standing offers with a page under `_services/`: BizBlitz, VizBl
 A dated, enrolling offer: Tapestry and Pivot Point Passage (renamed from Turning Point Tenders on 2026-09-21). Has a flyer, a service page and a registration.
 
 **Group**:
-Where a service sits on the homepage: Individuals, Groups or Organizations (op-033). Each service names one in its `group` front matter; the three are listed in `_data/service_groups.yml` (op-045).
+Which audience a service is for: Individuals, Groups or Organizations (op-033), named in its `group` front matter and listed in `_data/service_groups.yml` (op-045). Since 2026-09-24 the homepage shows one flat grid of cards in `order` and the group only colours a card's top edge; `hidden` keeps a service off the homepage.
 _Avoid_: course, workshop
 
 **Blitz**:

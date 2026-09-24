@@ -1,29 +1,19 @@
-{%- comment -%} The call to action. The button opens Susan's booking page when Site settings has
-one, and the contact form until then. {%- endcomment -%}
+{%- comment -%} The call to action. The words link to the page named in more_url. The button opens
+Susan's booking page when Site settings has one, and the contact form until then. {%- endcomment -%}
 {%- assign booking = site.data.settings.booking_url | default: "" | strip -%}
 <section class="call" id="call">
   <div class="container">
     <div class="call-card">
-      <div class="call-text">
+      {% if include.block.more_url %}<a href="{% include href.html url=include.block.more_url %}" class="call-text call-link">{% else %}<div class="call-text">{% endif %}
         {% if include.block.eyebrow %}<span class="eyebrow">{{ include.block.eyebrow | escape }}</span>{% endif %}
         <h2>{{ include.block.heading | escape }}</h2>
         {% if include.block.text %}<p>{{ include.block.text | escape }}</p>{% endif %}
-        {% if include.block.points and include.block.points.size > 0 %}
-        <ul class="call-points">
-          {% for point in include.block.points %}
-          <li>{{ point | escape }}</li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-      </div>
+      {% if include.block.more_url %}</a>{% else %}</div>{% endif %}
       <div class="call-action">
         {% if booking != "" %}
-        <a href="{{ booking }}" target="_blank" rel="noopener" class="btn btn-primary"><i class="fas fa-calendar-check"></i> {{ include.block.button_label | default: "Schedule a time" | escape }}</a>
+        <a href="{{ booking }}" target="_blank" rel="noopener" class="btn btn-primary"><i class="fas fa-calendar-check"></i> {{ include.block.button_label | default: "Request a time" | escape }}</a>
         {% else %}
-        <a href="{{ '/contact/' | relative_url }}?program={{ include.block.heading | url_encode }}" class="btn btn-primary"><i class="fas fa-calendar-check"></i> {{ include.block.button_label | default: "Schedule a time" | escape }}</a>
-        {% endif %}
-        {% if include.block.more_url and include.block.more_label %}
-        <a href="{% include href.html url=include.block.more_url %}" class="call-more">{{ include.block.more_label | escape }} <i class="fas fa-arrow-right"></i></a>
+        <a href="{{ '/contact/' | relative_url }}?program={{ include.block.heading | url_encode }}" class="btn btn-primary"><i class="fas fa-calendar-check"></i> {{ include.block.button_label | default: "Request a time" | escape }}</a>
         {% endif %}
       </div>
     </div>

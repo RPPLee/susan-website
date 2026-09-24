@@ -19,7 +19,7 @@ social:
   linkedin_company: https://www.linkedin.com/company/97186879/
   substack: https://metaphase.substack.com/
 
-# Where "Schedule a time" buttons go. Empty sends them to the contact form.
+# Where "Request a time" buttons go. Empty sends them to the contact form.
 booking_url: ""
 
 # Navigation Menu
