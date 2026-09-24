@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>30 Minutes, One Problem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* SAMPLE FLYER. Every fact on this page is a placeholder until Susan confirms it. */
+  :root {
+    --teal: #1A8292;
+    --teal-dark: #14697a;
+    --gold: #D08529;
+    --ink: #0A2D2F;
+    --paper: #ffffff;
+    --cream: #f6f2ea;
+    --muted: #4c6466;
+  }
+  @page { size: letter; margin: 0; }
+  html, body { margin: 0; padding: 0; background: #ddd; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page {
+    width: 8.5in; height: 11in; margin: 0 auto; background: var(--paper);
+    box-sizing: border-box; position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  @media screen and (min-width: 9in) { .page { box-shadow: 0 6px 30px rgba(0,0,0,0.25); margin: 24px auto; } }
+  @media print { html, body { background: #fff; } .page { box-shadow: none; margin: 0; page-break-after: avoid; } }
+
+  /* Header band */
+  .band {
+    background: linear-gradient(115deg, var(--teal) -10%, #0f4f58 45%, var(--ink) 100%);
+    color: var(--cream); padding: 0.42in 0.7in 0.38in; position: relative;
+  }
+  .band .dots {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(208,133,41,0.5) 1.2px, transparent 1.5px);
+    background-size: 18px 18px; background-position: 9px 9px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.7) 85%, #000 100%);
+    mask-image: linear-gradient(90deg, transparent 50%, rgba(0,0,0,0.7) 85%, #000 100%);
+  }
+  .band > * { position: relative; }
+  .kicker { color: var(--gold); font-weight: 600; font-size: 10.5pt; letter-spacing: 0.28em; text-transform: uppercase; margin: 0 0 9pt; }
+  h1 { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; font-size: 40pt; line-height: 1.02; margin: 0 0 11pt; letter-spacing: -0.01em; }
+  h1 em { font-style: italic; font-weight: 600; color: var(--gold); }
+  .rule { width: 1.2in; height: 4px; background: var(--gold); margin: 0 0 11pt; }
+  .lede { font-size: 12.5pt; line-height: 1.42; margin: 0; max-width: 6.6in; color: rgba(246,242,234,0.92); }
+  .facts { margin: 12pt 0 0; display: flex; gap: 10pt; flex-wrap: wrap; }
+  .facts span {
+    border: 1.5px solid rgba(246,242,234,0.55); border-radius: 999px; padding: 4pt 11pt;
+    font-size: 10pt; font-weight: 600; letter-spacing: 0.04em; color: var(--cream);
+  }
+
+  /* Body */
+  .body { flex: 1; padding: 0.3in 0.7in 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5in; }
+  h2 { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; font-size: 17pt; margin: 0 0 10pt; color: var(--teal-dark); }
+  .steps { list-style: none; margin: 0; padding: 0; counter-reset: step; }
+  .steps li { position: relative; padding-left: 0.5in; margin-bottom: 9pt; font-size: 10.5pt; line-height: 1.42; }
+  .steps li::before {
+    counter-increment: step; content: counter(step);
+    position: absolute; left: 0; top: 0; width: 0.34in; height: 0.34in; border-radius: 50%;
+    background: var(--teal); color: #fff; font-family: 'Source Serif 4', Georgia, serif; font-weight: 700;
+    font-size: 13pt; display: flex; align-items: center; justify-content: center;
+  }
+  .steps b { display: block; font-weight: 600; color: var(--ink); }
+  .who { list-style: none; margin: 0; padding: 0; }
+  .who li { position: relative; padding-left: 0.26in; margin-bottom: 7pt; font-size: 10.5pt; line-height: 1.42; }
+  .who li::before { content: ""; position: absolute; left: 0.04in; top: 0.09in; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+  .note { font-size: 9.5pt; color: var(--muted); line-height: 1.42; margin: 8pt 0 0; }
+
+  /* Susan strip */
+  .susan { margin: 0.18in 0.7in 0; padding: 10pt 14pt; background: var(--cream); border-left: 4px solid var(--gold); font-size: 10pt; line-height: 1.45; }
+  .susan b { font-family: 'Source Serif 4', Georgia, serif; font-size: 12pt; color: var(--teal-dark); }
+
+  /* Pass-along footer */
+  .pass { margin: 0.2in 0.7in 0; padding: 12pt 0 0; border-top: 2px solid var(--teal); display: flex; gap: 0.35in; align-items: center; }
+  .pass .text { flex: 1; }
+  .pass h3 { font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; font-size: 20pt; margin: 0 0 6pt; color: var(--ink); }
+  .pass h3 em { font-style: italic; color: var(--gold); }
+  .pass p { margin: 0 0 8pt; font-size: 10.5pt; line-height: 1.45; }
+  .contact { font-size: 10.5pt; line-height: 1.6; font-weight: 500; }
+  .contact span { color: var(--teal-dark); }
+  .contact .sep { color: var(--gold); padding: 0 6pt; }
+  .qr {
+    width: 1.3in; height: 1.3in; flex: none; box-sizing: border-box;
+    border: 2.5px dashed var(--teal); border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    text-align: center; font-size: 7.5pt; line-height: 1.35; color: var(--teal-dark); padding: 6pt; font-weight: 600; overflow-wrap: anywhere;
+  }
+
+  /* Footer with logo */
+  .foot { margin: auto 0.7in 0.28in; padding-top: 8pt; display: flex; align-items: center; justify-content: space-between; }
+  .foot img { height: 0.55in; }
+  .foot small { font-size: 8pt; color: var(--muted); letter-spacing: 0.02em; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="band">
+    <div class="dots"></div>
+    <p class="kicker">A free conversation with Susan Mills</p>
+    <h1>30 Minutes,<br><em>One Problem.</em></h1>
+    <div class="rule"></div>
+    <p class="lede">Bring one real problem from your work. We'll talk it through together, live, and you'll leave with a clearer next step. No pitch, no homework, no strings.</p>
+    <div class="facts">
+      <span>Free</span>
+      <span>30 minutes</span>
+      <span>By phone or video</span>
+      <span>One person, one problem</span>
+    </div>
+  </header>
+
+  <section class="body">
+    <div>
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><b>Pick the problem.</b> Something real and current: a decision you keep putting off, a person you can't get through to, a plan that has stalled.</li>
+        <li><b>Book 30 minutes.</b> Email or call, and we'll find a time. Phone or video, whichever you prefer.</li>
+        <li><b>Work it through, live.</b> Questions, then a way forward. You take the next step. If you want more, we can talk about that later.</li>
+      </ol>
+    </div>
+    <div>
+      <h2>Who it's for</h2>
+      <ul class="who">
+        <li>Owners and managers of small businesses and nonprofits.</li>
+        <li>People stepping into a bigger role, or thinking about stepping out of one.</li>
+        <li>Anyone with a knot in their work they have been turning over alone.</li>
+        <li>Friends of friends. If someone handed you this, you're already invited.</li>
+      </ul>
+      <p class="note">One session per person. Not therapy, not legal or financial advice: a working conversation with someone who has seen a lot.</p>
+    </div>
+  </section>
+
+  <aside class="susan">
+    <b>Susan Mills</b> has spent eight decades listening, and most of them helping people run organizations: as an executive, a board member, a coach, and a mentor. She founded Metaphase Management Associates in Berkeley, California to keep doing what she likes best, which is sitting down with one person and one problem.
+  </aside>
+
+  <section class="pass">
+    <div class="text">
+      <h3>Pass this along.</h3>
+      <p>When your 30 minutes are done, give this flyer to two people who could use their own. That's how it travels: one conversation at a time.</p>
+      <div class="contact">
+        <span>susanmills@metaphasemgt.com</span><span class="sep">&middot;</span><span>510-524-3434</span><span class="sep">&middot;</span><span>metaphasemgt.com</span>
+      </div>
+    </div>
+    <div class="qr"><div>QR to<br>metaphasemgt.com/<wbr>contact<br><span style="font-weight:400">(placeholder)</span></div></div>
+  </section>
+
+  <footer class="foot">
+    <img src="../../../assets/images/logo.png" alt="Metaphase Management Associates">
+    <small>Sample flyer. Details to be confirmed.</small>
+  </footer>
+
+</div>
+</body>
+</html>
