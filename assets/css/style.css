@@ -416,6 +416,18 @@ section {
   inset: 0;
 }
 
+/* No hover transform on this button: a transform would make it the containing block of its
+   stretched ::after, which then collapses to the button, ends the hover, and expands again,
+   and the card flickers. The card itself lifts on hover instead (Lee, 2026-09-24). */
+.service-card-more,
+.service-card-more:hover {
+  transform: none;
+}
+
+.service-card:hover .service-card-more {
+  background: var(--border-color);
+}
+
 .service-card:has(.service-card-more:focus-visible) {
   outline: 3px solid var(--accent-color);
   outline-offset: 3px;
@@ -1741,6 +1753,10 @@ h1, h2, h3,
 
 .company-about {
   max-width: 760px;
+}
+
+.about-founder .about-text {
+  max-width: 900px;
 }
 
 .company-about h2 {

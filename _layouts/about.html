@@ -2,12 +2,13 @@
 layout: default
 ---
 {%- comment -%} The About page. Every word comes from pages/about.md: the company section is front
-matter and comes first, then the bio (the body) with the photo and specialties, all edited in
-Pages CMS. Lee, 2026-09-24: the firm before the founder, since the site is about Metaphase. {%- endcomment -%}
+matter and comes first, with the specialties beside it since they are the firm's (Lee,
+2026-09-24), then the bio (the body) with the photo, all edited in Pages CMS. {%- endcomment -%}
 
 <section class="page-content about-company">
   <div class="container">
     <h1 class="page-title">{{ page.heading | default: "About Us" }}</h1>
+    <div class="about-content">
     {% if page.company_heading or page.company_text %}
     <div class="company-about">
       {% if page.company_heading %}<h2>{{ page.company_heading }}</h2>{% endif %}
@@ -19,16 +20,6 @@ Pages CMS. Lee, 2026-09-24: the firm before the founder, since the site is about
       {% endif %}
     </div>
     {% endif %}
-  </div>
-</section>
-
-<section class="about-founder">
-  <div class="container">
-    <div class="about-content">
-      <div class="about-text">
-        {% if page.photo %}<img src="{{ page.photo | relative_url }}" alt="{{ site.data.settings.author.name }}" class="about-photo">{% endif %}
-        {{ content }}
-      </div>
 
       {% if page.specialties and page.specialties.size > 0 %}
       <div class="about-skills">
@@ -43,6 +34,15 @@ Pages CMS. Lee, 2026-09-24: the firm before the founder, since the site is about
         {% endfor %}
       </div>
       {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="about-founder">
+  <div class="container">
+    <div class="about-text">
+      {% if page.photo %}<img src="{{ page.photo | relative_url }}" alt="{{ site.data.settings.author.name }}" class="about-photo">{% endif %}
+      {{ content }}
     </div>
   </div>
 </section>
