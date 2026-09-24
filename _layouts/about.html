@@ -1,13 +1,29 @@
 ---
 layout: default
 ---
-{%- comment -%} The About page. Every word comes from pages/about.md: the bio is the body, the photo,
-specialties and company section are front matter, all edited in Pages CMS. {%- endcomment -%}
+{%- comment -%} The About page. Every word comes from pages/about.md: the company section is front
+matter and comes first, then the bio (the body) with the photo and specialties, all edited in
+Pages CMS. Lee, 2026-09-24: the firm before the founder, since the site is about Metaphase. {%- endcomment -%}
 
-<section class="page-content">
+<section class="page-content about-company">
   <div class="container">
     <h1 class="page-title">{{ page.heading | default: "About Us" }}</h1>
+    {% if page.company_heading or page.company_text %}
+    <div class="company-about">
+      {% if page.company_heading %}<h2>{{ page.company_heading }}</h2>{% endif %}
+      <div class="company-about-text">
+        {{ page.company_text | markdownify }}
+      </div>
+      {% if page.company_tagline %}
+      <p class="company-about-tagline">{{ page.company_tagline }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
 
+<section class="about-founder">
+  <div class="container">
     <div class="about-content">
       <div class="about-text">
         {% if page.photo %}<img src="{{ page.photo | relative_url }}" alt="{{ site.data.settings.author.name }}" class="about-photo">{% endif %}
@@ -30,22 +46,3 @@ specialties and company section are front matter, all edited in Pages CMS. {%- e
     </div>
   </div>
 </section>
-
-<!-- Company section -->
-{% if page.company_heading or page.company_text %}
-<section style="padding: 60px 0; background: var(--bg-secondary);">
-  <div class="container">
-    <div class="company-about" style="max-width: 700px; margin: 0 auto; text-align: center;">
-      {% if page.company_heading %}<h2 class="section-title">{{ page.company_heading }}</h2>{% endif %}
-      <div style="color: var(--text-light); font-size: 1.1rem; text-align: left;">
-        {{ page.company_text | markdownify }}
-      </div>
-      {% if page.company_tagline %}
-      <p style="font-size: 1.25rem; font-weight: 600; color: var(--primary-color); font-style: italic; margin-top: 32px;">
-        {{ page.company_tagline }}
-      </p>
-      {% endif %}
-    </div>
-  </div>
-</section>
-{% endif %}

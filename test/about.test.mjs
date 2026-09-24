@@ -27,6 +27,8 @@ test("the About page shows the bio with the photo and specialties, and no impact
     assert.ok(html.includes(firstSentence), "the bio is not on the page");
     assert.match(html, /Specialties/);
     assert.match(html, /About Metaphase Management/);
+    // Lee, 2026-09-24: the firm comes before the founder.
+    assert.ok(html.indexOf("About Metaphase Management") < html.indexOf(firstSentence), "the bio is above the company section");
     assert.doesNotMatch(html, /Our Impact/);
   } finally {
     b.cleanup();

@@ -1647,3 +1647,44 @@ h1, h2, h3,
   border-radius: 20px;
   box-shadow: 0 24px 48px rgba(10, 45, 47, 0.15);
 }
+
+/* ===== About page: the firm first, then the founder (Lee, 2026-09-24) ===== */
+.about-company {
+  padding-bottom: 64px;
+}
+
+.company-about {
+  max-width: 760px;
+}
+
+.company-about h2 {
+  font-size: 1.75rem;
+  margin-bottom: 20px;
+}
+
+.company-about-text {
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+.company-about-text p,
+.company-about-text ul {
+  margin-bottom: 16px;
+}
+
+.company-about-text li {
+  margin-bottom: 8px;
+}
+
+.company-about-tagline {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  font-style: italic;
+  margin-top: 28px;
+}
+
+.about-founder {
+  padding: 72px 0;
+  background: var(--bg-secondary);
+}
