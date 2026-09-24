@@ -24,6 +24,7 @@ plugins:
 
 # Exclude from build
 exclude:
+  - scripts
   - Gemfile
   - Gemfile.lock
   - package.json

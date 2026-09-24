@@ -23,6 +23,9 @@ Thumbs.db
 # Private copies of the site the tests build from
 .test-data-*/
 
+# Fetched at build time by scripts/fetch-substack.mjs
+_data/substack.json
+
 # Misc
 *.log
 

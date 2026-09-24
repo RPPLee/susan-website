@@ -10,7 +10,19 @@ intro: Short tips from Susan on business, leadership and navigating change.
     <h1 class="page-title">{{ page.title | escape }}</h1>
     {% if page.intro %}<p class="section-subtitle">{{ page.intro | escape }}</p>{% endif %}
 
-    {% if site.posts.size > 0 %}
+    {%- comment -%} The Substack section comes first (see _includes/home/posts.html); local posts
+    fill in while there are none. {%- endcomment -%}
+    {% assign substack = site.data.substack.items | default: empty %}
+    {% if substack.size > 0 %}
+    <div class="post-grid">
+      {% for post in substack %}
+      {% include substack-card.html post=post %}
+      {% endfor %}
+    </div>
+    {% if site.data.substack.url %}
+    <p class="insights-more"><a href="{{ site.data.substack.url }}" target="_blank" rel="noopener" class="btn btn-secondary">All posts on Substack <i class="fas fa-arrow-up-right-from-square"></i></a></p>
+    {% endif %}
+    {% elsif site.posts.size > 0 %}
     <div class="post-grid">
       {% for post in site.posts %}
       {% include post-card.html post=post %}

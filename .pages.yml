@@ -100,6 +100,7 @@ content:
                 label: Photo
                 type: image
                 options: { media: images }
+              - { name: caption, label: Line under the photo, description: 'For example "Susan Mills, Founder & CEO".', type: string }
               - name: text
                 label: Text
                 type: rich-text
@@ -471,6 +472,10 @@ content:
       - name: booking_url
         label: Booking page
         description: The address of your Google Calendar booking page. "Request a time" buttons open it. Leave empty and they open the contact form instead.
+        type: string
+      - name: substack_section_feed
+        label: Insights feed
+        description: The feed address of the Substack section shown on Insights, for example https://metaphase.substack.com/s/money-culture-and-community/feed. The site picks up new posts within a day.
         type: string
       - name: author
         label: Susan

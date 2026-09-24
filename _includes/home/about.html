@@ -3,7 +3,8 @@
     <div class="about-preview-content">
       {% if include.block.image %}
       <div class="about-preview-image">
-        <img src="{{ include.block.image | relative_url }}" alt="Susan Mills">
+        <img src="{{ include.block.image | relative_url }}" alt="{{ include.block.caption | default: site.data.settings.author.name | escape }}">
+        {% if include.block.caption %}<p class="about-preview-caption">{{ include.block.caption | escape }}</p>{% endif %}
       </div>
       {% endif %}
       <div class="about-preview-text">

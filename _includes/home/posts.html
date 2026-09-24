@@ -1,5 +1,8 @@
-{%- comment -%} The newest Insights posts. Hidden until Susan has published one. {%- endcomment -%}
-{% if site.posts.size > 0 %}
+{%- comment -%} The newest Insights. Posts from the Substack section (_data/substack.json, fetched
+by scripts/fetch-substack.mjs) come first; local _posts fill in while there are none. Hidden until
+there is something to show. {%- endcomment -%}
+{% assign substack = site.data.substack.items | default: empty %}
+{% if substack.size > 0 or site.posts.size > 0 %}
 <section class="writing" id="writing">
   <div class="container">
     {% if include.block.eyebrow %}<span class="eyebrow">{{ include.block.eyebrow | escape }}</span>{% endif %}
@@ -7,9 +10,15 @@
     {% if include.block.text %}<p class="section-subtitle">{{ include.block.text | escape }}</p>{% endif %}
     <div class="post-grid">
       {% assign count = include.block.count | default: 3 %}
+      {% if substack.size > 0 %}
+      {% for post in substack limit: count %}
+      {% include substack-card.html post=post %}
+      {% endfor %}
+      {% else %}
       {% for post in site.posts limit: count %}
       {% include post-card.html post=post %}
       {% endfor %}
+      {% endif %}
     </div>
     <div class="writing-cta">
       <a href="{{ '/insights/' | relative_url }}" class="btn btn-secondary">{{ include.block.button_label | default: "More Insights" | escape }}</a>

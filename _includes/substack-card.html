@@ -1,0 +1,14 @@
+{%- comment -%} One post from the Substack section, from _data/substack.json. {%- endcomment -%}
+<article class="post-card post-card-substack">
+  {% if include.post.image %}
+  <a href="{{ include.post.url }}" target="_blank" rel="noopener" class="post-card-image" tabindex="-1" aria-hidden="true">
+    <img src="{{ include.post.image }}" alt="" loading="lazy">
+  </a>
+  {% endif %}
+  <div class="post-card-body">
+    {% if include.post.date != "" %}<time datetime="{{ include.post.date }}">{{ include.post.date | date: "%B %-d, %Y" }}</time>{% endif %}
+    <h3><a href="{{ include.post.url }}" target="_blank" rel="noopener">{{ include.post.title | escape }}</a></h3>
+    <p>{{ include.post.summary | escape }}</p>
+    <a href="{{ include.post.url }}" target="_blank" rel="noopener" class="post-card-link">Read on Substack <i class="fas fa-arrow-up-right-from-square"></i></a>
+  </div>
+</article>

@@ -444,6 +444,13 @@ section {
   box-shadow: 0 12px 32px rgba(10, 45, 47, 0.12);
 }
 
+.about-preview-caption {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
 .about-preview-text h2 {
   font-size: 2rem;
   margin-bottom: 16px;
@@ -1766,4 +1773,10 @@ h1, h2, h3,
 .about-founder {
   padding: 72px 0;
   background: var(--bg-secondary);
+}
+
+/* ===== Insights from the Substack section (Lee, 2026-09-24) ===== */
+.insights-more {
+  text-align: center;
+  margin-top: 40px;
 }

@@ -32,30 +32,24 @@ sections:
   - type: testimonials
     heading: What Clients Say
   - type: about
-    heading: Meet Susan Mills
+    heading: About Metaphase Management
     image: /assets/images/susan-profile-1.jpg
+    caption: Susan Mills, Founder & CEO
     text: >-
-      Susan Mills is a skilled companion steeped in helping individuals,
-      business entrepreneurs and community initiatives thrive as they blend
-      personally rewarding and financially practical paths forward. 
+      Metaphase Management helps individuals, businesses and communities
+      navigate the journey from idea to meaningful impact. We coach
+      individuals and design leadership programs, team building, business
+      models and operations that balance personal, business, community,
+      spiritual and environmental considerations, because competitive
+      cultures alone lead to burnout, and we are stronger together than
+      alone.
 
 
-      Susan has decades of success helping large and small clients develop
-      competitive advantage and beome industry leaders.  With this has come
-      Susan's first-hand understanding of the dispiriting human costs of
-      pursuing financial performance only.  
-
-
-      Today, Susan's counsel incorporates considerations for
-      interconnections.  She  helps clients build vitality through
-      multi-dimensional reflection and assessment, collaborations, networks,
-      reciprocity, financial flows and creative diversity.  It has taken a few
-      life lessons to understand this deeply!
-
-
-      Susan specializes in transforming solo performance into teamwork and
-      shared value.  Finding  joy and insight  during the  slog through tough
-      and confusing times creates sustained rewards. 
+      Founder Susan Mills is the person you work with. Over four decades
+      she has guided more than 200 companies and programs from first idea
+      through growth and market leadership, and along the way saw the human
+      cost of pursuing financial performance only. That experience shapes
+      every engagement.
     button_label: Learn More
     button_url: /about/
   - type: contact
