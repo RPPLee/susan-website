@@ -22,10 +22,10 @@ social:
 # Where "Request a time" buttons go. Empty sends them to the contact form.
 booking_url: ""
 
-# The Substack section shown on Insights and the homepage: its RSS feed address, for example
-# https://metaphase.substack.com/s/money-culture-and-community/feed. A scheduled build fetches it
+# The Substack section shown on Insights and the homepage: its address, for example
+# https://metaphase.substack.com/s/money-culture-community. A scheduled build fetches its posts
 # into _data/substack.json (scripts/fetch-substack.mjs); empty means Insights shows local posts only.
-substack_section_feed: "https://metaphase.substack.com/s/money-culture-and-community/feed"
+substack_section: "https://metaphase.substack.com/s/money-culture-community"
 
 # Navigation Menu
 menu:

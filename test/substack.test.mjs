@@ -1,49 +1,43 @@
 // Insights shows the posts of one Substack section (Lee, 2026-09-24). scripts/fetch-substack.mjs
-// fetches the section's RSS feed into _data/substack.json on every deploy and once a day; Susan
-// publishes on Substack and edits nothing here. The feed address is a site setting.
+// fetches the section's posts from the publication's archive API into _data/substack.json on every
+// deploy and once a day; Susan publishes on Substack and edits nothing here. The section address is
+// a site setting. (Substack's per-section RSS feeds answer 404 on this publication.)
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildWithData, loadYaml, repo } from "./jekyll.mjs";
-import { parseFeed, feedUrl, fetchSection } from "../scripts/fetch-substack.mjs";
+import { parseArchive, parseSectionUrl, archiveUrl, sectionUrl, fetchSection } from "../scripts/fetch-substack.mjs";
 
-const feed = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0"><channel>
-<title><![CDATA[Money, Culture &amp; Community - Experience Matters]]></title>
-<link>https://metaphase.substack.com/s/money-culture-and-community</link>
-<item>
-<title><![CDATA[Older post]]></title>
-<link>https://metaphase.substack.com/p/older-post</link>
-<pubDate>Tue, 01 Sep 2026 15:00:00 GMT</pubDate>
-<description><![CDATA[<p>First paragraph of the <b>older</b> post.</p>]]></description>
-</item>
-<item>
-<title><![CDATA[Gift &amp; gain]]></title>
-<link>https://metaphase.substack.com/p/gift-and-gain</link>
-<pubDate>Thu, 10 Sep 2026 15:00:00 GMT</pubDate>
-<description><![CDATA[<p>Why a gift economy pairs with business.</p>]]></description>
-<enclosure url="https://substackcdn.com/image/gift.jpg" length="0" type="image/jpeg"/>
-</item>
-</channel></rss>`;
+const section = "https://metaphase.substack.com/s/money-culture-community";
+const archive = [
+  { title: "Older post", canonical_url: "https://metaphase.substack.com/p/older-post", post_date: "2026-09-01T15:00:00.000Z", subtitle: "", description: "", truncated_body_text: "First paragraph of the older post.", cover_image: null, section_slug: "money-culture-community", section_name: "Money, Culture, Community", audience: "everyone" },
+  { title: "On the road", canonical_url: "https://metaphase.substack.com/p/on-the-road", post_date: "2026-09-05T15:00:00.000Z", subtitle: "Not in this section", cover_image: "https://substackcdn.com/image/road.jpg", section_slug: "notes-from-the-road", section_name: "Notes From The Road", audience: "everyone" },
+  { title: "Gift &amp; gain", canonical_url: "https://metaphase.substack.com/p/gift-and-gain", post_date: "2026-09-10T15:00:00.000Z", subtitle: "Why a gift economy pairs with business.", cover_image: "https://substackcdn.com/image/gift.jpg", section_slug: "money-culture-community", section_name: "Money, Culture, Community", audience: "everyone" },
+  { title: "No section", canonical_url: "https://metaphase.substack.com/p/no-section", post_date: "2026-09-12T15:00:00.000Z", subtitle: "", section_slug: null, section_name: null, audience: "everyone" },
+];
 
-test("the fetcher turns a section feed into newest-first posts with title, link, date, summary and picture", () => {
-  const section = parseFeed(feed);
-  assert.equal(section.url, "https://metaphase.substack.com/s/money-culture-and-community");
-  assert.deepEqual(section.items, [
+test("the fetcher keeps the section's posts, newest first, with title, link, date, summary and picture", () => {
+  const result = parseArchive(archive, section);
+  assert.equal(result.url, section);
+  assert.equal(result.title, "Money, Culture, Community");
+  assert.deepEqual(result.items, [
     { title: "Gift & gain", url: "https://metaphase.substack.com/p/gift-and-gain", date: "2026-09-10", summary: "Why a gift economy pairs with business.", image: "https://substackcdn.com/image/gift.jpg" },
     { title: "Older post", url: "https://metaphase.substack.com/p/older-post", date: "2026-09-01", summary: "First paragraph of the older post.", image: "" },
   ]);
+  // The publication address alone means every post.
+  assert.equal(parseArchive(archive, "https://metaphase.substack.com").items.length, 4);
 });
 
-test("the feed address is a site setting under the Substack publication, and a missing section leaves the list empty", async () => {
+test("the section address is a site setting under the Substack publication, and it names the archive API", async () => {
   const settings = loadYaml("_data/settings.yml");
-  assert.equal(feedUrl(), settings.substack_section_feed);
-  assert.ok(feedUrl().startsWith(settings.social.substack), "the section feed is not on Susan's Substack");
-  assert.match(feedUrl(), /\/feed$/);
-  const missing = await fetchSection("https://127.0.0.1:9/s/nothing/feed");
-  assert.deepEqual(missing.items, []);
+  assert.equal(sectionUrl(), settings.substack_section);
+  assert.ok(sectionUrl().startsWith(settings.social.substack), "the section is not on Susan's Substack");
+  assert.deepEqual(parseSectionUrl(sectionUrl()), { origin: "https://metaphase.substack.com", slug: "money-culture-community" });
+  assert.equal(archiveUrl(sectionUrl()), "https://metaphase.substack.com/api/v1/archive?sort=new&offset=0&limit=50");
+  assert.deepEqual((await fetchSection("https://127.0.0.1:9/s/nothing")).items, []);
   assert.deepEqual((await fetchSection("")).items, []);
+  assert.deepEqual((await fetchSection("not an address")).items, []);
 });
 
 test("the deploy fetches the section on every build and once a day, and the fetched file stays out of git", () => {
@@ -56,7 +50,7 @@ test("the deploy fetches the section on every build and once a day, and the fetc
 });
 
 test("the fetched posts show on Insights and the homepage, linking to Substack", () => {
-  const b = buildWithData((data) => writeFileSync(join(data, "substack.json"), JSON.stringify({ ...parseFeed(feed), fetched: "2026-09-24T12:00:00Z" })));
+  const b = buildWithData((data) => writeFileSync(join(data, "substack.json"), JSON.stringify({ ...parseArchive(archive, section), fetched: "2026-09-24T12:00:00Z" })));
   try {
     assert.equal(b.result.status, 0, `jekyll build failed\n${b.result.stderr}`);
     const titles = (html) => [...html.matchAll(/<h3><a href="(https:\/\/metaphase\.substack\.com\/p\/[^"]+)" target="_blank" rel="noopener">([^<]+)<\/a><\/h3>/g)].map((m) => m[2]);
@@ -65,7 +59,7 @@ test("the fetched posts show on Insights and the homepage, linking to Substack",
     assert.match(insights, /<time datetime="2026-09-10">September 10, 2026<\/time>/);
     assert.match(insights, /<img src="https:\/\/substackcdn\.com\/image\/gift\.jpg" alt="" loading="lazy">/);
     assert.match(insights, /Why a gift economy pairs with business\./);
-    assert.match(insights, /href="https:\/\/metaphase\.substack\.com\/s\/money-culture-and-community"[^>]*>All posts on Substack/);
+    assert.match(insights, /href="https:\/\/metaphase\.substack\.com\/s\/money-culture-community"[^>]*>All posts on Substack/);
     assert.doesNotMatch(insights, /The first tips are on their way/);
     assert.deepEqual(titles(b.page("index.html")), ["Gift &amp; gain", "Older post"]);
   } finally {
@@ -74,7 +68,7 @@ test("the fetched posts show on Insights and the homepage, linking to Substack",
 });
 
 test("with an empty fetch the site falls back to local posts or the waiting note", () => {
-  const b = buildWithData((data) => writeFileSync(join(data, "substack.json"), JSON.stringify({ url: "", items: [], note: "feed returned 404" })));
+  const b = buildWithData((data) => writeFileSync(join(data, "substack.json"), JSON.stringify({ url: "", items: [], note: "archive returned 404" })));
   try {
     assert.equal(b.result.status, 0, `jekyll build failed\n${b.result.stderr}`);
     assert.doesNotMatch(b.page("insights/index.html"), /Read on Substack/);

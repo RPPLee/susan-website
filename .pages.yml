@@ -452,9 +452,9 @@ content:
         label: Booking page
         description: The address of your Google Calendar booking page. "Request a time" buttons open it. Leave empty and they open the contact form instead.
         type: string
-      - name: substack_section_feed
-        label: Insights feed
-        description: The feed address of the Substack section shown on Insights, for example https://metaphase.substack.com/s/money-culture-and-community/feed. The site picks up new posts within a day.
+      - name: substack_section
+        label: Insights section
+        description: The address of the Substack section shown on Insights, for example https://metaphase.substack.com/s/money-culture-community. The site picks up new posts within a day.
         type: string
       - name: author
         label: Susan

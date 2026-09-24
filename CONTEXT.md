@@ -46,7 +46,7 @@ The web app Susan uses to change the site without code. Pages CMS.
 _Avoid_: CMS, admin
 
 **Insights page**:
-The site page that lists her Substack posts, read from the feed at build time.
+The site page that lists the posts of one Substack section (Money, Culture, Community), read from Substack's archive API at build time and once a day.
 _Avoid_: blog
 
 **Booking link**:
