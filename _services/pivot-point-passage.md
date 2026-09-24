@@ -15,11 +15,9 @@ image: /assets/social/share-pivot-point-passage.png
 
 ## What is Pivot Point Passage?
 
-Pivot Point Passage is a private and curated six-month listening and coaching program for an individual at a moment of transition. This work focuses on key life moments when the past no longer exists and the future is unclear. The process seeks personal clarity, resolution, and optimism for what is ahead.
+Pivot Point Passage is a listening and coaching program designed around a life-changing event marked by the past that no longer exists and the future that is unclear. This work catalyzes self-reflection and imagination to shape a new focus or direction. Over six months of structured tasks and conversations we journey through stages of discovery. This builds a foundation for a path forward guided by clarity, resolution, and wisdom.
 
-This engagement blends business management consulting, career and life coaching, spiritual and religious explorations, and simple time spent with a trusted friend hashing out ideas. The context of this work recognizes the larger world -- communities, friends, families and the client's personal interests. The understanding of interconnectedness frames the Pivot Point Passage perspective.
-
-Every working session is a time of deep listening, grounded presence and reciprocal dialog.
+This engagement blends career and life coaching, business management consulting, spiritual and religious explorations and simple time spent with a trusted friend hashing out ideas. The context of this work recognizes the larger world, communities, friends, families and the client's personal interests. The understanding of interconnectedness frames the Pivot Point Passage perspective. Every working session is a time of deep listening, nonjudgement, grounded presence and reciprocal dialog.
 
 ## What the Engagement Includes
 
@@ -37,7 +35,7 @@ Every working session is a time of deep listening, grounded presence and recipro
 
 **Monthly activity summary** -- review and looking forward.
 
-**Closing session** -- one comprehensive review and planning session in the final month.
+**Closing session** -- one comprehensive review and planning session in the last month.
 
 ## Is This For You?
 
