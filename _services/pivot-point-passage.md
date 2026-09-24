@@ -6,7 +6,7 @@ icon: fas fa-anchor
 duration: Six months -- ten hours per month
 price: Custom -- inquire for engagement pricing
 format: Private, one-to-one engagement
-order: 9
+order: 0
 group: individuals
 new: true
 summary: For individuals. A private, curated six-month listening and coaching program for one person at a moment of transition.

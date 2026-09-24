@@ -6,6 +6,8 @@
 {%- comment -%} One flat grid in `order`. Services with group `hidden` stay off the homepage;
 the other group ids only colour the card's top edge now (Lee, 2026-09-24). {%- endcomment -%}
 {% assign services = site.services | sort: "order" %}
+    <div class="services-carousel">
+    <button type="button" class="carousel-arrow carousel-arrow-prev" aria-label="Previous services"><i class="fas fa-chevron-left"></i></button>
     <div class="services-grid">
 {% for service in services %}
 {% if service.group == "hidden" %}{% continue %}{% endif %}
@@ -19,5 +21,27 @@ the other group ids only colour the card's top edge now (Lee, 2026-09-24). {%- e
       </article>
 {% endfor %}
     </div>
+    <button type="button" class="carousel-arrow carousel-arrow-next" aria-label="Next services"><i class="fas fa-chevron-right"></i></button>
+    </div>
   </div>
 </section>
+
+<script>
+  // The arrows scroll the row by one card; each arrow greys out at its end of the row.
+  (function () {
+    var row = document.querySelector('.services-grid');
+    var prev = document.querySelector('.carousel-arrow-prev');
+    var next = document.querySelector('.carousel-arrow-next');
+    if (!row || !prev || !next) return;
+    function step() { var card = row.querySelector('.service-card'); return card ? card.offsetWidth + 32 : 300; }
+    function update() {
+      prev.disabled = row.scrollLeft <= 1;
+      next.disabled = row.scrollLeft + row.clientWidth >= row.scrollWidth - 1;
+    }
+    prev.addEventListener('click', function () { row.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    next.addEventListener('click', function () { row.scrollBy({ left: step(), behavior: 'smooth' }); });
+    row.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+</script>

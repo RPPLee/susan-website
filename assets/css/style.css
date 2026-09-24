@@ -266,11 +266,63 @@ section {
   background: var(--bg-secondary);
 }
 
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 32px;
+/* The service cards are a horizontal carousel: one row that scrolls sideways and snaps to each
+   card, with arrows either side on a mouse and a swipe on a phone (Lee, 2026-09-24). */
+.services-carousel {
+  position: relative;
 }
+
+.services-grid {
+  display: flex;
+  gap: 32px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 8px 4px 24px;
+  scrollbar-width: none;
+}
+
+.services-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.services-grid > .service-card {
+  flex: 0 0 350px;
+  scroll-snap-align: start;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color, rgba(10, 45, 47, 0.12));
+  background: var(--bg-color);
+  color: var(--primary-color);
+  box-shadow: 0 8px 24px rgba(10, 45, 47, 0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  z-index: 2;
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.carousel-arrow:hover {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.carousel-arrow[disabled] {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.carousel-arrow-prev { left: -24px; }
+.carousel-arrow-next { right: -24px; }
 
 .service-card {
   background: var(--bg-color);
@@ -349,8 +401,29 @@ section {
   margin-bottom: 24px;
 }
 
+/* The whole card is clickable: the Learn more link stretches over the card (Lee, 2026-09-24). */
+.service-card {
+  position: relative;
+}
+
 .service-card-more {
   margin-top: auto;
+}
+
+.service-card-more::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.service-card:has(.service-card-more:focus-visible) {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 3px;
+}
+
+.service-card-content h4 a {
+  position: relative;
+  z-index: 1;
 }
 
 /* ===== About Preview Section ===== */
@@ -849,9 +922,12 @@ section {
     justify-content: center;
   }
 
-  .services-grid {
-    grid-template-columns: 1fr;
+  .services-grid > .service-card {
+    flex-basis: 85%;
   }
+
+  .carousel-arrow-prev { left: 4px; }
+  .carousel-arrow-next { right: 4px; }
 
   .about-preview-content {
     grid-template-columns: 1fr;
@@ -1380,8 +1456,8 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 40px;
-  padding: 32px 44px;
+  gap: 48px;
+  padding: 56px 64px;
   border-radius: 20px;
   color: #fff;
   background: linear-gradient(135deg, #0A2D2F 0%, var(--primary-dark) 100%);
@@ -1393,14 +1469,15 @@ section {
 }
 
 .call-card h2 {
-  font-size: 1.75rem;
+  font-size: 2.25rem;
   line-height: 1.2;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .call-card p {
   color: rgba(255, 255, 255, 0.85);
-  max-width: 620px;
+  font-size: 1.125rem;
+  max-width: 680px;
 }
 
 /* The words are one link to the page the call is about. */
@@ -1411,14 +1488,11 @@ section {
 
 .call-link h2 {
   color: #fff;
-  text-decoration: underline;
-  text-decoration-color: rgba(255, 255, 255, 0.35);
-  text-underline-offset: 6px;
-  transition: text-decoration-color 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .call-link:hover h2 {
-  text-decoration-color: var(--accent-color);
+  color: var(--accent-color);
 }
 
 .call-action {
@@ -1457,7 +1531,7 @@ section {
   }
 
   .call-card h2 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 }
 
@@ -1627,6 +1701,7 @@ h1, h2, h3,
   background: var(--bg-color);
 }
 
+/* The gold rule under a section heading, everywhere but Our Services (Lee, 2026-09-24). */
 .section-title::after {
   content: "";
   display: block;
@@ -1635,6 +1710,10 @@ h1, h2, h3,
   margin: 16px auto 0;
   border-radius: 2px;
   background: var(--accent-color);
+}
+
+.services .section-title::after {
+  display: none;
 }
 
 .service-card,
