@@ -302,21 +302,42 @@ content:
 
   - name: about
     label: About
-    description: Your bio on the About page. The specialties beside it and the company section below it stay as they are.
+    description: "The whole About page: the heading, your photo and bio, the specialties beside the bio, and the company section below it."
     type: file
     path: pages/about.md
     format: yaml-frontmatter
     fields:
       - name: title
-        label: Title
+        label: Title in the browser tab
         type: string
         required: true
+      - { name: heading, label: Heading at the top of the page, type: string }
+      - name: photo
+        label: Photo
+        type: image
+        options: { media: images }
       - name: body
         label: Bio
         type: rich-text
         options:
           format: markdown
           media: images
+      - { name: specialties_heading, label: Specialties heading, type: string }
+      - name: specialties
+        label: Specialties
+        description: Groups of tags beside the bio. Remove them all to hide the column.
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Group name, type: string }
+          - { name: tags, label: Tags, type: string, list: true }
+      - { name: company_heading, label: Company section heading, type: string }
+      - name: company_text
+        label: Company section text
+        description: About Metaphase Management. Paragraphs and bullet lists work.
+        type: rich-text
+        options: { format: markdown, media: false }
+      - { name: company_tagline, label: Closing line, description: 'For example "We love coaching. We are expert communicators. We have fun."', type: string }
 
   - name: testimonials
     label: Testimonials

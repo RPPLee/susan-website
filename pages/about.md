@@ -2,6 +2,66 @@
 layout: about
 title: About
 permalink: /about/
+heading: About Us
+photo: /assets/images/susan-profile-2.jpg
+specialties_heading: Specialties
+specialties:
+  - title: Strategy & Planning
+    tags:
+      - Strategic Planning
+      - Market Position
+      - Business Plans
+      - Scenario Planning
+      - Investment & Funding
+  - title: Relationships & Community
+    tags:
+      - Partnerships
+      - Community Development
+      - Teambuilding
+      - Facilitation
+      - Coaching
+  - title: Operations & Innovation
+    tags:
+      - Operations
+      - Brand Communications
+      - Crisis Management
+      - Circular Economy
+      - Gift Economy
+      - Social Impact
+company_heading: About Metaphase Management
+company_text: >-
+  Metaphase Management helps individuals, businesses and communities navigate the journey from
+  idea to meaningful impact. From past experience we recognize that highly competitive behaviors
+  and cultures may lead to burnout, alienation and general dissatisfaction. Our coaching and
+  planning aim to generate thriving from the perspectives of personal, business, community,
+  spiritual and environmental considerations. We coach individuals. We design leadership
+  programs, team building, business models and operations systems that incorporate
+  collaboration, interconnected roles and responsibilities, reciprocity and balance and financial
+  performance metrics. We do not forget we are stronger together than alone.
+
+
+  As background, we have guided motivated public institutions, global businesses, innovative
+  community leaders, ambitious start-up founders, and compassionate individuals to:
+
+
+  - Transform telecommunications into information technology, as the break-up of AT&T's monopoly
+  became the dot-com industry's competitive digital services.
+
+  - Reinvent community collaborations, weaving university, municipal and business strengths into
+  regional festivals and year-long community development initiatives.
+
+  - Open new business segments challenged with uncertainty and confusion, including women-led
+  services, cannabis dispensary licensing, Web3/community local currency.
+
+  - Introduce an industry-scale circular-economy model for environmental and social impact,
+  weaving regenerative agriculture for renewable energy, mining of toxic sites (soil and water)
+  with restorative practices to harvest Rare Earth Elements and precious metals, and blending
+  their now-clean waste streams into new construction materials to transform regions and
+  industries.
+
+  - Explore gift economy practices, a cultural exchange that pairs with business and economic
+  development to balance stress and opportunity.
+company_tagline: We love coaching. We are expert communicators. We have fun.
 ---
 
 ## Susan Mills, Founder & CEO

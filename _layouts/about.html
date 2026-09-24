@@ -1,8 +1,8 @@
 ---
 layout: default
 ---
-{%- comment -%} The About page around the bio Susan edits (op-057). The specialties and company sections
-stay here with Lee. {%- endcomment -%}
+{%- comment -%} The About page. Every word comes from pages/about.md: the bio is the body, the photo,
+specialties and company section are front matter, all edited in Pages CMS. {%- endcomment -%}
 
 <section class="page-content">
   <div class="container">
@@ -10,65 +10,42 @@ stay here with Lee. {%- endcomment -%}
 
     <div class="about-content">
       <div class="about-text">
-        <img src="{{ '/assets/images/susan-profile-2.jpg' | relative_url }}" alt="Susan Mills" class="about-photo">
+        {% if page.photo %}<img src="{{ page.photo | relative_url }}" alt="{{ site.data.settings.author.name }}" class="about-photo">{% endif %}
         {{ content }}
       </div>
 
+      {% if page.specialties and page.specialties.size > 0 %}
       <div class="about-skills">
-        <h3 style="font-size: 1.25rem; margin-bottom: 24px;">Specialties</h3>
-
+        <h3 style="font-size: 1.25rem; margin-bottom: 24px;">{{ page.specialties_heading | default: "Specialties" }}</h3>
+        {% for group in page.specialties %}
         <div style="margin-bottom: 24px;">
-          <h4 style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Strategy &amp; Planning</h4>
+          {% if group.title %}<h4 style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">{{ group.title }}</h4>{% endif %}
           <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-            <span class="skill-tag">Strategic Planning</span>
-            <span class="skill-tag">Market Position</span>
-            <span class="skill-tag">Business Plans</span>
-            <span class="skill-tag">Scenario Planning</span>
-            <span class="skill-tag">Investment &amp; Funding</span>
+            {% for tag in group.tags %}<span class="skill-tag">{{ tag }}</span>{% endfor %}
           </div>
         </div>
-
-        <div style="margin-bottom: 24px;">
-          <h4 style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Relationships &amp; Community</h4>
-          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-            <span class="skill-tag">Partnerships</span>
-            <span class="skill-tag">Community Development</span>
-            <span class="skill-tag">Teambuilding</span>
-            <span class="skill-tag">Facilitation</span>
-            <span class="skill-tag">Coaching</span>
-          </div>
-        </div>
-
-        <div style="margin-bottom: 24px;">
-          <h4 style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Operations &amp; Innovation</h4>
-          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-            <span class="skill-tag">Operations</span>
-            <span class="skill-tag">Brand Communications</span>
-            <span class="skill-tag">Crisis Management</span>
-            <span class="skill-tag">Circular Economy</span>
-            <span class="skill-tag">Gift Economy</span>
-            <span class="skill-tag">Social Impact</span>
-          </div>
-        </div>
+        {% endfor %}
       </div>
+      {% endif %}
     </div>
   </div>
 </section>
 
-<!-- Company Info Section -->
+<!-- Company section -->
+{% if page.company_heading or page.company_text %}
 <section style="padding: 60px 0; background: var(--bg-secondary);">
   <div class="container">
-    <div style="max-width: 700px; margin: 0 auto; text-align: center;">
-      <h2 class="section-title">About Metaphase Management</h2>
-      <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 16px;">
-        Metaphase Management helps businesses and communities navigate the journey from idea to meaningful impact. Our clients have changed the worlds they live in.
+    <div class="company-about" style="max-width: 700px; margin: 0 auto; text-align: center;">
+      {% if page.company_heading %}<h2 class="section-title">{{ page.company_heading }}</h2>{% endif %}
+      <div style="color: var(--text-light); font-size: 1.1rem; text-align: left;">
+        {{ page.company_text | markdownify }}
+      </div>
+      {% if page.company_tagline %}
+      <p style="font-size: 1.25rem; font-weight: 600; color: var(--primary-color); font-style: italic; margin-top: 32px;">
+        {{ page.company_tagline }}
       </p>
-      <p style="color: var(--text-light); margin-bottom: 32px;">
-        Founded in 2007 and based in Berkeley, California, we are a boutique strategic management consultancy serving motivated public institutions, global businesses, innovative community leaders, ambitious startup founders, and compassionate individuals.
-      </p>
-      <p style="font-size: 1.25rem; font-weight: 600; color: var(--primary-color); font-style: italic;">
-        We love coaching. We are expert communicators. We have fun.
-      </p>
+      {% endif %}
     </div>
   </div>
 </section>
+{% endif %}
