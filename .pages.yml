@@ -243,6 +243,10 @@ content:
         label: Format
         description: Who takes part and how, for example "One-on-one or small group".
         type: string
+      - name: checkout
+        label: Stripe payment link
+        description: Paste the Payment Link from Stripe (it starts with https://buy.stripe.com/). The page then shows a Pay button. Leave empty and it shows Get in Touch instead.
+        type: string
       - name: group
         label: Group
         description: Where the service sits on the homepage.
@@ -297,6 +301,7 @@ content:
           - { name: facts, label: Short facts, type: string, list: true }
           - { name: url, label: Link to the full program page, description: 'For example /services/tapestry/.', type: string }
           - { name: flyer, label: Link to the flyer, description: 'Optional, for example /assets/flyers/tapestry.pdf.', type: string }
+          - { name: checkout, label: Stripe payment link, description: 'Optional. Paste the Payment Link from Stripe (starts with https://buy.stripe.com/) and the card shows a Pay button.', type: string }
       - { name: closing_heading, label: Closing heading, type: string }
       - { name: closing_text, label: Closing paragraph, type: text }
 

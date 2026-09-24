@@ -5,6 +5,7 @@ tagline: Facilitated Groups for Shared Growth and Purpose
 icon: fas fa-circle-nodes
 duration: Ongoing meetings
 price: "$500 formation and planning"
+checkout: ""
 format: In person or online, up to 10 participants
 order: 4
 group: groups

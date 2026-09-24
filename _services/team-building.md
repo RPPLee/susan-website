@@ -5,6 +5,7 @@ tagline: Aligning Vision, Roles, and Decision-Making
 icon: fas fa-people-group
 duration: 3-6 month engagements
 price: "$500 initial planning"
+checkout: ""
 format: In person and/or virtual
 order: 5
 group: organizations

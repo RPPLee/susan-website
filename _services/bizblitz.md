@@ -5,6 +5,7 @@ tagline: 60-Minute Rapid-Fire Business Analysis
 icon: fas fa-bolt
 duration: 60 minutes
 price: Contact for pricing!
+checkout: ""
 format: One-on-one or small group
 order: 1
 group: organizations

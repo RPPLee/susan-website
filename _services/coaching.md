@@ -5,6 +5,7 @@ tagline: Experienced Guidance for Life and Business Transitions
 icon: fas fa-comments
 duration: 60-minute sessions
 price: "$250 initial session, $150/hour thereafter"
+checkout: ""
 format: In person, phone, or video
 order: 3
 group: individuals

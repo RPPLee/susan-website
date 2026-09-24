@@ -32,7 +32,8 @@ edits as fields in the editor. {%- endcomment -%}
         {% endif %}
         <div class="program-actions">
           {% if program.url %}<a href="{% include href.html url=program.url %}" class="btn btn-secondary">Full Program Details</a>{% endif %}
-          <a href="{{ '/contact/' | relative_url }}?program={{ program.title | url_encode }}" class="btn btn-primary">Ask About {{ program.title | escape }}</a>
+          {% if program.checkout and program.checkout != "" %}<a href="{{ program.checkout }}" target="_blank" rel="noopener" class="btn btn-primary pay-button"><i class="fas fa-credit-card"></i> Pay for {{ program.title | escape }}</a>
+          <a href="{{ '/contact/' | relative_url }}?program={{ program.title | url_encode }}" class="btn btn-secondary">Ask About {{ program.title | escape }}</a>{% else %}<a href="{{ '/contact/' | relative_url }}?program={{ program.title | url_encode }}" class="btn btn-primary">Ask About {{ program.title | escape }}</a>{% endif %}
         </div>
         {% if program.flyer %}
         <p class="program-download">

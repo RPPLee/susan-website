@@ -63,6 +63,17 @@ layout: default
         </a>
         {% endif %}
       </div>
+      {% elsif page.checkout and page.checkout != "" %}
+      <h3>Ready to get started?</h3>
+      <p>Pay securely through Stripe{% if page.price %} ({{ page.price }}){% endif %}, or send Susan a message first.</p>
+      <div class="cta-buttons">
+        <a href="{{ page.checkout }}" target="_blank" rel="noopener" class="btn btn-primary pay-button">
+          <i class="fas fa-credit-card"></i> Pay{% if page.price %} {{ page.price | split: "," | first | split: " or " | first }}{% endif %}
+        </a>
+        <a href="{{ '/contact/' | relative_url }}?program={{ page.title | url_encode }}" class="btn btn-secondary">
+          <i class="fas fa-paper-plane"></i> Ask a question
+        </a>
+      </div>
       {% else %}
       <h3>Ready to get started?</h3>
       <p>Send Susan a message and she will follow up to talk through fit, timing and next steps.</p>

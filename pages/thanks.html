@@ -10,7 +10,15 @@ sitemap: false
   <div class="container">
     <div class="thanks-page">
       <h1 class="page-title">Thank you</h1>
-      <p>Your message has been sent. We will write back to you soon.</p>
+      <p id="thanks-message">Your message has been sent. We will write back to you soon.</p>
+      <p id="thanks-paid" hidden>Your payment went through. Stripe emails you a receipt, and Susan will be in touch within two business days to set up your first session.</p>
+      <script>
+        // Stripe Payment Links send the buyer to /thanks/?paid=1 after a successful payment.
+        if (new URLSearchParams(location.search).get("paid")) {
+          document.getElementById("thanks-message").hidden = true;
+          document.getElementById("thanks-paid").hidden = false;
+        }
+      </script>
       <div class="cta-buttons">
         <a href="{{ '/' | relative_url }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to the homepage</a>
         <a href="{{ '/programs/' | relative_url }}" class="btn btn-secondary">See the programs</a>

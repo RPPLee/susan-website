@@ -5,6 +5,7 @@ tagline: Story-making that builds and strengthens community
 icon: fas fa-feather-pointed
 duration: Six months -- twice monthly, two hours each
 price: "$400/person (groups of five) or $300/person (groups of six to ten)"
+checkout: ""
 format: Cohort of up to 10, in person or online
 order: 8
 group: groups

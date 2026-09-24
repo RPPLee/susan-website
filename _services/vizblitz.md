@@ -5,6 +5,7 @@ tagline: 60-Minute Future Visioning Session
 icon: fas fa-eye
 duration: 60 minutes
 price: Contact for pricing
+checkout: ""
 format: One-on-one or small group
 order: 10
 group: individuals
