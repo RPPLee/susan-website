@@ -15,7 +15,7 @@ const entries = Object.fromEntries(config.content.map((entry) => [entry.label, e
 test("the sidebar lists every page with words on it, Site settings, Media and Banners", () => {
   assert.deepEqual(
     config.content.map((entry) => entry.label),
-    ["Home page", "Insights posts", "Insights page", "Services", "Programs", "BizBlitz and VizBlitz page", "Contact page", "Thank-you page", "About", "Testimonials", "Site settings"],
+    ["Home page", "Insights posts", "Insights page", "Services", "Services page", "BizBlitz and VizBlitz page", "Contact page", "Thank-you page", "About", "Testimonials", "Site settings"],
   );
   assert.deepEqual(config.media.map((m) => m.label), ["Media", "Banners"]);
 });
@@ -70,8 +70,8 @@ test("site settings expose fields that exist in the data file, and not the menu"
   for (const name of ["email", "phone", "location"]) assert.ok(group("author").includes(name), `author.${name} is not editable`);
 });
 
-test("the About, Programs and Insights pages expose front matter that exists", () => {
-  for (const label of ["About", "Programs", "Insights page"]) {
+test("the About, Services and Insights pages expose front matter that exists", () => {
+  for (const label of ["About", "Services page", "Insights page"]) {
     const entry = entries[label];
     assert.equal(entry.type, "file");
     assert.equal(entry.format, "yaml-frontmatter", `${label} must keep its front matter separate from its body`);
@@ -170,17 +170,15 @@ test("Insights posts are a collection Susan writes in the rich-text editor, with
   assert.equal(field("published").type, "boolean");
 });
 
-// Lee, 2026-09-18: Susan cannot edit HTML, so the Programs page is fields, and no entry opens as code.
+// Lee, 2026-09-18: Susan cannot edit HTML, so the page-shaped entries are fields, and no entry opens as code.
 test("nothing in the editor opens as HTML source", () => {
   const types = (fields) => fields.flatMap((f) => [f.type, ...types(f.fields || []), ...(f.blocks || []).flatMap((b) => types(b.fields || []))]);
   for (const entry of config.content) assert.ok(!types(entry.fields).includes("code"), `${entry.label} has a code field`);
   const layout = readFileSync(join(repo, "_layouts/programs.html"), "utf8");
-  const programs = entries.Programs.fields.find((f) => f.name === "programs");
-  for (const f of programs.fields) assert.ok(layout.includes(`program.${f.name}`), `the Programs layout never reads ${f.name}`);
   const blitz = entries["BizBlitz and VizBlitz page"].fields.find((f) => f.name === "programs");
   for (const f of blitz.fields) assert.ok(layout.includes(`program.${f.name}`), `the Programs layout never reads ${f.name}`);
-  for (const [label, file] of [["Contact page", "pages/contact.html"], ["Thank-you page", "pages/thanks.html"]]) {
+  for (const [label, file] of [["Contact page", "pages/contact.html"], ["Thank-you page", "pages/thanks.html"], ["Services page", "pages/services.html"]]) {
     const page = readFileSync(join(repo, file), "utf8");
-    for (const f of entries[label].fields) assert.ok(page.includes(`page.${f.name}`) || f.name === "title", `${file} never reads ${f.name}`);
+    for (const f of entries[label].fields) assert.ok(page.includes(`page.${f.name}`) || f.name === "title" || f.name === "description", `${file} never reads ${f.name}`); // title and description are read by the default layout
   }
 });

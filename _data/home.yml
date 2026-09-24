@@ -8,9 +8,6 @@ sections:
       - label: Explore Services
         url: /#services
         style: primary
-      - label: New Programs
-        url: /programs/
-        style: secondary
   - type: call
     eyebrow: Receive Your Free Hour
     heading: Conversation With An OG

@@ -50,7 +50,7 @@ content:
               - { name: text, label: Paragraph, type: text }
               - name: buttons
                 label: Buttons
-                description: Add, remove or reorder the buttons. A link inside the site starts with a slash, for example /programs/ or /#services.
+                description: Add, remove or reorder the buttons. A link inside the site starts with a slash, for example /services/ or /#services.
                 type: object
                 list: true
                 fields:
@@ -254,14 +254,9 @@ content:
         type: string
       - name: image
         label: Banner
-        description: Optional. A wide picture shown at the top of the page, also used when the page is shared.
+        description: Optional. A wide picture at the top of the page that carries the service's name, also used when the page is shared.
         type: image
         options: { media: banners }
-      - name: show_header
-        label: Show the name above the banner
-        description: Turn off when the banner already carries the name, as on Conversation With An OG.
-        type: boolean
-        default: true
       - name: booking
         label: Request a time button
         description: On, the page ends with a Request a time button instead of Get in Touch.
@@ -296,37 +291,20 @@ content:
           format: markdown
           media: images
 
-  - name: programs
-    label: Programs
-    description: The New Programs page. Edit the words at the top, each program, and the closing section. Add, remove or reorder programs.
+  - name: services_page
+    label: Services page
+    description: The /services/ page. The cards come from Services in the sidebar; edit the words above and below them here.
     type: file
-    path: pages/programs.html
+    path: pages/services.html
     format: yaml-frontmatter
     fields:
       - { name: title, label: Title in the browser tab, type: string, required: true }
       - { name: description, label: Description for search engines, type: text }
-      - { name: eyebrow, label: Small line above the headline, type: string }
-      - { name: heading, label: Headline, type: string }
-      - { name: intro, label: Paragraph under the headline, type: text }
-      - { name: button_label, label: Words on the top button, type: string }
-      - name: programs
-        label: Programs
-        type: object
-        list: true
-        fields:
-          - { name: title, label: Name, type: string, required: true }
-          - { name: kicker, label: Small line above the name, description: 'For example "For groups of 5–10".', type: string }
-          - { name: tagline, label: Tagline, type: string }
-          - name: text
-            label: Description
-            type: rich-text
-            options: { format: markdown, media: false }
-          - { name: facts, label: Short facts, type: string, list: true }
-          - { name: url, label: Link to the full program page, description: 'For example /services/tapestry/.', type: string }
-          - { name: flyer, label: Link to the flyer, description: 'Optional, for example /assets/flyers/tapestry.pdf.', type: string }
-          - { name: checkout, label: Stripe payment link, description: 'Optional. Paste the Payment Link from Stripe (starts with https://buy.stripe.com/) and the card shows a Pay button.', type: string }
+      - { name: heading, label: Heading, type: string }
+      - { name: intro, label: Line under the heading, type: text }
       - { name: closing_heading, label: Closing heading, type: string }
       - { name: closing_text, label: Closing paragraph, type: text }
+      - { name: closing_button, label: Words on the closing button, type: string }
 
   - name: blitz
     label: BizBlitz and VizBlitz page
@@ -355,6 +333,7 @@ content:
             options: { format: markdown, media: false }
           - { name: facts, label: Short facts, type: string, list: true }
           - { name: url, label: Link to the full page, description: 'For example /services/bizblitz/.', type: string }
+          - { name: checkout, label: Stripe payment link, description: 'Optional. Paste the Payment Link from Stripe (starts with https://buy.stripe.com/) and the card shows a Pay button.', type: string }
       - { name: closing_heading, label: Closing heading, type: string }
       - { name: closing_text, label: Closing paragraph, type: text }
 

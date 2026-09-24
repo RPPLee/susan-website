@@ -49,13 +49,13 @@ test("pages carry a share image for link previews", () => {
     assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
     const page = (p) => readFileSync(join(destination, p), "utf8");
     const og = (p) => (page(p).match(/<meta property="og:image" content="([^"]+)"/) || [])[1];
-    assert.equal(og("programs/index.html"), "https://metaphasemgt.com/assets/social/share-programs.png");
     assert.equal(og("services/tapestry/index.html"), "https://metaphasemgt.com/assets/social/share-tapestry.png");
     assert.equal(og("services/pivot-point-passage/index.html"), "https://metaphasemgt.com/assets/social/share-pivot-point-passage.png");
     assert.equal(og("services/conversation-with-an-og/index.html"), "https://metaphasemgt.com/assets/social/share-conversation-with-an-og.png");
     assert.equal(og("blitz/index.html"), "https://metaphasemgt.com/assets/social/share-blitz.png");
     assert.equal(og("index.html"), "https://metaphasemgt.com/assets/social/share-default.png");
     assert.equal(og("about/index.html"), "https://metaphasemgt.com/assets/social/share-default.png");
+    assert.equal(og("services/index.html"), "https://metaphasemgt.com/assets/social/share-default.png");
   } finally {
     rmSync(destination, { recursive: true, force: true });
   }
@@ -69,7 +69,7 @@ test("the old Turning Point Tenders address forwards to Pivot Point Passage", ()
     assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
     const page = (p) => readFileSync(join(destination, p), "utf8");
     assert.match(page("services/turning-point-tenders/index.html"), /<meta http-equiv="refresh" content="0; ?url=\/services\/pivot-point-passage\/">/);
-    for (const p of ["services/pivot-point-passage/index.html", "programs/index.html", "index.html"]) {
+    for (const p of ["services/pivot-point-passage/index.html", "services/index.html", "index.html"]) {
       assert.doesNotMatch(page(p), /Turning Point Tenders/, `${p} still says Turning Point Tenders`);
     }
   } finally {
@@ -85,11 +85,11 @@ test("register buttons go to the contact form and /register/ redirects there", (
     assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
     const page = (p) => readFileSync(join(destination, p), "utf8");
 
-    for (const p of ["index.html", "programs/index.html", "services/tapestry/index.html", "services/coaching/index.html"]) {
+    for (const p of ["index.html", "services/index.html", "services/tapestry/index.html", "services/coaching/index.html"]) {
       assert.doesNotMatch(page(p), /href="[^"]*\/register\//, `${p} still links to /register/`);
       assert.match(page(p), /href="[^"]*\/contact\/[^"]*"/, `${p} has no link to the contact form`);
     }
-    assert.match(page("programs/index.html"), /href="\/contact\/\?program=Tapestry"/);
+    assert.match(page("services/tapestry/index.html"), /href="\/contact\/\?program=Tapestry"/);
 
     const redirect = page("register/index.html");
     assert.match(redirect, /<meta http-equiv="refresh" content="0; ?url=\/contact\/">/);
@@ -136,6 +136,39 @@ test("the homepage shows the visible services as one grid of cards from the coll
     rmSync(destination, { recursive: true, force: true });
   }
 });
+
+// Lee, 2026-09-24: one Services entry in the menu, a /services/ page with every card, no New
+// Programs button or page (the old address forwards), and no icon or tagline above a service.
+test("Services is a page with every card, /programs/ forwards to it, and service pages start with the banner or a plain title", () => {
+  const { destination, result } = buildSite();
+  try {
+    assert.equal(result.status, 0, `jekyll build failed (exit ${result.status})\n${result.stderr}`);
+    const page = (p) => readFileSync(join(destination, p), "utf8");
+    const menu = loadYaml("_data/settings.yml").menu;
+    assert.deepEqual(menu.filter((m) => /services|programs/i.test(m.title)).map((m) => [m.title, m.url]), [["Services", "/services/"]]);
+    assert.doesNotMatch(page("index.html"), /New Programs|href="\/programs\/"/);
+
+    const services = readdirSync(join(repo, "_services")).map((file) => frontMatter(join("_services", file)));
+    const visible = services.filter((s) => s.group !== "hidden").sort((a, b) => a.order - b.order).map((s) => escapeHtml(s.title));
+    const titles = [...page("services/index.html").matchAll(/<h4><a href="\/services\/[^"]+\/">([^<]+)<\/a><\/h4>/g)].map((m) => m[1]);
+    assert.deepEqual(titles, visible);
+    assert.doesNotMatch(page("services/index.html"), /carousel-arrow/);
+    assert.match(page("programs/index.html"), /<meta http-equiv="refresh" content="0; ?url=\/services\/">/);
+
+    for (const service of services) {
+      const html = page(`services/${slugOf(service)}/index.html`);
+      assert.doesNotMatch(html, /service-header|service-icon-large|service-tagline/, `${service.title} still has the icon or tagline header`);
+      if (service.image) assert.match(html, /<h1 class="visually-hidden">/, `${service.title} has a banner but a visible title`);
+      else assert.match(html, /<h1 class="service-title">/, `${service.title} has no banner and no title`);
+    }
+  } finally {
+    rmSync(destination, { recursive: true, force: true });
+  }
+});
+
+function slugOf(service) {
+  return readdirSync(join(repo, "_services")).find((file) => frontMatter(join("_services", file)).title === service.title).replace(/\.md$/, "");
+}
 
 function entriesOrderField() {
   const services = loadYaml(".pages.yml").content.find((entry) => entry.name === "services");

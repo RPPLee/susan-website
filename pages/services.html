@@ -1,0 +1,30 @@
+---
+layout: default
+title: Services
+permalink: /services/
+description: Coaching, peer circles, team building, strategic planning and six-month programs from Metaphase Management Associates.
+heading: Services
+intro: Every engagement starts with a conversation. Read about each service, then get in touch and we will talk through fit, timing and next steps.
+closing_heading: Not sure which fits?
+closing_text: Tell us where you are and what you are weighing. We will help you decide, with no obligation.
+closing_button: Get in Touch
+---
+{%- comment -%} The Services page (Lee, 2026-09-24): every service as a card, the same cards as the
+homepage, in a grid. It replaced the New Programs page; /programs/ forwards here. The words at the
+top and bottom are front matter Susan edits in Pages CMS. {%- endcomment -%}
+<section class="page-content services-page">
+  <div class="container">
+    <h1 class="page-title">{{ page.heading | default: page.title | escape }}</h1>
+    {% if page.intro %}<p class="section-subtitle">{{ page.intro | escape }}</p>{% endif %}
+    <div class="services-grid">
+{% include service-cards.html %}
+    </div>
+    {% if page.closing_heading or page.closing_text %}
+    <div class="services-closing">
+      {% if page.closing_heading %}<h2>{{ page.closing_heading | escape }}</h2>{% endif %}
+      {% if page.closing_text %}<p>{{ page.closing_text | escape }}</p>{% endif %}
+      <a href="{{ '/contact/' | relative_url }}" class="btn btn-primary"><i class="fas fa-paper-plane"></i> {{ page.closing_button | default: "Get in Touch" | escape }}</a>
+    </div>
+    {% endif %}
+  </div>
+</section>

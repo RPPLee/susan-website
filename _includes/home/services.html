@@ -3,23 +3,10 @@
     <h2 class="section-title">{{ include.block.heading | default: "Our Services" | escape }}</h2>
     {% if include.block.text %}<p class="section-subtitle">{{ include.block.text | escape }}</p>{% endif %}
 
-{%- comment -%} One flat grid in `order`. Services with group `hidden` stay off the homepage;
-the other group ids only colour the card's top edge now (Lee, 2026-09-24). {%- endcomment -%}
-{% assign services = site.services | sort: "order" %}
     <div class="services-carousel">
     <button type="button" class="carousel-arrow carousel-arrow-prev" aria-label="Previous services"><i class="fas fa-chevron-left"></i></button>
     <div class="services-grid">
-{% for service in services %}
-{% if service.group == "hidden" %}{% continue %}{% endif %}
-      <article class="service-card service-card-{{ service.group }}">
-        <div class="service-card-content">
-          <h4><a href="{{ service.url | relative_url }}">{{ service.title | escape }}</a></h4>
-          {% if service.tagline %}<p class="service-card-tagline">{{ service.tagline | escape }}</p>{% endif %}
-          {% if service.summary %}<p class="service-card-summary">{{ service.summary | escape }}</p>{% endif %}
-          <a href="{{ service.url | relative_url }}" class="btn btn-secondary service-card-more" aria-label="Learn more about {{ service.title | escape }}">Learn more</a>
-        </div>
-      </article>
-{% endfor %}
+{% include service-cards.html %}
     </div>
     <button type="button" class="carousel-arrow carousel-arrow-next" aria-label="Next services"><i class="fas fa-chevron-right"></i></button>
     </div>

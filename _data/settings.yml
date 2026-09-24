@@ -29,10 +29,8 @@ substack_section_feed: "https://metaphase.substack.com/s/money-culture-and-commu
 
 # Navigation Menu
 menu:
-  - title: Programs
-    url: /programs/
   - title: Services
-    url: /#services
+    url: /services/
   - title: Insights
     url: /insights/
   - title: About

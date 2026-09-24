@@ -4,25 +4,20 @@ layout: default
 
 <section class="service-detail">
   <div class="container">
-    <a href="{{ '/#services' | relative_url }}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Services</a>
+    <a href="{{ '/services/' | relative_url }}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Services</a>
 
-    {% if page.image and page.show_header == false %}
-    <h1 class="visually-hidden">{{ page.title }}</h1>
+    {%- comment -%} No icon or tagline above the page (Lee, 2026-09-24). Every page shows a banner:
+    its own from the front matter, or the site's share image from the _config.yml default. An own
+    banner carries the service's name, so the heading is for screen readers only; with the default
+    banner the page shows a plain title. {%- endcomment -%}
+    {% if page.image == "/assets/social/share-default.png" %}
+    <h1 class="service-title">{{ page.title }}</h1>
     {% else %}
-    <div class="service-header">
-      <div class="service-icon-large">
-        <i class="{{ page.icon }}"></i>
-      </div>
-      <h1>{{ page.title }}</h1>
-      <p class="service-tagline">{{ page.tagline }}</p>
-    </div>
+    <h1 class="visually-hidden">{{ page.title }}</h1>
     {% endif %}
-
-    {% if page.image %}
     <div class="service-image">
       <img src="{{ page.image | relative_url }}" alt="{{ page.title }}">
     </div>
-    {% endif %}
 
     {% if page.duration or page.price or page.format %}
     <div class="service-meta">

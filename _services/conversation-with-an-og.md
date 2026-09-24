@@ -6,7 +6,6 @@ icon: fas fa-comment-dots
 order: 11
 group: hidden
 booking: true
-show_header: false
 cta_heading: Request a time
 cta_text: "Send Susan a message and she will reply with times."
 cta_button: Request a time

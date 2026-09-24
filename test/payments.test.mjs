@@ -8,30 +8,31 @@ import { loadYaml, buildCopy } from "./jekyll.mjs";
 
 const link = "https://buy.stripe.com/test_abc123";
 
-test("the editor offers the Stripe link on services and programs", () => {
+// The New Programs page went on 2026-09-24; the blitz page keeps the same card layout and field.
+test("the editor offers the Stripe link on services and the blitz sessions", () => {
   const config = loadYaml(".pages.yml");
   const services = config.content.find((entry) => entry.name === "services");
   assert.ok(services.fields.some((field) => field.name === "checkout"));
-  const programs = config.content.find((entry) => entry.name === "programs");
-  const cards = programs.fields.find((field) => field.name === "programs");
+  const blitz = config.content.find((entry) => entry.name === "blitz");
+  const cards = blitz.fields.find((field) => field.name === "programs");
   assert.ok(cards.fields.some((field) => field.name === "checkout"));
 });
 
-test("a checkout link turns the service and program buttons into Pay", () => {
+test("a checkout link turns the service and blitz buttons into Pay", () => {
   const b = buildCopy((source) => {
     const service = join(source, "_services/coaching.md");
     writeFileSync(service, readFileSync(service, "utf8").replace(/^checkout: ""$/m, `checkout: ${link}`));
-    const programs = join(source, "pages/programs.html");
-    writeFileSync(programs, readFileSync(programs, "utf8").replace("url: /services/tapestry/", `url: /services/tapestry/\n    checkout: ${link}`));
+    const blitz = join(source, "pages/blitz.html");
+    writeFileSync(blitz, readFileSync(blitz, "utf8").replace("url: /services/bizblitz/", `url: /services/bizblitz/\n    checkout: ${link}`));
   });
   try {
     assert.equal(b.result.status, 0, `jekyll build failed\n${b.result.stderr}`);
     const coaching = b.page("services/coaching/index.html");
     assert.match(coaching, new RegExp(`href="${link}"[^>]*class="btn btn-primary pay-button"`));
     assert.match(coaching, /Pay \$250 initial session/);
-    const programs = b.page("programs/index.html");
-    assert.match(programs, /Pay for Tapestry/);
-    assert.match(programs, /Ask About Pivot Point Passage/);
+    const blitz = b.page("blitz/index.html");
+    assert.match(blitz, /Pay for BizBlitz/);
+    assert.match(blitz, /Ask About VizBlitz/);
   } finally {
     b.cleanup();
   }
@@ -43,7 +44,7 @@ test("without a link the pages show Get in Touch and no Pay button", () => {
     assert.equal(b.result.status, 0, `jekyll build failed\n${b.result.stderr}`);
     assert.doesNotMatch(b.page("services/coaching/index.html"), /pay-button/);
     assert.match(b.page("services/coaching/index.html"), /Get in Touch/);
-    assert.doesNotMatch(b.page("programs/index.html"), /pay-button/);
+    assert.doesNotMatch(b.page("blitz/index.html"), /pay-button/);
     assert.match(b.page("thanks/index.html"), /paid=1/);
   } finally {
     b.cleanup();

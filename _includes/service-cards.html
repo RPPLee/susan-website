@@ -1,0 +1,14 @@
+{%- comment -%} The service cards, in `order`, one per service whose group is not `hidden`.
+Used by the homepage carousel (_includes/home/services.html) and the Services page. {%- endcomment -%}
+{% assign services = site.services | sort: "order" %}
+{% for service in services %}
+{% if service.group == "hidden" %}{% continue %}{% endif %}
+      <article class="service-card service-card-{{ service.group }}">
+        <div class="service-card-content">
+          <h4><a href="{{ service.url | relative_url }}">{{ service.title | escape }}</a></h4>
+          {% if service.tagline %}<p class="service-card-tagline">{{ service.tagline | escape }}</p>{% endif %}
+          {% if service.summary %}<p class="service-card-summary">{{ service.summary | escape }}</p>{% endif %}
+          <a href="{{ service.url | relative_url }}" class="btn btn-secondary service-card-more" aria-label="Learn more about {{ service.title | escape }}">Learn more</a>
+        </div>
+      </article>
+{% endfor %}
