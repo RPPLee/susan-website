@@ -383,7 +383,7 @@ content:
 
   - name: about
     label: About
-    description: "The whole About page: the heading, your photo and bio, the specialties beside the bio, and the company section below it."
+    description: "The whole About page: the heading, the company section with the specialties beside it, and your photo and bio below."
     type: file
     path: pages/about.md
     format: yaml-frontmatter
