@@ -2,12 +2,15 @@
 // fetches the section's posts from the publication's archive API into _data/substack.json on every
 // deploy and once a day; Susan publishes on Substack and edits nothing here. The section address is
 // a site setting. (Substack's per-section RSS feeds answer 404 on this publication.)
+// Substack answers 403 to GitHub's runners (2026-09-25), so the fetched file is committed and a
+// failed fetch keeps it.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { buildWithData, loadYaml, repo } from "./jekyll.mjs";
-import { parseArchive, parseSectionUrl, archiveUrl, sectionUrl, fetchSection } from "../scripts/fetch-substack.mjs";
+import { parseArchive, parseSectionUrl, archiveUrl, sectionUrl, fetchSection, save } from "../scripts/fetch-substack.mjs";
 
 const section = "https://metaphase.substack.com/s/money-culture-community";
 const archive = [
@@ -40,12 +43,12 @@ test("the section address is a site setting under the Substack publication, and 
   assert.deepEqual((await fetchSection("not an address")).items, []);
 });
 
-test("the deploy fetches the section on every build and once a day, and the fetched file stays out of git", () => {
+test("the deploy fetches the section on every build and once a day, and the fetched file is committed", () => {
   const workflow = readFileSync(join(repo, ".github/workflows/jekyll.yml"), "utf8");
   assert.match(workflow, /schedule:\s*\n\s*- cron:/);
   assert.match(workflow, /run: node scripts\/fetch-substack\.mjs/);
   assert.ok(workflow.indexOf("fetch-substack") < workflow.indexOf("jekyll-build-pages"), "the fetch runs after the build");
-  assert.match(readFileSync(join(repo, ".gitignore"), "utf8"), /^_data\/substack\.json$/m);
+  assert.doesNotMatch(readFileSync(join(repo, ".gitignore"), "utf8"), /^_data\/substack\.json$/m);
   assert.match(readFileSync(join(repo, "_config.yml"), "utf8"), /^\s+- scripts$/m);
 });
 
@@ -74,5 +77,24 @@ test("with an empty fetch the site falls back to local posts or the waiting note
     assert.doesNotMatch(b.page("insights/index.html"), /Read on Substack/);
   } finally {
     b.cleanup();
+  }
+});
+
+test("a fetch Substack refuses keeps the posts already fetched for that section", () => {
+  const dir = mkdtempSync(join(tmpdir(), "substack-save-"));
+  const path = join(dir, "substack.json");
+  try {
+    const good = parseArchive(archive, section);
+    save(good, path);
+    const refused = { url: section, items: [], note: "archive returned 403", failed: true };
+    assert.deepEqual(save(refused, path).items, good.items);
+    assert.deepEqual(JSON.parse(readFileSync(path, "utf8")).items, good.items);
+    // A different section, or a fetch that worked and found nothing, replaces the list.
+    assert.deepEqual(save({ ...refused, url: "https://metaphase.substack.com/s/other" }, path).items, []);
+    save(good, path);
+    assert.deepEqual(save({ url: section, items: [] }, path).items, []);
+    assert.equal(JSON.parse(readFileSync(path, "utf8")).failed, undefined);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
 });

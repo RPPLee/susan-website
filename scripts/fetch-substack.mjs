@@ -1,8 +1,10 @@
 // Fetches the Substack section named in _data/settings.yml (substack_section) and writes the newest
 // posts to _data/substack.json, which Insights and the homepage read. The deploy workflow runs this
-// on every build and once a day, so a post Susan publishes in that section reaches the site within
-// a day with nothing to edit here. Any failure writes an empty list and exits 0: the site must
-// still build when the section does not exist yet. No npm dependencies.
+// on every build and once a day. The script always exits 0 so the site still builds.
+//
+// Substack answers 403 to GitHub's runners, so the build usually cannot reach it. The fetched file
+// is committed, and a failed fetch keeps it rather than writing an empty list. Run this script
+// where Substack answers (a laptop) and commit the file to bring in new posts. No npm dependencies.
 //
 // Substack's per-section RSS feeds (/s/<slug>/feed) answer 404 on this publication, so the posts
 // come from the publication's archive API instead, which labels every post with its section slug.
@@ -71,16 +73,30 @@ export async function fetchSection(url) {
   if (!api) return { url, items: [], note: "substack_section is not an address" };
   try {
     const response = await fetch(api, { headers: { "user-agent": "metaphasemgt.com build", accept: "application/json" }, signal: AbortSignal.timeout(20000) });
-    if (!response.ok) return { url, items: [], note: `archive returned ${response.status}` };
+    if (!response.ok) return { url, items: [], note: `archive returned ${response.status}`, failed: true };
     return { ...parseArchive(await response.json(), url), api };
   } catch (error) {
-    return { url, items: [], note: `archive failed: ${error.message}` };
+    return { url, items: [], note: `archive failed: ${error.message}`, failed: true };
   }
 }
 
+// Writes the result, unless Substack could not be reached and the file already holds posts for the
+// same section: those stay until a fetch succeeds. Returns what the file now holds.
+export function save(result, path = output) {
+  if (result.failed) {
+    try {
+      const kept = JSON.parse(readFileSync(path, "utf8"));
+      if (kept.url === result.url && kept.items?.length) return { ...kept, kept: result.note };
+    } catch {}
+  }
+  const { failed, ...fresh } = result;
+  fresh.fetched = new Date().toISOString();
+  writeFileSync(path, JSON.stringify(fresh, null, 2) + "\n");
+  return fresh;
+}
+
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  const result = await fetchSection(sectionUrl());
-  result.fetched = new Date().toISOString();
-  writeFileSync(output, JSON.stringify(result, null, 2) + "\n");
-  console.log(`${result.items.length} Substack posts${result.note ? ` (${result.note})` : ""} -> _data/substack.json`);
+  const result = save(await fetchSection(sectionUrl()));
+  const note = result.kept ? ` (${result.kept}; kept the list fetched ${result.fetched})` : result.note ? ` (${result.note})` : "";
+  console.log(`${result.items.length} Substack posts${note} -> _data/substack.json`);
 }

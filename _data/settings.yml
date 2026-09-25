@@ -23,8 +23,9 @@ social:
 booking_url: ""
 
 # The Substack section shown on Insights and the homepage: its address, for example
-# https://metaphase.substack.com/s/money-culture-community. A scheduled build fetches its posts
-# into _data/substack.json (scripts/fetch-substack.mjs); empty means Insights shows local posts only.
+# https://metaphase.substack.com/s/money-culture-community. scripts/fetch-substack.mjs fetches its
+# posts into _data/substack.json, which is committed because Substack blocks GitHub's build servers;
+# empty means Insights shows local posts only.
 substack_section: "https://metaphase.substack.com/s/money-culture-community"
 
 # Navigation Menu

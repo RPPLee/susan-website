@@ -1,0 +1,15 @@
+{
+  "title": "Money, Culture, Community",
+  "url": "https://metaphase.substack.com/s/money-culture-community",
+  "items": [
+    {
+      "title": "GIFTING and the GIFT ECONOMY",
+      "url": "https://metaphase.substack.com/p/gifting-and-the-gift-economy",
+      "date": "2026-09-25",
+      "summary": "A cultural and social approach to money and wealth",
+      "image": "https://substack-video.s3.amazonaws.com/video_upload/post/217287434/a6c49524-dc4e-4c5e-9769-ab80ede64eb7/transcoded-00001.png"
+    }
+  ],
+  "api": "https://metaphase.substack.com/api/v1/archive?sort=new&offset=0&limit=50",
+  "fetched": "2026-09-25T14:52:46.546Z"
+}
