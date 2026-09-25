@@ -17,15 +17,6 @@ sections:
     more_url: /services/conversation-with-an-og/
   - type: services
     heading: Our Services
-  - type: posts
-    eyebrow: Tips
-    heading: Finding insight
-    text: These tools, exercises and suggestions are aids that help make sense of a
-      moment.  Their use can reveal perspectives beyond being stuck in the
-      polarity of either-or choices into a recognition of underlying shared
-      interests and potential solutions
-    count: 3
-    button_label: Tap Into Insights
   - type: testimonials
     heading: What Clients Say
   - type: about

@@ -3,7 +3,7 @@
 // newest. The posts here are written into a private copy of the source (buildCopy).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildCopy } from "./jekyll.mjs";
 
@@ -26,6 +26,8 @@ test("a post Susan writes gets a page, a card on Insights and a place on the hom
     for (const file of readdirSync(join(source, "_posts"))) rmSync(join(source, "_posts", file));
     // Substack posts take the place of local ones, so the fetched section is emptied too.
     writeFileSync(join(source, "_data/substack.json"), JSON.stringify({ items: [] }));
+    // The homepage has no posts block since 2026-09-25; Susan can add one back in the editor.
+    appendFileSync(join(source, "_data/home.yml"), "\n  - type: posts\n");
     writeFileSync(join(source, "_posts/2026-09-01-older-tip.md"), post({ title: "Older tip" }));
     writeFileSync(join(source, "_posts/2026-09-10-newer-tip.md"), post({ title: "Newer tip", image: "/assets/images/tip.jpg" }));
     writeFileSync(join(source, "_posts/2026-09-12-a-draft.md"), post({ title: "A draft", published: false }));

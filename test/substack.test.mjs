@@ -6,7 +6,7 @@
 // failed fetch keeps it.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { buildWithData, loadYaml, repo } from "./jekyll.mjs";
@@ -53,7 +53,10 @@ test("the deploy fetches the section on every build and once a day, and the fetc
 });
 
 test("the fetched posts show on Insights and the homepage, linking to Substack", () => {
-  const b = buildWithData((data) => writeFileSync(join(data, "substack.json"), JSON.stringify({ ...parseArchive(archive, section), fetched: "2026-09-24T12:00:00Z" })));
+  const b = buildWithData((data) => {
+    writeFileSync(join(data, "substack.json"), JSON.stringify({ ...parseArchive(archive, section), fetched: "2026-09-24T12:00:00Z" }));
+    appendFileSync(join(data, "home.yml"), "\n  - type: posts\n"); // the live homepage has none
+  });
   try {
     assert.equal(b.result.status, 0, `jekyll build failed\n${b.result.stderr}`);
     const titles = (html) => [...html.matchAll(/<h3><a href="(https:\/\/metaphase\.substack\.com\/p\/[^"]+)" target="_blank" rel="noopener">([^<]+)<\/a><\/h3>/g)].map((m) => m[2]);
