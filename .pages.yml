@@ -475,6 +475,14 @@ content:
           - name: location
             label: Location
             type: string
+          - name: address
+            label: Mailing address, line 1
+            description: Shown on the digital business card at /card/ and saved into the contact. For example PO Box 8480.
+            type: string
+          - name: address_line2
+            label: Mailing address, line 2
+            description: City, state and ZIP, for example Berkeley, CA 94707.
+            type: string
       - name: social
         label: Links
         type: object

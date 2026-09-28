@@ -1,0 +1,50 @@
+---
+layout: default
+title: Susan Mills
+permalink: /card/
+image: /assets/social/share-card.png
+description: Susan Mills, Founder of Metaphase Management Associates. Save the contact, call, email, or connect on LinkedIn.
+heading: Susan Mills
+intro: Helping clients navigate the journey from idea to meaningful impact.
+save_label: Save contact
+---
+{%- assign a = site.data.settings.author -%}
+{%- assign s = site.data.settings.social -%}
+{%- assign tel = a.phone | remove: '-' | remove: ' ' | remove: '(' | remove: ')' | remove: '.' -%}
+
+<section class="page-content">
+  <div class="container">
+    <div class="biz-card">
+      <img class="biz-card-logo" src="{{ '/assets/images/logo.svg' | relative_url }}" alt="{{ site.data.settings.title }}">
+      <h1 class="page-title">{{ page.heading | default: a.name | escape }}</h1>
+      <p class="biz-card-title">{{ a.title | escape }}, {{ site.data.settings.title | escape }}</p>
+      <p class="biz-card-intro">{{ page.intro | escape }}</p>
+
+      <a class="btn btn-primary biz-card-save" href="{{ '/assets/susan-mills.vcf' | relative_url }}" download="susan-mills.vcf">
+        <i class="fas fa-address-card"></i> {{ page.save_label | default: "Save contact" | escape }}
+      </a>
+
+      <ul class="biz-card-lines">
+        <li><i class="fas fa-phone"></i> <a href="tel:{{ tel }}">{{ a.phone }}</a></li>
+        <li><i class="fas fa-envelope"></i> <a href="mailto:{{ a.email }}">{{ a.email }}</a></li>
+        <li><i class="fas fa-globe"></i> <a href="{{ '/' | absolute_url }}">metaphasemgt.com</a></li>
+        {% if a.address %}<li><i class="fas fa-map-marker-alt"></i> <span>{{ a.address | escape }}{% if a.address_line2 %}, {{ a.address_line2 | escape }}{% endif %}</span></li>{% endif %}
+      </ul>
+
+      <div class="contact-links biz-card-links">
+        {% if s.linkedin %}
+        <a href="{{ s.linkedin }}" target="_blank" rel="noopener" class="contact-link"><i class="fab fa-linkedin"></i><span>LinkedIn</span></a>
+        {% endif %}
+        {% if s.substack %}
+        <a href="{{ s.substack }}" target="_blank" rel="noopener" class="contact-link">{% include substack-icon.html %}<span>Substack</span></a>
+        {% endif %}
+        <a href="{{ '/services/' | relative_url }}" class="contact-link"><i class="fas fa-compass"></i><span>Services</span></a>
+      </div>
+
+      <figure class="biz-card-qr">
+        <img src="{{ '/assets/images/card-qr.png' | relative_url }}" alt="QR code for {{ page.url | absolute_url }}" width="180" height="180">
+        <figcaption>Scan to open this card</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>

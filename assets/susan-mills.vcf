@@ -1,0 +1,30 @@
+---
+# Susan's contact card. Phones open it straight into Contacts. Every line comes from
+# Site settings, so the editor keeps it current; the photo is the logomark.
+permalink: /assets/susan-mills.vcf
+---
+{%- assign a = site.data.settings.author -%}
+{%- assign s = site.data.settings.social -%}
+{%- assign names = a.name | split: " " -%}
+{%- assign first = names | first -%}
+{%- assign last = names | last -%}
+BEGIN:VCARD
+VERSION:3.0
+N:{{ last }};{{ first }};;;
+FN:{{ a.name }}
+ORG:{{ site.data.settings.title }}
+TITLE:{{ a.title }}
+TEL;TYPE=WORK,VOICE:{{ a.phone }}
+EMAIL;TYPE=WORK:{{ a.email }}
+ADR;TYPE=WORK:;;{{ a.address }};{{ a.address_line2 | split: "," | first }};{{ a.address_line2 | split: ", " | last | split: " " | first }};{{ a.address_line2 | split: " " | last }};USA
+URL:https://metaphasemgt.com/
+{%- if s.linkedin %}
+URL;TYPE=LinkedIn:{{ s.linkedin }}
+{%- endif %}
+{%- if s.substack %}
+URL;TYPE=Substack:{{ s.substack }}
+{%- endif %}
+PHOTO;ENCODING=b;TYPE=PNG:
+{% include card-photo.b64 %}
+REV:{{ site.time | date: "%Y%m%dT%H%M%SZ" }}
+END:VCARD
