@@ -51,6 +51,7 @@ test("pages carry a share image for link previews", () => {
     const og = (p) => (page(p).match(/<meta property="og:image" content="([^"]+)"/) || [])[1];
     assert.equal(og("services/tapestry/index.html"), "https://metaphasemgt.com/assets/social/share-tapestry.png");
     assert.equal(og("services/pivot-point-passage/index.html"), "https://metaphasemgt.com/assets/social/share-pivot-point-passage.png");
+    assert.equal(og("services/your-turn-next-move/index.html"), "https://metaphasemgt.com/assets/social/share-your-turn-next-move.png");
     assert.equal(og("services/conversation-with-an-og/index.html"), "https://metaphasemgt.com/assets/social/share-conversation-with-an-og.png");
     assert.equal(og("blitz/index.html"), "https://metaphasemgt.com/assets/social/share-blitz.png");
     assert.equal(og("index.html"), "https://metaphasemgt.com/assets/social/share-default.png");
