@@ -30,8 +30,8 @@ specialties:
       - Social Impact
 company_heading: About Metaphase Management
 company_text: >-
-  Metaphase Management helps individuals, businesses and communities navigate the journey from
-  idea to meaningful impact. From past experience we recognize that highly competitive behaviors
+  Metaphase Management helps individuals, businesses and communities go from idea
+  to impact. From past experience we recognize that highly competitive behaviors
   and cultures may lead to burnout, alienation and general dissatisfaction. Our coaching and
   planning aim to generate thriving from the perspectives of personal, business, community,
   spiritual and environmental considerations. We coach individuals. We design leadership
