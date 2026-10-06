@@ -9,7 +9,7 @@ checkout: ""
 format: One-on-one or small group
 summary: In one intense hour Susan walks you through your market position, value proposition, competitive landscape and action plan, so you leave with clarity you did not have walking in.
 order: 1
-group: organizations
+group: hidden
 ---
 ## What is BizBlitz?
 

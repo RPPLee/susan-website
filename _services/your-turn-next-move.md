@@ -3,7 +3,7 @@ layout: service
 title: Your Turn, Next Move
 tagline: Discover, Articulate and Explore a Change of Direction in Two Weeks of Structured Exercises, Homework and Conversation
 icon: fas fa-chess-knight
-order: 2
+order: 0
 group: individuals
 new: true
 summary: "Your Turn, Next Move shifts your question of what’s next? from pondering and dreaming into one or more action-based practical scenarios that enable you to explore a possible new life or business direction."
