@@ -1,18 +1,20 @@
 ---
 layout: service
 title: Pivot Point Passage
-tagline: Navigating a significant life transition with six months of support and companionship
+tagline: Navigating a significant transition with six months of support and
+  companionship
 icon: fas fa-anchor
-duration: Six months -- ten hours per month
+duration: Six months of (usually) weekly meetings
 price: Custom -- inquire for engagement pricing
 format: Private, one-to-one engagement
 order: 2
 group: individuals
 new: true
-summary: For individuals. A private, curated six-month listening and coaching program for one person at a moment of transition.
+summary: For individuals. A private, curated six-month listening and coaching
+  program for one person at a moment of challenge and change
 image: /assets/social/share-pivot-point-passage.png
+booking: false
 ---
-
 ## What is Pivot Point Passage?
 
 Pivot Point Passage is a listening and coaching program designed around a life-changing event marked by the past that no longer exists and the future that is unclear. This work catalyzes self-reflection and imagination to shape a new focus or direction. Over six months of structured tasks and conversations we journey through stages of discovery. This builds a foundation for a path forward guided by clarity, resolution, and wisdom.
