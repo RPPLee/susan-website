@@ -1,15 +1,18 @@
 ---
 layout: service
 title: Your Turn, Next Move
-tagline: Discover, Articulate and Explore a Change of Direction in Two Weeks of Structured Exercises, Homework and Conversation
+tagline: " Discover, Articulate and Explore a Change of Direction in Two Weeks
+  of Structured Exercises, Homework and Conversation"
 icon: fas fa-chess-knight
 order: 0
 group: individuals
 new: true
-summary: "Your Turn, Next Move shifts your question of what’s next? from pondering and dreaming into one or more action-based practical scenarios that enable you to explore a possible new life or business direction."
+summary: Your Turn, Next Move shifts your question of what’s next? from
+  pondering and dreaming into one or more action-based practical scenarios that
+  enable you to explore a possible new life or business direction.
 image: /assets/social/share-your-turn-next-move.png
+booking: false
 ---
-
 **Your Turn, Next Move** shifts your question of *what’s next?* from pondering and dreaming into one or more action-based practical scenarios that enable you to explore a possible new life or business direction.
 
 This structured suite of activities taps into your experience, insights, connections, fears, dreams and imagination as they affect a potential aspiration or important decision. At the conclusion, you will have articulated a concrete, high-level identification of one or more possibilities and ways to test them further.
