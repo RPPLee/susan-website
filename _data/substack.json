@@ -3,6 +3,13 @@
   "url": "https://metaphase.substack.com/s/money-culture-community",
   "items": [
     {
+      "title": "Saving Circles",
+      "url": "https://metaphase.substack.com/p/saving-circles",
+      "date": "2026-10-09",
+      "summary": "What the world’s poor can teach us about resiliency, trust and ingenuity",
+      "image": "https://substackcdn.com/image/fetch/$s_!wSWP!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F7afd8dad-0032-4f6c-83ad-d0d2925c32f8_2048x1187.jpeg"
+    },
+    {
       "title": "GIFTING and the GIFT ECONOMY",
       "url": "https://metaphase.substack.com/p/gifting-and-the-gift-economy",
       "date": "2026-09-25",
@@ -11,5 +18,5 @@
     }
   ],
   "api": "https://metaphase.substack.com/api/v1/archive?sort=new&offset=0&limit=50",
-  "fetched": "2026-09-25T14:52:46.546Z"
+  "fetched": "2026-10-09T17:21:48.211Z"
 }
