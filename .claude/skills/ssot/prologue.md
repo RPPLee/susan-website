@@ -1,6 +1,6 @@
 # SSOT prologue
 
-Every -lee skill and `/ssot` runs this first, unchanged. It catches the decision record up with
+`/ssot` runs this first, unchanged. It catches the decision record up with
 what the ratifiers have already ruled on the page, and says what still waits. Format, file
 locations and the rules of the record: `docs/ssot/decisions/README.md`. Read it once per session.
 
@@ -77,7 +77,7 @@ docs/ssot/decisions/<feature>.md` reads both sections and says what each paragra
 - `pending` ids are left as they are; `unknown` ids are a mistake to fix; `uncited` paragraphs
   with no decision behind them stay as they are and are listed in the report as backfill
   candidates; `unstated` ids (decisions that answered a question but appear nowhere in the spec)
-  are listed in the report for the next `/to-spec-lee`.
+  are listed in the report for the next `/to-spec`.
 
 Run `cite` again: `rejected` and `unknown` must be empty. Change nothing else in the spec.
 

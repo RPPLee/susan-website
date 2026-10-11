@@ -3,7 +3,9 @@
   "private": true,
   "description": "Tests for the Metaphase Management Associates site. The site itself is built by Jekyll.",
   "scripts": {
-    "test": "node --test 'test/**/*.test.mjs'"
+    "test": "node --test 'test/**/*.test.mjs'",
+    "build": "PATH=/opt/homebrew/opt/ruby/bin:$PATH bundle exec jekyll build",
+    "serve": "PATH=/opt/homebrew/opt/ruby/bin:$PATH bundle exec jekyll serve --port 4000 --livereload"
   },
   "engines": {
     "node": ">=22"

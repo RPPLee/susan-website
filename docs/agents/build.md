@@ -15,9 +15,12 @@ bundle install
 ## Build
 
 ```sh
-bundle exec jekyll build          # writes _site/
-bundle exec jekyll serve          # http://localhost:4000, rebuilds on save
+npm run build                     # writes _site/
+npm run serve                     # http://localhost:4000, rebuilds on save
 ```
+
+Both scripts put Homebrew's Ruby first on `PATH`, so they work in a shell that never ran the
+export above. `bundle exec jekyll ...` directly needs that export first.
 
 ## Test
 
@@ -37,6 +40,13 @@ and a YAML reader.
 
 The test hardcodes Homebrew's Ruby path, `/opt/homebrew/opt/ruby/bin`, and prefers it, so `npm test`
 works without the `PATH` line above.
+
+## Pushing
+
+The remote is `https://RPPLee@github.com/...` and the repo's own `credential.helper` hands git the
+`RPPLee` token from `gh`, whichever `gh` account is active. `git push` just works; no
+`gh auth switch` needed. `gh` API calls against the repo (Pages settings, workflow runs that need
+write) still take `gh auth switch -u RPPLee`.
 
 ## Deploy
 

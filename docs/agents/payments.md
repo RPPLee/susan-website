@@ -6,11 +6,11 @@ button opens a link Stripe hosts, Stripe takes the card, and the buyer lands bac
 
 ## Plumbing (built 2026-09-24)
 
-- Every service (`_services/*.md`) and every program card (`pages/programs.html`) has an optional
+- Every service (`_services/*.md`) and every session card on `pages/blitz.html` has an optional
   `checkout` field. When it holds a URL the page shows **Pay** as the main button and the contact
   form as the second one. Empty, the page shows **Get in Touch** as before.
 - Susan pastes the links herself in Pages CMS: Services > (service) > "Stripe payment link", and
-  Programs > (program) > "Stripe payment link".
+  BizBlitz and VizBlitz page > Sessions > (session) > "Stripe payment link".
 - `/thanks/?paid=1` says the payment went through; plain `/thanks/` still thanks a form sender.
 - The `price` field on each service is the text shown on the page and on the Pay button. Keep it
   in step with the Payment Link's amount.

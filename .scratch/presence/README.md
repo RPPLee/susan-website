@@ -7,7 +7,7 @@ Read this first in a fresh session. The record is the truth; this is the story a
 - Approved and rejected: `docs/ssot/decisions/presence.md` (47 approved, 3 rejected, 9 withdrawn as of 2026-09-14; Lee approved the last 38 in the terminal because the page was unreachable on his phone, and withdrew the nine payment cards in the terminal the same day).
 - Proposed and open: `.scratch/presence/decisions.md` (2 proposed, op-063 and op-064; 0 open questions).
 - The page: the `Artifact:` line in `docs/ssot/decisions/README.md`. Lee and Susan rule there.
-- Tooling and rules: `docs/ssot/decisions/README.md`. Skills: `/ssot`, `/grill-with-docs-lee presence`, `/to-spec-lee presence`, `/to-tickets-lee presence`.
+- Tooling and rules: `docs/ssot/decisions/README.md`. Skills: `/ssot`, then Matt's `/grill-with-docs`, `/to-spec`, `/to-tickets` directly (the `-lee` wrappers are gone since 2026-10-11).
 - Glossary: `CONTEXT.md`. Research behind the cards: `docs/research/`.
 
 ## What Susan asked for (email of 2026-09-11, via Lee)
@@ -35,7 +35,7 @@ Lee closed op-021 (Pages CMS, op-029) and op-024 (ignore the Stripe email, op-03
 - The spec is `.scratch/presence/spec.md` (written 2026-09-14). Its seven Spec cards, op-043 to op-049, are approved. The 14 tickets are in `.scratch/presence/issues/`, blockers first. 01 and 05 done; 02, 03, 04 and 14 wait on a human (Susan's company-page copy, Lee's yes on the LinkedIn copy, Susan's first Pages CMS sign-in, Lee's Formspree check); 12 and 13 are `wontfix` after op-065; 06 to 11 are ready for an agent, in order.
 - Done on 2026-09-14 outside the tickets: the personal banner trimmed to headline and logo (op-066 proposed); Featured on Susan's profile now shows BizBlitz and VizBlitz, Conversation With An OG and Turning Point Tenders as coloured link cards plus the Substack and the OG post (op-067 proposed); every site page has a share image (`assets/social/share-*.png`, rendered from `docs/research/share-images/card.html`); two new pages, `/services/conversation-with-an-og/` and `/blitz/`; the homepage intro moved into `_data/settings.yml`. Pages CMS is installed and Lee's round trip is proven (three minutes, commit under his name).
 - Lee's machine cannot build the site today (system Ruby 2.6, Jekyll 3.9; the Gemfile wants 4.3). op-048 covers the fix.
-- Next: `/implement-lee presence` does not exist yet; use `/implement ticket 06`, then 07 to 11 in order, `/clear` between tickets. Pushes to `main` need the RPPLee account (`gh auth switch -u RPPLee && gh auth setup-git`, then switch back to lbm54).
+- Next: use `/implement ticket 06`, then 07 to 11 in order, `/clear` between tickets. Pushes to `main` need the RPPLee account (`gh auth switch -u RPPLee && gh auth setup-git`, then switch back to lbm54).
 
 ## 2026-09-16
 
@@ -51,3 +51,10 @@ Lee closed op-021 (Pages CMS, op-029) and op-024 (ignore the Stripe email, op-03
 - Built on branch `susan-round-2`, not pushed: homepage blocks (`_data/home.yml`, `_includes/home/`), `_posts` blog with the post layout, the Substack feed, cron and both subscribe forms removed, `booking_url` in Site settings with the contact form as fallback, About rewritten from her LinkedIn About (read from her profile that day), the facelift at the end of `style.css`. Proposals op-072 to op-076.
 - Waits on a human: Lee's push to `main`; Susan's Google Calendar appointment schedule, whose address goes in Site settings > Booking page; Lee's round trip in Pages CMS on the Home page block list (reorder, add and remove a block, and confirm the saved `home.yml` still builds); Susan's first sign-in.
 - `sync.test.mjs` case 15 (round trip of the proposals file) already failed on `main` before this round.
+
+## 2026-10-11
+
+- Everything above the Sep 18 entry is history. Live today: the round-2 homepage blocks, Insights read from the Substack section (`_data/substack.json`, refreshed daily), the Services page with twelve services starting Your Turn, Next Move / Quick Turnaround / Pivot Point Passage, the business card at `/card/`, Stripe `checkout` fields present but empty. Susan saves through the editor under her own name.
+- Lee's machine builds the site (`npm run build`, `npm run serve`); pushes need no account switch (docs/agents/build.md).
+- LinkedIn: both banners read "From Idea to Impact"; Featured holds Your Turn, Next Move, Pivot Point Passage and Conversation With An OG. How to change them: `docs/agents/linkedin.md`.
+- Open: Susan's verification case with LinkedIn (reopen drafted Oct 10); the `sync.test.mjs` round-trip case still fails and is left alone on Lee's ruling.

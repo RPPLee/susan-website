@@ -56,7 +56,7 @@ _Avoid_: calendar, scheduler
 ### Offers
 
 **Service**:
-One of the seven standing offers with a page under `_services/`: BizBlitz, VizBlitz, Coaching, Peer Circles, Team Building, Strategic Planning, Performance.
+A standing offer with a page under `_services/`. The folder is the list; `order` sorts the cards and `hidden` keeps one off the grid.
 
 **Program**:
 A dated, enrolling offer: Tapestry and Pivot Point Passage (renamed from Turning Point Tenders on 2026-09-21). Has a flyer, a service page and a registration.
@@ -69,7 +69,7 @@ _Avoid_: course, workshop
 A 60-minute fixed-price session: BizBlitz (business analysis) or VizBlitz (future visioning).
 
 **Fixed-price item**:
-An offer with a published price that gets a pay button: programs, blitzes, the coaching package.
+An offer with a published price: programs, blitzes, the coaching package. Can carry a pay button.
 
 **Retained work**:
 An engagement quoted in conversation and invoiced: strategic planning, performance, team building beyond the first session.
@@ -87,7 +87,7 @@ The Stripe account Substack requires to charge readers. Already connected; the o
 Was planned as a second account for program and coaching payments. Never created; dropped by op-065. The Substack account is the only Stripe account.
 
 **Pay button**:
-Was a planned Stripe checkout link on a fixed-price item's page. Dropped by op-065; the site takes no payments.
+A Stripe Payment Link a service page shows as its main button when its `checkout` field holds one (built 2026-09-24, `docs/agents/payments.md`). Every field is empty today, so the site takes no payments and every page shows the contact form instead.
 _Avoid_: buy now, cart
 
 **Paywall**:

@@ -1,6 +1,6 @@
 # SSOT epilogue
 
-Every -lee skill and `/ssot` ends with this, unchanged. It puts what the run produced on the page
+`/ssot` ends with this, unchanged. It puts what the run produced on the page
 and tells the ratifier what waits on them. Same conventions as `prologue.md` (`SYNC`, `URL`,
 `<feature>`, README first).
 

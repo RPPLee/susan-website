@@ -10,11 +10,17 @@ Issues and specs live as local markdown files under `.scratch/`. See `docs/agent
 
 ### Triage labels
 
-The five default triage roles, each label string equal to its name. See `docs/agents/triage-labels.md`.
+The five default triage roles, each label string equal to its name.
 
 ### Domain docs
 
-Single-context: one `CONTEXT.md` plus `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+Single-context: the glossary is `CONTEXT.md` at the repo root; use its terms, not the ones it avoids.
+
+### Building, editing, paying, LinkedIn
+
+`docs/agents/build.md` (build, test, push), `docs/agents/editor.md` (what Susan edits in Pages
+CMS and where it lives), `docs/agents/payments.md` (the Stripe `checkout` field),
+`docs/agents/linkedin.md` (changing banners and Featured cards in Chrome).
 
 ### Publishing
 
@@ -26,6 +32,7 @@ so they never reach metaphasemgt.com. Add any new non-site file there too.
 
 Product decisions live in `docs/ssot/decisions/<feature>.md` and enter only through a ratifier's
 verdict on the decisions page. Proposals wait in `.scratch/<feature>/decisions.md`. Format, page,
-sync commands and rules: `docs/ssot/decisions/README.md`. The `-lee` skills in `.claude/skills/`
-(`/ssot`, `/grill-with-docs-lee`, `/to-spec-lee`, `/to-tickets-lee`) wrap Matt Pocock's skills
-with that record. Current feature slug: `presence` (website, LinkedIn, Substack, payments).
+sync commands and rules: `docs/ssot/decisions/README.md`. `/ssot` in `.claude/skills/` opens
+the page and applies verdicts. The `-lee` wrappers around Matt Pocock's skills were removed on
+2026-10-11; use his skills directly. Current feature slug: `presence` (website, LinkedIn,
+Substack, payments).

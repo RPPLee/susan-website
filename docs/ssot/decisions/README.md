@@ -13,7 +13,7 @@ tooling is the same as in `mealvana_endurance`, and fixes should be made in both
 Everything here runs from a checkout of this repo. Nothing reads a user name or a session id;
 every path is repo-relative, and the page's data lives in the artifact's own database, not on
 anyone's laptop. The one thing read from the home directory is Matt Pocock's skills plugin in
-Claude Code's plugin cache, which the -lee skills follow at run time (`MATT_SKILLS_ROOT`
+Claude Code's plugin cache, which `matt.mjs` locates (`MATT_SKILLS_ROOT`
 points elsewhere if the cache lives elsewhere).
 
 1. Install Node 20 or newer. The sync module is plain ESM with no dependencies.
@@ -81,12 +81,12 @@ A clause list lets Lee tick the clauses he wants dropped in Rewrite instead of r
 ```
 
 The `Spec` category holds what a spec decides: its test seams and its implementation and
-testing decisions, written by `/to-spec-lee` with `source: spec <feature> <date>`. The spec cites
+testing decisions, written by `/to-spec` with `source: spec <feature> <date>`. The spec cites
 each card's id in parentheses at the end of the paragraph it came from, so `sync.mjs cite` can
 say which paragraphs stand, which were rejected, and which name no decision.
 
 The `Tickets` category holds a ticket breakdown waiting for approval, written by
-`/to-tickets-lee` with `source: tickets <feature> <date>`. Each card carries three more meta
+`/to-tickets` with `source: tickets <feature> <date>`. Each card carries three more meta
 lines: `- ticket: NN` (the number its file will get), `- blocked: NN, NN` (the blockers the
 breakdown declared, optional) and `- depends: <id>, <id>` (the decision ids the ticket relies
 on). Its **What it touches** line is a comma-separated list of repo paths; `sync.mjs ticket-plan`
@@ -116,10 +116,10 @@ and `**Lee said.**`, and its `**Decision.**` is the rewrite awaiting approval.
 An open question is a section with `- kind: question`, `- status: open`, and
 `- linked: <id>` naming the decision it came from. Its parts are `**Context.**`,
 `**Question.**` (Lee's words), `**Why.**` (why it matters), `**What it touches.**`.
-It has no Approve button. The next `/to-spec-lee` or grill picks open questions up first.
+It has no Approve button. The next `/to-spec` or grill picks open questions up first.
 
 A decision that answers a question (`linked:` to a question that is `answered`) is what
-`sync.mjs linked` lists; `/to-spec-lee` states these in the spec first. A decision rejected or
+`sync.mjs linked` lists; `/to-spec` states these in the spec first. A decision rejected or
 withdrawn after it answered leaves the question pointing at a ruling that no longer stands;
 `linked` marks it `stale` and the skills report it. There is no reopen path yet: the ratifier
 re-asks it on the page or in a grill.
@@ -201,27 +201,15 @@ mentioned in a ticket becomes a link back to the decision.
 ## Skills
 
 `/ssot` in `.claude/skills/ssot/` opens the page and applies verdicts; `/ssot backfill <feature>`
-mines a feature's spec, tickets, ADRs and docs into proposals. Its `prologue.md` and `epilogue.md`
-are the steps every -lee skill runs before and after Matt Pocock's skill of the same name, and
-`matt.mjs <name>` prints the path of Matt's skill in the plugin cache (newest version; a missing
-file exits 1 with the path it looked for). Tests: `node --test .claude/skills/ssot/matt.test.mjs`.
-`/grill-with-docs-lee <feature> [<question id>]` in `.claude/skills/grill-with-docs-lee/` runs the
-prologue, follows Matt's grill-with-docs, and walks the feature's open questions first, one per
-round, in the ratifier's order; on `done` every ruling becomes a proposal, every answered question
-is closed through `answers`, and a ruling that fits no card becomes an open question in their
-words. `/to-spec-lee <feature>` in `.claude/skills/to-spec-lee/` runs the prologue, follows
-Matt's to-spec, and puts the spec's test seams and every new implementation and testing decision
-on the page as `Spec` category cards (Context opens with the spec's problem statement) instead of
-confirming them in the terminal; the spec cites each card's id from the start, and after the
-ratifier's Finish the prologue drops the rejected paragraphs. It ends with `Next: /to-tickets-lee`
-only when no `Spec` card is pending. `/to-tickets-lee <feature>` in `.claude/skills/to-tickets-lee/`
-runs the prologue, stops while any `Spec` card is proposed or amended (`sync.mjs pending
-<proposals.md> Spec`), follows Matt's to-tickets, and puts the breakdown on the page as one
-`Tickets` card per ticket with its blockers, its touches and the decision ids it depends on,
-instead of quizzing in the terminal; touches that overlap become blocking edges
-(`ticket-plan`), and the ticket files are written (`publish-tickets`) only once every card is
-approved, each with the three header lines the Work page reads, a `**Decisions:**` line citing
-its ids, and a closing `Next:` line. `/implement-lee` does not exist yet.
+mines a feature's spec, tickets and docs into proposals. Its `prologue.md` and `epilogue.md` are
+the steps it runs before and after its own work, and `matt.mjs <name>` prints the path of Matt
+Pocock's skill of that name in the plugin cache (newest version; a missing file exits 1 with the
+path it looked for). Tests: `node --test .claude/skills/ssot/matt.test.mjs`.
+
+The `-lee` wrappers (`/grill-with-docs-lee`, `/to-spec`, `/to-tickets`) that ran the
+prologue and epilogue around Matt's skills were removed on 2026-10-11. Matt's skills run directly
+now; rulings they produce reach the page through `/ssot backfill <feature>`, and the `Spec` and
+`Tickets` card categories, `ticket-plan` and `publish-tickets` in the sync module remain for it.
 
 ## Sync module
 
