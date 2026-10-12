@@ -30,38 +30,27 @@ specialties:
       - Social Impact
 company_heading: About Metaphase Management
 company_text: >-
-  Metaphase Management helps individuals, businesses and communities go from idea
-  to impact. From past experience we recognize that highly competitive behaviors
-  and cultures may lead to burnout, alienation and general dissatisfaction. Our coaching and
-  planning aim to generate thriving from the perspectives of personal, business, community,
-  spiritual and environmental considerations. We coach individuals. We design leadership
-  programs, team building, business models and operations systems that incorporate
-  collaboration, interconnected roles and responsibilities, reciprocity and balance and financial
-  performance metrics. We do not forget we are stronger together than alone.
+  Metaphase Management helps individuals, businesses and communities navigate the path from idea
+  to impact. We coach individuals and companies to define clear direction, design  and develop
+  leadership , build teams, consider new types of business models and use new tools to track  and
+  report operations.
 
 
-  As background, we have guided motivated public institutions, global businesses, innovative
-  community leaders, ambitious start-up founders, and compassionate individuals to:
+  People are our focus, especially at times of transition such as promotion, retirement or
+  peer-level shifts, company redesign, job or role elimination, succession planning, and functional
+  team collaborations.  We work with board members and management to align expectations and
+  directions.
 
 
-  - Transform telecommunications into information technology, as the break-up of AT&T's monopoly
-  became the dot-com industry's competitive digital services.
+  We emphasize processes not to-do lists . We encourage approaches  that balance personal,
+  business, community, inspirational and environmental considerations. Understanding that a culture
+  focused on competitive financial performance alone leads to burnout, we incorporate additional
+  factors of wellbeing in setting goald for successful performance.
 
-  - Reinvent community collaborations, weaving university, municipal and business strengths into
-  regional festivals and year-long community development initiatives.
 
-  - Open new business segments challenged with uncertainty and confusion, including women-led
-  services, cannabis dispensary licensing, Web3/community local currency.
-
-  - Introduce an industry-scale circular-economy model for environmental and social impact,
-  weaving regenerative agriculture for renewable energy, mining of toxic sites (soil and water)
-  with restorative practices to harvest Rare Earth Elements and precious metals, and blending
-  their now-clean waste streams into new construction materials to transform regions and
-  industries.
-
-  - Explore gift economy practices, a cultural exchange that pairs with business and economic
-  development to balance stress and opportunity.
-company_tagline: We love coaching. We are expert communicators. We have fun.
+  Founder Susan Mills has, over four decades, guided more than 200 companies and programs from
+  first idea through growth and market leadership, and along the way saw the human cost of pursuing
+  financial performance only. That experience shapes every engagement.
 ---
 
 ## Susan Mills, Founder & CEO

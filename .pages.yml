@@ -397,7 +397,6 @@ content:
         description: About Metaphase Management. Paragraphs and bullet lists work.
         type: rich-text
         options: { format: markdown, media: false }
-      - { name: company_tagline, label: Closing line, description: 'For example "We love coaching. We are expert communicators. We have fun."', type: string }
 
   - name: testimonials
     label: Testimonials
